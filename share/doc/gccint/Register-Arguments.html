@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,7 +75,7 @@ Next: <a href="Scalar-Return.html#Scalar-Return" accesskey="n" rel="next">Scalar
 </div>
 <hr>
 <a name="Passing-Arguments-in-Registers"></a>
-<h4 class="subsection">17.10.7 Passing Arguments in Registers</h4>
+<h4 class="subsection">17.9.7 Passing Arguments in Registers</h4>
 <a name="index-arguments-in-registers"></a>
 <a name="index-registers-arguments"></a>
 
@@ -84,7 +84,7 @@ types of arguments are passed in registers or how they are arranged in
 the stack.
 </p>
 <dl>
-<dt><a name="index-TARGET_005fFUNCTION_005fARG"></a>Target Hook: <em>rtx</em> <strong>TARGET_FUNCTION_ARG</strong> <em>(cumulative_args_t <var>ca</var>, enum machine_mode <var>mode</var>, const_tree <var>type</var>, bool <var>named</var>)</em></dt>
+<dt><a name="index-TARGET_005fFUNCTION_005fARG"></a>Target Hook: <em>rtx</em> <strong>TARGET_FUNCTION_ARG</strong> <em>(cumulative_args_t <var>ca</var>, machine_mode <var>mode</var>, const_tree <var>type</var>, bool <var>named</var>)</em></dt>
 <dd><p>Return an RTX indicating whether a function argument is passed in a
 register and if so, which register.
 </p>
@@ -100,6 +100,12 @@ syntax error has previously occurred.
 <p>The return value is usually either a <code>reg</code> RTX for the hard
 register in which to pass the argument, or zero to pass the argument
 on the stack.
+</p>
+<p>The return value can be a <code>const_int</code> which means argument is
+passed in a target specific slot with specified number.  Target hooks
+should be used to store or load argument in such case.  See
+<code>TARGET_STORE_BOUNDS_FOR_ARG</code> and <code>TARGET_LOAD_BOUNDS_FOR_ARG</code>
+for more information.
 </p>
 <p>The value of the expression can also be a <code>parallel</code> RTX.  This is
 used when an argument is passed in multiple locations.  The mode of the
@@ -138,7 +144,7 @@ a register.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fMUST_005fPASS_005fIN_005fSTACK"></a>Target Hook: <em>bool</em> <strong>TARGET_MUST_PASS_IN_STACK</strong> <em>(enum machine_mode <var>mode</var>, const_tree <var>type</var>)</em></dt>
+<dt><a name="index-TARGET_005fMUST_005fPASS_005fIN_005fSTACK"></a>Target Hook: <em>bool</em> <strong>TARGET_MUST_PASS_IN_STACK</strong> <em>(machine_mode <var>mode</var>, const_tree <var>type</var>)</em></dt>
 <dd><p>This target hook should return <code>true</code> if we should not pass <var>type</var>
 solely in registers.  The file <samp>expr.h</samp> defines a
 definition that is usually appropriate, refer to <samp>expr.h</samp> for additional
@@ -146,24 +152,40 @@ documentation.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fFUNCTION_005fINCOMING_005fARG"></a>Target Hook: <em>rtx</em> <strong>TARGET_FUNCTION_INCOMING_ARG</strong> <em>(cumulative_args_t <var>ca</var>, enum machine_mode <var>mode</var>, const_tree <var>type</var>, bool <var>named</var>)</em></dt>
-<dd><p>Define this hook if the target machine has &ldquo;register windows&rdquo;, so
-that the register in which a function sees an arguments is not
-necessarily the same as the one in which the caller passed the
-argument.
+<dt><a name="index-TARGET_005fFUNCTION_005fINCOMING_005fARG"></a>Target Hook: <em>rtx</em> <strong>TARGET_FUNCTION_INCOMING_ARG</strong> <em>(cumulative_args_t <var>ca</var>, machine_mode <var>mode</var>, const_tree <var>type</var>, bool <var>named</var>)</em></dt>
+<dd><p>Define this hook if the caller and callee on the target have different
+views of where arguments are passed.  Also define this hook if there are
+functions that are never directly called, but are invoked by the hardware
+and which have nonstandard calling conventions.
 </p>
-<p>For such machines, <code>TARGET_FUNCTION_ARG</code> computes the register in
+<p>In this case <code>TARGET_FUNCTION_ARG</code> computes the register in
 which the caller passes the value, and
 <code>TARGET_FUNCTION_INCOMING_ARG</code> should be defined in a similar
 fashion to tell the function being called where the arguments will
 arrive.
+</p>
+<p><code>TARGET_FUNCTION_INCOMING_ARG</code> can also return arbitrary address
+computation using hard register, which can be forced into a register,
+so that it can be used to pass special arguments.
 </p>
 <p>If <code>TARGET_FUNCTION_INCOMING_ARG</code> is not defined,
 <code>TARGET_FUNCTION_ARG</code> serves both purposes.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fARG_005fPARTIAL_005fBYTES"></a>Target Hook: <em>int</em> <strong>TARGET_ARG_PARTIAL_BYTES</strong> <em>(cumulative_args_t <var>cum</var>, enum machine_mode <var>mode</var>, tree <var>type</var>, bool <var>named</var>)</em></dt>
+<dt><a name="index-TARGET_005fUSE_005fPSEUDO_005fPIC_005fREG"></a>Target Hook: <em>bool</em> <strong>TARGET_USE_PSEUDO_PIC_REG</strong> <em>(void)</em></dt>
+<dd><p>This hook should return 1 in case pseudo register should be created
+for pic_offset_table_rtx during function expand.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fINIT_005fPIC_005fREG"></a>Target Hook: <em>void</em> <strong>TARGET_INIT_PIC_REG</strong> <em>(void)</em></dt>
+<dd><p>Perform a target dependent initialization of pic_offset_table_rtx.
+This hook is called at the start of register allocation.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fARG_005fPARTIAL_005fBYTES"></a>Target Hook: <em>int</em> <strong>TARGET_ARG_PARTIAL_BYTES</strong> <em>(cumulative_args_t <var>cum</var>, machine_mode <var>mode</var>, tree <var>type</var>, bool <var>named</var>)</em></dt>
 <dd><p>This target hook returns the number of bytes at the beginning of an
 argument that must be put in registers.  The value must be zero for
 arguments that are passed entirely in registers or that are entirely
@@ -183,7 +205,7 @@ register to be used by the caller for this argument; likewise
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fPASS_005fBY_005fREFERENCE"></a>Target Hook: <em>bool</em> <strong>TARGET_PASS_BY_REFERENCE</strong> <em>(cumulative_args_t <var>cum</var>, enum machine_mode <var>mode</var>, const_tree <var>type</var>, bool <var>named</var>)</em></dt>
+<dt><a name="index-TARGET_005fPASS_005fBY_005fREFERENCE"></a>Target Hook: <em>bool</em> <strong>TARGET_PASS_BY_REFERENCE</strong> <em>(cumulative_args_t <var>cum</var>, machine_mode <var>mode</var>, const_tree <var>type</var>, bool <var>named</var>)</em></dt>
 <dd><p>This target hook should return <code>true</code> if an argument at the
 position indicated by <var>cum</var> should be passed by reference.  This
 predicate is queried after target independent reasons for being
@@ -196,7 +218,7 @@ to that type.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fCALLEE_005fCOPIES"></a>Target Hook: <em>bool</em> <strong>TARGET_CALLEE_COPIES</strong> <em>(cumulative_args_t <var>cum</var>, enum machine_mode <var>mode</var>, const_tree <var>type</var>, bool <var>named</var>)</em></dt>
+<dt><a name="index-TARGET_005fCALLEE_005fCOPIES"></a>Target Hook: <em>bool</em> <strong>TARGET_CALLEE_COPIES</strong> <em>(cumulative_args_t <var>cum</var>, machine_mode <var>mode</var>, const_tree <var>type</var>, bool <var>named</var>)</em></dt>
 <dd><p>The function argument described by the parameters to this hook is
 known to be passed by reference.  The hook should return true if the
 function argument should be copied by the callee instead of copied
@@ -279,7 +301,7 @@ argument <var>libname</var> exists for symmetry with
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fFUNCTION_005fARG_005fADVANCE"></a>Target Hook: <em>void</em> <strong>TARGET_FUNCTION_ARG_ADVANCE</strong> <em>(cumulative_args_t <var>ca</var>, enum machine_mode <var>mode</var>, const_tree <var>type</var>, bool <var>named</var>)</em></dt>
+<dt><a name="index-TARGET_005fFUNCTION_005fARG_005fADVANCE"></a>Target Hook: <em>void</em> <strong>TARGET_FUNCTION_ARG_ADVANCE</strong> <em>(cumulative_args_t <var>ca</var>, machine_mode <var>mode</var>, const_tree <var>type</var>, bool <var>named</var>)</em></dt>
 <dd><p>This hook updates the summarizer variable pointed to by <var>ca</var> to
 advance past an argument in the argument list.  The values <var>mode</var>,
 <var>type</var> and <var>named</var> describe that argument.  Once this is done,
@@ -339,14 +361,14 @@ required.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fFUNCTION_005fARG_005fBOUNDARY"></a>Target Hook: <em>unsigned int</em> <strong>TARGET_FUNCTION_ARG_BOUNDARY</strong> <em>(enum machine_mode <var>mode</var>, const_tree <var>type</var>)</em></dt>
+<dt><a name="index-TARGET_005fFUNCTION_005fARG_005fBOUNDARY"></a>Target Hook: <em>unsigned int</em> <strong>TARGET_FUNCTION_ARG_BOUNDARY</strong> <em>(machine_mode <var>mode</var>, const_tree <var>type</var>)</em></dt>
 <dd><p>This hook returns the alignment boundary, in bits, of an argument
 with the specified mode and type.  The default hook returns
 <code>PARM_BOUNDARY</code> for all arguments.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fFUNCTION_005fARG_005fROUND_005fBOUNDARY"></a>Target Hook: <em>unsigned int</em> <strong>TARGET_FUNCTION_ARG_ROUND_BOUNDARY</strong> <em>(enum machine_mode <var>mode</var>, const_tree <var>type</var>)</em></dt>
+<dt><a name="index-TARGET_005fFUNCTION_005fARG_005fROUND_005fBOUNDARY"></a>Target Hook: <em>unsigned int</em> <strong>TARGET_FUNCTION_ARG_ROUND_BOUNDARY</strong> <em>(machine_mode <var>mode</var>, const_tree <var>type</var>)</em></dt>
 <dd><p>Normally, the size of an argument is rounded up to <code>PARM_BOUNDARY</code>,
 which is the default value for this hook.  You can define this hook to
 return a different value if an argument size must be rounded to a larger
@@ -421,7 +443,7 @@ arguments to <code>va_arg</code>; the latter two are as in
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fVALID_005fPOINTER_005fMODE"></a>Target Hook: <em>bool</em> <strong>TARGET_VALID_POINTER_MODE</strong> <em>(enum machine_mode <var>mode</var>)</em></dt>
+<dt><a name="index-TARGET_005fVALID_005fPOINTER_005fMODE"></a>Target Hook: <em>bool</em> <strong>TARGET_VALID_POINTER_MODE</strong> <em>(machine_mode <var>mode</var>)</em></dt>
 <dd><p>Define this to return nonzero if the port can handle pointers
 with machine mode <var>mode</var>.  The default version of this
 hook returns true for both <code>ptr_mode</code> and <code>Pmode</code>.
@@ -433,7 +455,7 @@ hook returns true for both <code>ptr_mode</code> and <code>Pmode</code>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCALAR_005fMODE_005fSUPPORTED_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_SCALAR_MODE_SUPPORTED_P</strong> <em>(enum machine_mode <var>mode</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCALAR_005fMODE_005fSUPPORTED_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_SCALAR_MODE_SUPPORTED_P</strong> <em>(machine_mode <var>mode</var>)</em></dt>
 <dd><p>Define this to return nonzero if the port is prepared to handle
 insns involving scalar mode <var>mode</var>.  For a scalar mode to be
 considered supported, all the basic arithmetic and comparisons
@@ -446,14 +468,14 @@ code in <samp>optabs.c</samp>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fVECTOR_005fMODE_005fSUPPORTED_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_VECTOR_MODE_SUPPORTED_P</strong> <em>(enum machine_mode <var>mode</var>)</em></dt>
+<dt><a name="index-TARGET_005fVECTOR_005fMODE_005fSUPPORTED_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_VECTOR_MODE_SUPPORTED_P</strong> <em>(machine_mode <var>mode</var>)</em></dt>
 <dd><p>Define this to return nonzero if the port is prepared to handle
 insns involving vector mode <var>mode</var>.  At the very least, it
 must have move patterns for this mode.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fARRAY_005fMODE_005fSUPPORTED_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_ARRAY_MODE_SUPPORTED_P</strong> <em>(enum machine_mode <var>mode</var>, unsigned HOST_WIDE_INT <var>nelems</var>)</em></dt>
+<dt><a name="index-TARGET_005fARRAY_005fMODE_005fSUPPORTED_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_ARRAY_MODE_SUPPORTED_P</strong> <em>(machine_mode <var>mode</var>, unsigned HOST_WIDE_INT <var>nelems</var>)</em></dt>
 <dd><p>Return true if GCC should try to use a scalar mode to store an array
 of <var>nelems</var> elements, given that each element has mode <var>mode</var>.
 Returning true here overrides the usual <code>MAX_FIXED_MODE</code> limit
@@ -482,7 +504,35 @@ has operations like:
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSMALL_005fREGISTER_005fCLASSES_005fFOR_005fMODE_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_SMALL_REGISTER_CLASSES_FOR_MODE_P</strong> <em>(enum machine_mode <var>mode</var>)</em></dt>
+<dt><a name="index-TARGET_005fLIBGCC_005fFLOATING_005fMODE_005fSUPPORTED_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_LIBGCC_FLOATING_MODE_SUPPORTED_P</strong> <em>(machine_mode <var>mode</var>)</em></dt>
+<dd><p>Define this to return nonzero if libgcc provides support for the 
+floating-point mode <var>mode</var>, which is known to pass 
+<code>TARGET_SCALAR_MODE_SUPPORTED_P</code>.  The default version of this 
+hook returns true for all of <code>SFmode</code>, <code>DFmode</code>, 
+<code>XFmode</code> and <code>TFmode</code>, if such modes exist.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fFLOATN_005fMODE"></a>Target Hook: <em>machine_mode</em> <strong>TARGET_FLOATN_MODE</strong> <em>(int <var>n</var>, bool <var>extended</var>)</em></dt>
+<dd><p>Define this to return the machine mode to use for the type 
+<code>_Float<var>n</var></code>, if <var>extended</var> is false, or the type 
+<code>_Float<var>n</var>x</code>, if <var>extended</var> is true.  If such a type 
+is not supported, return <code>VOIDmode</code>.  The default version of this 
+hook returns <code>SFmode</code> for <code>_Float32</code>, <code>DFmode</code> for 
+<code>_Float64</code> and <code>_Float32x</code> and <code>TFmode</code> for 
+<code>_Float128</code>, if those modes exist and satisfy the requirements for 
+those types and pass <code>TARGET_SCALAR_MODE_SUPPORTED_P</code> and 
+<code>TARGET_LIBGCC_FLOATING_MODE_SUPPORTED_P</code>; for <code>_Float64x</code>, it 
+returns the first of <code>XFmode</code> and <code>TFmode</code> that exists and 
+satisfies the same requirements; for other types, it returns 
+<code>VOIDmode</code>.  The hook is only called for values of <var>n</var> and 
+<var>extended</var> that are valid according to ISO/IEC TS 18661-3:2015; that 
+is, <var>n</var> is one of 32, 64, 128, or, if <var>extended</var> is false, 16 or 
+greater than 128 and a multiple of 32.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fSMALL_005fREGISTER_005fCLASSES_005fFOR_005fMODE_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_SMALL_REGISTER_CLASSES_FOR_MODE_P</strong> <em>(machine_mode <var>mode</var>)</em></dt>
 <dd><p>Define this to return nonzero for machine modes for which the port has
 small register classes.  If this target hook returns nonzero for a given
 <var>mode</var>, the compiler will try to minimize the lifetime of registers

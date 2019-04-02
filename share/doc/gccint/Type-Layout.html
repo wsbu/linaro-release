@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -210,40 +210,6 @@ the target machine.  If you don&rsquo;t define this, the default is
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-LIBGCC2_005fLONG_005fDOUBLE_005fTYPE_005fSIZE"></a>Macro: <strong>LIBGCC2_LONG_DOUBLE_TYPE_SIZE</strong></dt>
-<dd><p>Define this macro if <code>LONG_DOUBLE_TYPE_SIZE</code> is not constant or
-if you want routines in <samp>libgcc2.a</samp> for a size other than
-<code>LONG_DOUBLE_TYPE_SIZE</code>.  If you don&rsquo;t define this, the
-default is <code>LONG_DOUBLE_TYPE_SIZE</code>.
-</p></dd></dl>
-
-<dl>
-<dt><a name="index-LIBGCC2_005fHAS_005fDF_005fMODE"></a>Macro: <strong>LIBGCC2_HAS_DF_MODE</strong></dt>
-<dd><p>Define this macro if neither <code>DOUBLE_TYPE_SIZE</code> nor
-<code>LIBGCC2_LONG_DOUBLE_TYPE_SIZE</code> is
-<code>DFmode</code> but you want <code>DFmode</code> routines in <samp>libgcc2.a</samp>
-anyway.  If you don&rsquo;t define this and either <code>DOUBLE_TYPE_SIZE</code>
-or <code>LIBGCC2_LONG_DOUBLE_TYPE_SIZE</code> is 64 then the default is 1,
-otherwise it is 0.
-</p></dd></dl>
-
-<dl>
-<dt><a name="index-LIBGCC2_005fHAS_005fXF_005fMODE"></a>Macro: <strong>LIBGCC2_HAS_XF_MODE</strong></dt>
-<dd><p>Define this macro if <code>LIBGCC2_LONG_DOUBLE_TYPE_SIZE</code> is not
-<code>XFmode</code> but you want <code>XFmode</code> routines in <samp>libgcc2.a</samp>
-anyway.  If you don&rsquo;t define this and <code>LIBGCC2_LONG_DOUBLE_TYPE_SIZE</code>
-is 80 then the default is 1, otherwise it is 0.
-</p></dd></dl>
-
-<dl>
-<dt><a name="index-LIBGCC2_005fHAS_005fTF_005fMODE"></a>Macro: <strong>LIBGCC2_HAS_TF_MODE</strong></dt>
-<dd><p>Define this macro if <code>LIBGCC2_LONG_DOUBLE_TYPE_SIZE</code> is not
-<code>TFmode</code> but you want <code>TFmode</code> routines in <samp>libgcc2.a</samp>
-anyway.  If you don&rsquo;t define this and <code>LIBGCC2_LONG_DOUBLE_TYPE_SIZE</code>
-is 128 then the default is 1, otherwise it is 0.
-</p></dd></dl>
-
-<dl>
 <dt><a name="index-LIBGCC2_005fGNU_005fPREFIX"></a>Macro: <strong>LIBGCC2_GNU_PREFIX</strong></dt>
 <dd><p>This macro corresponds to the <code>TARGET_LIBFUNC_GNU_PREFIX</code> target
 hook and should be defined if that hook is overriden to be true.  It
@@ -251,29 +217,6 @@ causes function names in libgcc to be changed to use a <code>__gnu_</code>
 prefix for their name rather than the default <code>__</code>.  A port which
 uses this macro should also arrange to use <samp>t-gnu-prefix</samp> in
 the libgcc <samp>config.host</samp>.
-</p></dd></dl>
-
-<dl>
-<dt><a name="index-SF_005fSIZE"></a>Macro: <strong>SF_SIZE</strong></dt>
-<dt><a name="index-DF_005fSIZE"></a>Macro: <strong>DF_SIZE</strong></dt>
-<dt><a name="index-XF_005fSIZE"></a>Macro: <strong>XF_SIZE</strong></dt>
-<dt><a name="index-TF_005fSIZE"></a>Macro: <strong>TF_SIZE</strong></dt>
-<dd><p>Define these macros to be the size in bits of the mantissa of
-<code>SFmode</code>, <code>DFmode</code>, <code>XFmode</code> and <code>TFmode</code> values,
-if the defaults in <samp>libgcc2.h</samp> are inappropriate.  By default,
-<code>FLT_MANT_DIG</code> is used for <code>SF_SIZE</code>, <code>LDBL_MANT_DIG</code>
-for <code>XF_SIZE</code> and <code>TF_SIZE</code>, and <code>DBL_MANT_DIG</code> or
-<code>LDBL_MANT_DIG</code> for <code>DF_SIZE</code> according to whether
-<code>DOUBLE_TYPE_SIZE</code> or
-<code>LIBGCC2_LONG_DOUBLE_TYPE_SIZE</code> is 64.
-</p></dd></dl>
-
-<dl>
-<dt><a name="index-TARGET_005fFLT_005fEVAL_005fMETHOD"></a>Macro: <strong>TARGET_FLT_EVAL_METHOD</strong></dt>
-<dd><p>A C expression for the value for <code>FLT_EVAL_METHOD</code> in <samp>float.h</samp>,
-assuming, if applicable, that the floating-point control word is in its
-default state.  If you do not define this macro the value of
-<code>FLT_EVAL_METHOD</code> will be zero.
 </p></dd></dl>
 
 <dl>

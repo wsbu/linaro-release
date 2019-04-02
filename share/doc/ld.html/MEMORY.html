@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!-- This file documents the GNU linker LD
-(Linaro_Binutils-2017.01)
-version 2.24.0.
+(GNU Binutils)
+version 2.28.
 
-Copyright (C) 1991-2013 Free Software Foundation, Inc.
+Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -85,9 +85,10 @@ set section addresses based on the memory regions, and will warn about
 regions that become too full.  The linker will not shuffle sections
 around to fit into the available regions.
 </p>
-<p>A linker script may contain at most one use of the <code>MEMORY</code>
-command.  However, you can define as many blocks of memory within it as
-you wish.  The syntax is:
+<p>A linker script may contain many uses of the <code>MEMORY</code> command,
+however, all memory blocks defined are treated as if they were
+specified inside a single <code>MEMORY</code> command.  The syntax for
+<code>MEMORY</code> is:
 </p><div class="smallexample">
 <pre class="smallexample">MEMORY
   {

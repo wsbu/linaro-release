@@ -2,7 +2,7 @@
 <html>
 <!-- This file documents the GNU Assembler "as".
 
-Copyright (C) 1991-2013 Free Software Foundation, Inc.
+Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -67,7 +67,7 @@ Next: <a href="s390-Floating-Point.html#s390-Floating-Point" accesskey="n" rel="
 </div>
 <hr>
 <a name="Assembler-Directives-7"></a>
-<h4 class="subsection">9.37.4 Assembler Directives</h4>
+<h4 class="subsection">9.39.4 Assembler Directives</h4>
 
 <p><code>as</code> for s390 supports all of the standard ELF
 assembler directives as outlined in the main part of this document.
@@ -163,15 +163,27 @@ dumped to the current location (<a href="s390-Literal-Pool-Entries.html#s390-Lit
 </p>
 <a name="index-_002emachine-directive_002c-s390"></a>
 </dd>
-<dt><code>.machine string</code></dt>
-<dd><p>This directive allows you to change the machine for which code is
-generated.  <code>string</code> may be any of the <code>-march=</code> selection
-options (without the -march=), <code>push</code>, or <code>pop</code>.
-<code>.machine push</code> saves the currently selected cpu, which may be
-restored with <code>.machine pop</code>.  Be aware that the cpu string has
-to be put into double quotes in case it contains characters not
-appropriate for identifiers.  So you have to write <code>&quot;z9-109&quot;</code>
-instead of just <code>z9-109</code>.
+<dt><code>.machine <var>STRING</var>[+<var>EXTENSION</var>]&hellip;</code></dt>
+<dd>
+<p>This directive allows changing the machine for which code is
+generated.  <code>string</code> may be any of the <code>-march=</code>
+selection options, or <code>push</code>, or <code>pop</code>.  <code>.machine
+push</code> saves the currently selected cpu, which may be restored with
+<code>.machine pop</code>.  Be aware that the cpu string has to be put
+into double quotes in case it contains characters not appropriate
+for identifiers.  So you have to write <code>&quot;z9-109&quot;</code> instead of
+just <code>z9-109</code>.  Extensions can be specified after the cpu
+name, separated by plus charaters.  Valid extensions are:
+<code>htm</code>,
+<code>nohtm</code>,
+<code>vx</code>,
+<code>novx</code>.
+They extend the basic instruction set with features from a higher
+cpu level, or remove support for a feature from the given cpu
+level.
+</p>
+<p>Example: <code>z13+nohtm</code> allows all instructions of the z13 cpu
+except instructions from the HTM facility.
 </p>
 <a name="index-_002emachinemode-directive_002c-s390"></a>
 </dd>

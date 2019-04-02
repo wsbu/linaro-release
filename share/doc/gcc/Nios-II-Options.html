@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -33,7 +33,7 @@ You have freedom to copy and modify this GNU Manual, like GNU
 <link href="Option-Index.html#Option-Index" rel="index" title="Option Index">
 <link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
 <link href="Submodel-Options.html#Submodel-Options" rel="up" title="Submodel Options">
-<link href="PDP_002d11-Options.html#PDP_002d11-Options" rel="next" title="PDP-11 Options">
+<link href="Nvidia-PTX-Options.html#Nvidia-PTX-Options" rel="next" title="Nvidia PTX Options">
 <link href="NDS32-Options.html#NDS32-Options" rel="prev" title="NDS32 Options">
 <style type="text/css">
 <!--
@@ -71,11 +71,11 @@ ul.no-bullet {list-style: none}
 <a name="Nios-II-Options"></a>
 <div class="header">
 <p>
-Next: <a href="PDP_002d11-Options.html#PDP_002d11-Options" accesskey="n" rel="next">PDP-11 Options</a>, Previous: <a href="NDS32-Options.html#NDS32-Options" accesskey="p" rel="prev">NDS32 Options</a>, Up: <a href="Submodel-Options.html#Submodel-Options" accesskey="u" rel="up">Submodel Options</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="Nvidia-PTX-Options.html#Nvidia-PTX-Options" accesskey="n" rel="next">Nvidia PTX Options</a>, Previous: <a href="NDS32-Options.html#NDS32-Options" accesskey="p" rel="prev">NDS32 Options</a>, Up: <a href="Submodel-Options.html#Submodel-Options" accesskey="u" rel="up">Submodel Options</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
 <a name="Nios-II-Options-1"></a>
-<h4 class="subsection">3.17.33 Nios II Options</h4>
+<h4 class="subsection">3.18.32 Nios II Options</h4>
 <a name="index-Nios-II-options"></a>
 <a name="index-Altera-Nios-II-options"></a>
 
@@ -90,15 +90,59 @@ into the small data or BSS sections instead of the normal data or BSS
 sections.  The default value of <var>num</var> is 8.
 </p>
 </dd>
+<dt><code>-mgpopt=<var>option</var></code></dt>
 <dt><code>-mgpopt</code></dt>
 <dt><code>-mno-gpopt</code></dt>
 <dd><a name="index-mgpopt-1"></a>
 <a name="index-mno_002dgpopt-1"></a>
-<p>Generate (do not generate) GP-relative accesses for objects in the
-small data or BSS sections.  The default is <samp>-mgpopt</samp> except
-when <samp>-fpic</samp> or <samp>-fPIC</samp> is specified to generate
-position-independent code.  Note that the Nios II ABI does not permit
-GP-relative accesses from shared libraries.
+<p>Generate (do not generate) GP-relative accesses.  The following 
+<var>option</var> names are recognized:
+</p>
+<dl compact="compact">
+<dt>&lsquo;<samp>none</samp>&rsquo;</dt>
+<dd><p>Do not generate GP-relative accesses.
+</p>
+</dd>
+<dt>&lsquo;<samp>local</samp>&rsquo;</dt>
+<dd><p>Generate GP-relative accesses for small data objects that are not 
+external, weak, or uninitialized common symbols.  
+Also use GP-relative addressing for objects that
+have been explicitly placed in a small data section via a <code>section</code>
+attribute.
+</p>
+</dd>
+<dt>&lsquo;<samp>global</samp>&rsquo;</dt>
+<dd><p>As for &lsquo;<samp>local</samp>&rsquo;, but also generate GP-relative accesses for
+small data objects that are external, weak, or common.  If you use this option,
+you must ensure that all parts of your program (including libraries) are
+compiled with the same <samp>-G</samp> setting.
+</p>
+</dd>
+<dt>&lsquo;<samp>data</samp>&rsquo;</dt>
+<dd><p>Generate GP-relative accesses for all data objects in the program.  If you
+use this option, the entire data and BSS segments
+of your program must fit in 64K of memory and you must use an appropriate
+linker script to allocate them within the addressable range of the
+global pointer.
+</p>
+</dd>
+<dt>&lsquo;<samp>all</samp>&rsquo;</dt>
+<dd><p>Generate GP-relative addresses for function pointers as well as data
+pointers.  If you use this option, the entire text, data, and BSS segments
+of your program must fit in 64K of memory and you must use an appropriate
+linker script to allocate them within the addressable range of the
+global pointer.
+</p>
+</dd>
+</dl>
+
+<p><samp>-mgpopt</samp> is equivalent to <samp>-mgpopt=local</samp>, and
+<samp>-mno-gpopt</samp> is equivalent to <samp>-mgpopt=none</samp>.
+</p>
+<p>The default is <samp>-mgpopt</samp> except when <samp>-fpic</samp> or
+<samp>-fPIC</samp> is specified to generate position-independent code.
+Note that the Nios II ABI does not permit GP-relative accesses from
+shared libraries.
 </p>
 <p>You may need to specify <samp>-mno-gpopt</samp> explicitly when building
 programs that include large amounts of small data, including large
@@ -113,6 +157,16 @@ small data section.
 <a name="index-meb-2"></a>
 <p>Generate little-endian (default) or big-endian (experimental) code,
 respectively.
+</p>
+</dd>
+<dt><code>-march=<var>arch</var></code></dt>
+<dd><a name="index-march-9"></a>
+<p>This specifies the name of the target Nios II architecture.  GCC uses this
+name to determine what kind of instructions it can emit when generating
+assembly code.  Permissible names are: &lsquo;<samp>r1</samp>&rsquo;, &lsquo;<samp>r2</samp>&rsquo;.
+</p>
+<p>The preprocessor macro <code>__nios2_arch__</code> is available to programs,
+with value 1 or 2, indicating the targeted ISA level.
 </p>
 </dd>
 <dt><code>-mbypass-cache</code></dt>
@@ -157,13 +211,23 @@ instructions by the compiler. The default is to emit <code>mul</code>
 and not emit <code>div</code> and <code>mulx</code>.
 </p>
 </dd>
+<dt><code>-mbmx</code></dt>
+<dt><code>-mno-bmx</code></dt>
+<dt><code>-mcdx</code></dt>
+<dt><code>-mno-cdx</code></dt>
+<dd><p>Enable or disable generation of Nios II R2 BMX (bit manipulation) and
+CDX (code density) instructions.  Enabling these instructions also
+requires <samp>-march=r2</samp>.  Since these instructions are optional
+extensions to the R2 architecture, the default is not to emit them.
+</p>
+</dd>
 <dt><code>-mcustom-<var>insn</var>=<var>N</var></code></dt>
 <dt><code>-mno-custom-<var>insn</var></code></dt>
 <dd><a name="index-mcustom_002dinsn"></a>
 <a name="index-mno_002dcustom_002dinsn"></a>
 <p>Each <samp>-mcustom-<var>insn</var>=<var>N</var></samp> option enables use of a
 custom instruction with encoding <var>N</var> when generating code that uses 
-<var>insn</var>.  For example, <code>-mcustom-fadds=253</code> generates custom
+<var>insn</var>.  For example, <samp>-mcustom-fadds=253</samp> generates custom
 instruction 253 for single-precision floating-point add operations instead
 of the default behavior of using a library call.
 </p>
@@ -253,6 +317,13 @@ are only generated if <samp>-funsafe-math-optimizations</samp> is also specified
 <dt>&lsquo;<samp>fixsi</samp>&rsquo;, &lsquo;<samp>fixsu</samp>&rsquo;, &lsquo;<samp>fixdi</samp>&rsquo;, &lsquo;<samp>fixdu</samp>&rsquo;</dt>
 <dd><p>Conversion from floating point to signed or unsigned integer types, with
 truncation towards zero.
+</p>
+</dd>
+<dt>&lsquo;<samp>round</samp>&rsquo;</dt>
+<dd><p>Conversion from single-precision floating point to signed integer,
+rounding to the nearest integer and ties away from zero.
+This corresponds to the <code>__builtin_lroundf</code> function when
+<samp>-fno-math-errno</samp> is used.
 </p>
 </dd>
 <dt>&lsquo;<samp>floatis</samp>&rsquo;, &lsquo;<samp>floatus</samp>&rsquo;, &lsquo;<samp>floatid</samp>&rsquo;, &lsquo;<samp>floatud</samp>&rsquo;</dt>
@@ -392,7 +463,7 @@ This option is typically used to link with a library provided by a HAL BSP.
 <hr>
 <div class="header">
 <p>
-Next: <a href="PDP_002d11-Options.html#PDP_002d11-Options" accesskey="n" rel="next">PDP-11 Options</a>, Previous: <a href="NDS32-Options.html#NDS32-Options" accesskey="p" rel="prev">NDS32 Options</a>, Up: <a href="Submodel-Options.html#Submodel-Options" accesskey="u" rel="up">Submodel Options</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="Nvidia-PTX-Options.html#Nvidia-PTX-Options" accesskey="n" rel="next">Nvidia PTX Options</a>, Previous: <a href="NDS32-Options.html#NDS32-Options" accesskey="p" rel="prev">NDS32 Options</a>, Up: <a href="Submodel-Options.html#Submodel-Options" accesskey="u" rel="up">Submodel Options</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 
 

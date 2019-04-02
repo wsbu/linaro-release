@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,7 +75,7 @@ Next: <a href="Sections.html#Sections" accesskey="n" rel="next">Sections</a>, Pr
 </div>
 <hr>
 <a name="Adjusting-the-Instruction-Scheduler"></a>
-<h3 class="section">17.18 Adjusting the Instruction Scheduler</h3>
+<h3 class="section">17.17 Adjusting the Instruction Scheduler</h3>
 
 <p>The instruction scheduler may need a fair amount of machine-specific
 adjustment in order to produce good code.  GCC provides several target
@@ -96,7 +96,7 @@ it to vary depending on what the instructions are, you must use
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fVARIABLE_005fISSUE"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_VARIABLE_ISSUE</strong> <em>(FILE *<var>file</var>, int <var>verbose</var>, rtx <var>insn</var>, int <var>more</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fVARIABLE_005fISSUE"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_VARIABLE_ISSUE</strong> <em>(FILE *<var>file</var>, int <var>verbose</var>, rtx_insn *<var>insn</var>, int <var>more</var>)</em></dt>
 <dd><p>This hook is executed by the scheduler after it has scheduled an insn
 from the ready list.  It should return the number of insns which can
 still be issued in the current cycle.  The default is
@@ -111,14 +111,14 @@ was scheduled.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fADJUST_005fCOST"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_ADJUST_COST</strong> <em>(rtx <var>insn</var>, rtx <var>link</var>, rtx <var>dep_insn</var>, int <var>cost</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fADJUST_005fCOST"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_ADJUST_COST</strong> <em>(rtx_insn *<var>insn</var>, int <var>dep_type1</var>, rtx_insn *<var>dep_insn</var>, int <var>cost</var>, unsigned int <var>dw</var>)</em></dt>
 <dd><p>This function corrects the value of <var>cost</var> based on the
-relationship between <var>insn</var> and <var>dep_insn</var> through the
-dependence <var>link</var>.  It should return the new value.  The default
-is to make no adjustment to <var>cost</var>.  This can be used for example
-to specify to the scheduler using the traditional pipeline description
-that an output- or anti-dependence does not incur the same cost as a
-data-dependence.  If the scheduler using the automaton based pipeline
+relationship between <var>insn</var> and <var>dep_insn</var> through a
+dependence of type dep_type, and strength <var>dw</var>.  It should return the new
+value.  The default is to make no adjustment to <var>cost</var>.  This can be
+used for example to specify to the scheduler using the traditional pipeline
+description that an output- or anti-dependence does not incur the same cost
+as a data-dependence.  If the scheduler using the automaton based pipeline
 description, the cost of anti-dependence is zero and the cost of
 output-dependence is maximum of one and the difference of latency
 times of the first and the second insns.  If these values are not
@@ -127,7 +127,7 @@ see <a href="Processor-pipeline-description.html#Processor-pipeline-description"
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fADJUST_005fPRIORITY"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_ADJUST_PRIORITY</strong> <em>(rtx <var>insn</var>, int <var>priority</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fADJUST_005fPRIORITY"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_ADJUST_PRIORITY</strong> <em>(rtx_insn *<var>insn</var>, int <var>priority</var>)</em></dt>
 <dd><p>This hook adjusts the integer scheduling priority <var>priority</var> of
 <var>insn</var>.  It should return the new priority.  Increase the priority to
 execute <var>insn</var> earlier, reduce the priority to execute <var>insn</var>
@@ -136,7 +136,7 @@ scheduling priorities of insns.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fREORDER"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_REORDER</strong> <em>(FILE *<var>file</var>, int <var>verbose</var>, rtx *<var>ready</var>, int *<var>n_readyp</var>, int <var>clock</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fREORDER"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_REORDER</strong> <em>(FILE *<var>file</var>, int <var>verbose</var>, rtx_insn **<var>ready</var>, int *<var>n_readyp</var>, int <var>clock</var>)</em></dt>
 <dd><p>This hook is executed by the scheduler after it has scheduled the ready
 list, to allow the machine description to reorder it (for example to
 combine two small instructions together on &lsquo;<samp>VLIW</samp>&rsquo; machines).
@@ -154,7 +154,7 @@ can issue this cycle; normally this is just <code>issue_rate</code>.  See also
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fREORDER2"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_REORDER2</strong> <em>(FILE *<var>file</var>, int <var>verbose</var>, rtx *<var>ready</var>, int *<var>n_readyp</var>, int <var>clock</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fREORDER2"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_REORDER2</strong> <em>(FILE *<var>file</var>, int <var>verbose</var>, rtx_insn **<var>ready</var>, int *<var>n_readyp</var>, int <var>clock</var>)</em></dt>
 <dd><p>Like &lsquo;<samp>TARGET_SCHED_REORDER</samp>&rsquo;, but called at a different time.  That
 function is called whenever the scheduler starts a new cycle.  This one
 is called once per iteration over a cycle, immediately after
@@ -171,7 +171,7 @@ cycle.  These other insns can then be taken into account properly.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fMACRO_005fFUSION_005fPAIR_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_SCHED_MACRO_FUSION_PAIR_P</strong> <em>(rtx <var>prev</var>, rtx <var>curr</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fMACRO_005fFUSION_005fPAIR_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_SCHED_MACRO_FUSION_PAIR_P</strong> <em>(rtx_insn *<var>prev</var>, rtx_insn *<var>curr</var>)</em></dt>
 <dd><p>This hook is used to check whether two insns should be macro fused for
 a target microarchitecture. If this hook returns true for the given insn pair
 (<var>prev</var> and <var>curr</var>), the scheduler will put them into a sched
@@ -181,7 +181,7 @@ validate any dependencies needed to fuse the two insns together.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fDEPENDENCIES_005fEVALUATION_005fHOOK"></a>Target Hook: <em>void</em> <strong>TARGET_SCHED_DEPENDENCIES_EVALUATION_HOOK</strong> <em>(rtx <var>head</var>, rtx <var>tail</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fDEPENDENCIES_005fEVALUATION_005fHOOK"></a>Target Hook: <em>void</em> <strong>TARGET_SCHED_DEPENDENCIES_EVALUATION_HOOK</strong> <em>(rtx_insn *<var>head</var>, rtx_insn *<var>tail</var>)</em></dt>
 <dd><p>This hook is called after evaluation forward dependencies of insns in
 chain given by two parameter values (<var>head</var> and <var>tail</var>
 correspondingly) but before insns scheduling of the insn chain.  For
@@ -244,7 +244,7 @@ when the new simulated processor cycle starts.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fDFA_005fPOST_005fCYCLE_005fINSN"></a>Target Hook: <em>rtx</em> <strong>TARGET_SCHED_DFA_POST_CYCLE_INSN</strong> <em>(void)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fDFA_005fPOST_005fCYCLE_005fINSN"></a>Target Hook: <em>rtx_insn *</em> <strong>TARGET_SCHED_DFA_POST_CYCLE_INSN</strong> <em>(void)</em></dt>
 <dd><p>The hook is analogous to &lsquo;<samp>TARGET_SCHED_DFA_PRE_CYCLE_INSN</samp>&rsquo; but used
 to changed the state as if the insn were scheduled when the new
 simulated processor cycle finishes.
@@ -303,7 +303,7 @@ schedules to choose the best one.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fFIRST_005fCYCLE_005fMULTIPASS_005fDFA_005fLOOKAHEAD_005fGUARD"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_FIRST_CYCLE_MULTIPASS_DFA_LOOKAHEAD_GUARD</strong> <em>(rtx <var>insn</var>, int <var>ready_index</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fFIRST_005fCYCLE_005fMULTIPASS_005fDFA_005fLOOKAHEAD_005fGUARD"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_FIRST_CYCLE_MULTIPASS_DFA_LOOKAHEAD_GUARD</strong> <em>(rtx_insn *<var>insn</var>, int <var>ready_index</var>)</em></dt>
 <dd>
 <p>This hook controls what insns from the ready insn queue will be
 considered for the multipass insn scheduling.  If the hook returns
@@ -326,7 +326,7 @@ scheduling.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fFIRST_005fCYCLE_005fMULTIPASS_005fISSUE"></a>Target Hook: <em>void</em> <strong>TARGET_SCHED_FIRST_CYCLE_MULTIPASS_ISSUE</strong> <em>(void *<var>data</var>, signed char *<var>ready_try</var>, int <var>n_ready</var>, rtx <var>insn</var>, const void *<var>prev_data</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fFIRST_005fCYCLE_005fMULTIPASS_005fISSUE"></a>Target Hook: <em>void</em> <strong>TARGET_SCHED_FIRST_CYCLE_MULTIPASS_ISSUE</strong> <em>(void *<var>data</var>, signed char *<var>ready_try</var>, int <var>n_ready</var>, rtx_insn *<var>insn</var>, const void *<var>prev_data</var>)</em></dt>
 <dd><p>This hook is called when multipass scheduling evaluates instruction INSN.
 </p></dd></dl>
 
@@ -353,7 +353,7 @@ round of multipass scheduling.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fDFA_005fNEW_005fCYCLE"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_DFA_NEW_CYCLE</strong> <em>(FILE *<var>dump</var>, int <var>verbose</var>, rtx <var>insn</var>, int <var>last_clock</var>, int <var>clock</var>, int *<var>sort_p</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fDFA_005fNEW_005fCYCLE"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_DFA_NEW_CYCLE</strong> <em>(FILE *<var>dump</var>, int <var>verbose</var>, rtx_insn *<var>insn</var>, int <var>last_clock</var>, int <var>clock</var>, int *<var>sort_p</var>)</em></dt>
 <dd><p>This hook is called by the insn scheduler before issuing <var>insn</var>
 on cycle <var>clock</var>.  If the hook returns nonzero,
 <var>insn</var> is not issued on this processor cycle.  Instead,
@@ -423,7 +423,7 @@ beginning of the block.  Otherwise, copy the current context into <var>tc</var>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fSPECULATE_005fINSN"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_SPECULATE_INSN</strong> <em>(rtx <var>insn</var>, unsigned int <var>dep_status</var>, rtx *<var>new_pat</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fSPECULATE_005fINSN"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_SPECULATE_INSN</strong> <em>(rtx_insn *<var>insn</var>, unsigned int <var>dep_status</var>, rtx *<var>new_pat</var>)</em></dt>
 <dd><p>This hook is called by the insn scheduler when <var>insn</var> has only
 speculative dependencies and therefore can be scheduled speculatively.
 The hook is used to check if the pattern of <var>insn</var> has a speculative
@@ -442,7 +442,7 @@ instruction should branch to recovery code, or <code>false</code> otherwise.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fGEN_005fSPEC_005fCHECK"></a>Target Hook: <em>rtx</em> <strong>TARGET_SCHED_GEN_SPEC_CHECK</strong> <em>(rtx <var>insn</var>, rtx <var>label</var>, unsigned int <var>ds</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fGEN_005fSPEC_005fCHECK"></a>Target Hook: <em>rtx</em> <strong>TARGET_SCHED_GEN_SPEC_CHECK</strong> <em>(rtx_insn *<var>insn</var>, rtx_insn *<var>label</var>, unsigned int <var>ds</var>)</em></dt>
 <dd><p>This hook is called by the insn scheduler to generate a pattern for recovery
 check instruction.  If <var>mutate_p</var> is zero, then <var>insn</var> is a
 speculative instruction for which the check should be generated.
@@ -462,6 +462,15 @@ The structure describes speculation types that can be used in the scheduler.
 </p></dd></dl>
 
 <dl>
+<dt><a name="index-TARGET_005fSCHED_005fCAN_005fSPECULATE_005fINSN"></a>Target Hook: <em>bool</em> <strong>TARGET_SCHED_CAN_SPECULATE_INSN</strong> <em>(rtx_insn *<var>insn</var>)</em></dt>
+<dd><p>Some instructions should never be speculated by the schedulers, usually
+ because the instruction is too expensive to get this wrong.  Often such
+ instructions have long latency, and often they are not fully modeled in the
+ pipeline descriptions.  This hook should return <code>false</code> if <var>insn</var>
+ should not be speculated.
+</p></dd></dl>
+
+<dl>
 <dt><a name="index-TARGET_005fSCHED_005fSMS_005fRES_005fMII"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_SMS_RES_MII</strong> <em>(struct ddg *<var>g</var>)</em></dt>
 <dd><p>This hook is called by the swing modulo scheduler to calculate a
 resource-based lower bound which is based on the resources available in
@@ -472,13 +481,13 @@ of instructions divided by the issue rate.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fDISPATCH"></a>Target Hook: <em>bool</em> <strong>TARGET_SCHED_DISPATCH</strong> <em>(rtx <var>insn</var>, int <var>x</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fDISPATCH"></a>Target Hook: <em>bool</em> <strong>TARGET_SCHED_DISPATCH</strong> <em>(rtx_insn *<var>insn</var>, int <var>x</var>)</em></dt>
 <dd><p>This hook is called by Haifa Scheduler.  It returns true if dispatch scheduling
 is supported in hardware and the condition specified in the parameter is true.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fDISPATCH_005fDO"></a>Target Hook: <em>void</em> <strong>TARGET_SCHED_DISPATCH_DO</strong> <em>(rtx <var>insn</var>, int <var>x</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fDISPATCH_005fDO"></a>Target Hook: <em>void</em> <strong>TARGET_SCHED_DISPATCH_DO</strong> <em>(rtx_insn *<var>insn</var>, int <var>x</var>)</em></dt>
 <dd><p>This hook is called by Haifa Scheduler.  It performs the operation specified
 in its second parameter.
 </p></dd></dl>
@@ -491,9 +500,92 @@ also the latencies of operations.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSCHED_005fREASSOCIATION_005fWIDTH"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_REASSOCIATION_WIDTH</strong> <em>(unsigned int <var>opc</var>, enum machine_mode <var>mode</var>)</em></dt>
+<dt><a name="index-TARGET_005fSCHED_005fREASSOCIATION_005fWIDTH"></a>Target Hook: <em>int</em> <strong>TARGET_SCHED_REASSOCIATION_WIDTH</strong> <em>(unsigned int <var>opc</var>, machine_mode <var>mode</var>)</em></dt>
 <dd><p>This hook is called by tree reassociator to determine a level of
 parallelism required in output calculations chain.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fSCHED_005fFUSION_005fPRIORITY"></a>Target Hook: <em>void</em> <strong>TARGET_SCHED_FUSION_PRIORITY</strong> <em>(rtx_insn *<var>insn</var>, int <var>max_pri</var>, int *<var>fusion_pri</var>, int *<var>pri</var>)</em></dt>
+<dd><p>This hook is called by scheduling fusion pass.  It calculates fusion
+priorities for each instruction passed in by parameter.  The priorities
+are returned via pointer parameters.
+</p>
+<p><var>insn</var> is the instruction whose priorities need to be calculated.
+<var>max_pri</var> is the maximum priority can be returned in any cases.
+<var>fusion_pri</var> is the pointer parameter through which <var>insn</var>&rsquo;s
+fusion priority should be calculated and returned.
+<var>pri</var> is the pointer parameter through which <var>insn</var>&rsquo;s priority
+should be calculated and returned.
+</p>
+<p>Same <var>fusion_pri</var> should be returned for instructions which should
+be scheduled together.  Different <var>pri</var> should be returned for
+instructions with same <var>fusion_pri</var>.  <var>fusion_pri</var> is the major
+sort key, <var>pri</var> is the minor sort key.  All instructions will be
+scheduled according to the two priorities.  All priorities calculated
+should be between 0 (exclusive) and <var>max_pri</var> (inclusive).  To avoid
+false dependencies, <var>fusion_pri</var> of instructions which need to be
+scheduled together should be smaller than <var>fusion_pri</var> of irrelevant
+instructions.
+</p>
+<p>Given below example:
+</p>
+<div class="smallexample">
+<pre class="smallexample">    ldr r10, [r1, 4]
+    add r4, r4, r10
+    ldr r15, [r2, 8]
+    sub r5, r5, r15
+    ldr r11, [r1, 0]
+    add r4, r4, r11
+    ldr r16, [r2, 12]
+    sub r5, r5, r16
+</pre></div>
+
+<p>On targets like ARM/AArch64, the two pairs of consecutive loads should be
+merged.  Since peephole2 pass can&rsquo;t help in this case unless consecutive
+loads are actually next to each other in instruction flow.  That&rsquo;s where
+this scheduling fusion pass works.  This hook calculates priority for each
+instruction based on its fustion type, like:
+</p>
+<div class="smallexample">
+<pre class="smallexample">    ldr r10, [r1, 4]  ; fusion_pri=99,  pri=96
+    add r4, r4, r10   ; fusion_pri=100, pri=100
+    ldr r15, [r2, 8]  ; fusion_pri=98,  pri=92
+    sub r5, r5, r15   ; fusion_pri=100, pri=100
+    ldr r11, [r1, 0]  ; fusion_pri=99,  pri=100
+    add r4, r4, r11   ; fusion_pri=100, pri=100
+    ldr r16, [r2, 12] ; fusion_pri=98,  pri=88
+    sub r5, r5, r16   ; fusion_pri=100, pri=100
+</pre></div>
+
+<p>Scheduling fusion pass then sorts all ready to issue instructions according
+to the priorities.  As a result, instructions of same fusion type will be
+pushed together in instruction flow, like:
+</p>
+<div class="smallexample">
+<pre class="smallexample">    ldr r11, [r1, 0]
+    ldr r10, [r1, 4]
+    ldr r15, [r2, 8]
+    ldr r16, [r2, 12]
+    add r4, r4, r10
+    sub r5, r5, r15
+    add r4, r4, r11
+    sub r5, r5, r16
+</pre></div>
+
+<p>Now peephole2 pass can simply merge the two pairs of loads.
+</p>
+<p>Since scheduling fusion pass relies on peephole2 to do real fusion
+work, it is only enabled by default when peephole2 is in effect.
+</p>
+<p>This is firstly introduced on ARM/AArch64 targets, please refer to
+the hook implementation for how different fusion types are supported.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fEXPAND_005fDIVMOD_005fLIBFUNC"></a>Target Hook: <em>void</em> <strong>TARGET_EXPAND_DIVMOD_LIBFUNC</strong> <em>(rtx <var>libfunc</var>, machine_mode <var>mode</var>, rtx <var>op0</var>, rtx <var>op1</var>, rtx *<var>quot</var>, rtx *<var>rem</var>)</em></dt>
+<dd><p>Define this hook for enabling divmod transform if the port does not have
+hardware divmod insn but defines target-specific divmod libfuncs.
 </p></dd></dl>
 
 <hr>

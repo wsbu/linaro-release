@@ -4,17 +4,9 @@
 
 #include <linux/types.h>
 
-#ifndef __SIGINFO_VOIDPTR
-#define __SIGINFO_VOIDPTR(field) void *field
-#endif
-
-#ifndef __SIGINFO_BAND
-#define __SIGINFO_BAND(field) __ARCH_SI_BAND_T field
-#endif
-
 typedef union sigval {
 	int sival_int;
-	__SIGINFO_VOIDPTR(sival_ptr);
+	void *sival_ptr;
 } sigval_t;
 
 /*
@@ -94,26 +86,31 @@ typedef struct siginfo {
 
 		/* SIGILL, SIGFPE, SIGSEGV, SIGBUS */
 		struct {
-			__SIGINFO_VOIDPTR(_addr); /* faulting insn/memory ref. */
+			void *_addr; /* faulting insn/memory ref. */
 #ifdef __ARCH_SI_TRAPNO
 			int _trapno;	/* TRAP # which caused the signal */
 #endif
 			short _addr_lsb; /* LSB of the reported address */
-			struct {
-				void *_lower;
-				void *_upper;
-			} _addr_bnd;
+			union {
+				/* used when si_code=SEGV_BNDERR */
+				struct {
+					void *_lower;
+					void *_upper;
+				} _addr_bnd;
+				/* used when si_code=SEGV_PKUERR */
+				__u32 _pkey;
+			};
 		} _sigfault;
 
 		/* SIGPOLL */
 		struct {
-			__SIGINFO_BAND(_band);	/* POLL_IN, POLL_OUT, POLL_MSG */
+			__ARCH_SI_BAND_T _band;	/* POLL_IN, POLL_OUT, POLL_MSG */
 			int _fd;
 		} _sigpoll;
 
 		/* SIGSYS */
 		struct {
-			__SIGINFO_VOIDPTR(_call_addr); /* calling user insn */
+			void *_call_addr; /* calling user insn */
 			int _syscall;	/* triggering system call number */
 			unsigned int _arch;	/* AUDIT_ARCH_* of syscall */
 		} _sigsys;
@@ -145,6 +142,7 @@ typedef struct siginfo {
 #define si_addr_lsb	_sifields._sigfault._addr_lsb
 #define si_lower	_sifields._sigfault._addr_bnd._lower
 #define si_upper	_sifields._sigfault._addr_bnd._upper
+#define si_pkey		_sifields._sigfault._pkey
 #define si_band		_sifields._sigpoll._band
 #define si_fd		_sifields._sigpoll._fd
 #ifdef __ARCH_SIGSYS
@@ -212,7 +210,8 @@ typedef struct siginfo {
 #define SEGV_MAPERR	(__SI_FAULT|1)	/* address not mapped to object */
 #define SEGV_ACCERR	(__SI_FAULT|2)	/* invalid permissions for mapped object */
 #define SEGV_BNDERR	(__SI_FAULT|3)  /* failed address bound checks */
-#define NSIGSEGV	3
+#define SEGV_PKUERR	(__SI_FAULT|4)  /* failed protection key checks */
+#define NSIGSEGV	4
 
 /*
  * SIGBUS si_codes
@@ -296,7 +295,6 @@ typedef struct sigevent {
 		int _pad[SIGEV_PAD_SIZE];
 		 int _tid;
 
-		/* Note these two are handled only in userspace */
 		struct {
 			void (*_function)(sigval_t);
 			void *_attribute;	/* really pthread_attr_t */

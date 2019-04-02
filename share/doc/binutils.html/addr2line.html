@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1991-2013 Free Software Foundation, Inc.
+<!-- Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -105,26 +105,33 @@ standard input, and prints the file name and line number for each
 address on standard output.  In this mode, <code>addr2line</code> may be used
 in a pipe to convert dynamically chosen addresses.
 </p>
-<p>The format of the output is &lsquo;<samp>FILENAME:LINENO</samp>&rsquo;.  The file name and
-line number for each input address is printed on separate lines.
+<p>The format of the output is &lsquo;<samp>FILENAME:LINENO</samp>&rsquo;.  By default
+each input address generates one line of output.
 </p>
-<p>If the <samp>-f</samp> option is used, then each &lsquo;<samp>FILENAME:LINENO</samp>&rsquo;
-line is preceded by &lsquo;<samp>FUNCTIONNAME</samp>&rsquo; which is the name of the
-function containing the address.
+<p>Two options can generate additional lines before each
+&lsquo;<samp>FILENAME:LINENO</samp>&rsquo; line (in that order).
+</p>
+<p>If the <samp>-a</samp> option is used then a line with the input address
+is displayed.
+</p>
+<p>If the <samp>-f</samp> option is used, then a line with the
+&lsquo;<samp>FUNCTIONNAME</samp>&rsquo; is displayed.  This is the name of the function
+containing the address.
+</p>
+<p>One option can generate additional lines after the
+&lsquo;<samp>FILENAME:LINENO</samp>&rsquo; line.
 </p>
 <p>If the <samp>-i</samp> option is used and the code at the given address is
-present there because of inlining by the compiler then the
-&lsquo;<samp>{FUNCTIONNAME} FILENAME:LINENO</samp>&rsquo; information for the inlining
-function will be displayed afterwards.  This continues recursively
-until there is no more inlining to report.
+present there because of inlining by the compiler then additional
+lines are displayed afterwards.  One or two extra lines (if the
+<samp>-f</samp> option is used) are displayed for each inlined function.
 </p>
-<p>If the <samp>-a</samp> option is used then the output is prefixed by the
-input address.
-</p>
-<p>If the <samp>-p</samp> option is used then the output for each input
-address is displayed on one, possibly quite long, line.  If
-<samp>-p</samp> is not used then the output is broken up into multiple
-lines, based on the paragraphs above.
+<p>Alternatively if the <samp>-p</samp> option is used then each input
+address generates a single, long, output line containing the address,
+the function name, the file name and the line number.  If the
+<samp>-i</samp> option has also been used then any inlined functions will
+be displayed in the same manner, but on separate lines, and prefixed
+by the text &lsquo;<samp>(inlined by)</samp>&rsquo;.
 </p>
 <p>If the file name or function name can not be determined,
 <code>addr2line</code> will print two question marks in their place.  If the

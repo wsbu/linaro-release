@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,11 +75,11 @@ Next: <a href="GIMPLE_005fLABEL.html#GIMPLE_005fLABEL" accesskey="n" rel="next">
 </div>
 <hr>
 <a name="GIMPLE_005fEH_005fFILTER-1"></a>
-<h4 class="subsection">11.7.8 <code>GIMPLE_EH_FILTER</code></h4>
+<h4 class="subsection">11.8.8 <code>GIMPLE_EH_FILTER</code></h4>
 <a name="index-GIMPLE_005fEH_005fFILTER"></a>
 
 <dl>
-<dt><a name="index-gimple_005fbuild_005feh_005ffilter"></a>GIMPLE function: <em>gimple</em> <strong>gimple_build_eh_filter</strong> <em>(tree types, gimple_seq failure)</em></dt>
+<dt><a name="index-_002agimple_005fbuild_005feh_005ffilter"></a>GIMPLE function: <em>geh_filter</em> <strong>*gimple_build_eh_filter</strong> <em>(tree types, gimple_seq failure)</em></dt>
 <dd><p>Build a <code>GIMPLE_EH_FILTER</code> statement.  <code>TYPES</code> are the filter&rsquo;s
 types.  <code>FAILURE</code> is a sequence with the filter&rsquo;s failure action.
 </p></dd></dl>
@@ -102,24 +102,24 @@ statement fails.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005feh_005ffilter_005fset_005ftypes"></a>GIMPLE function: <em>void</em> <strong>gimple_eh_filter_set_types</strong> <em>(gimple g, tree types)</em></dt>
+<dt><a name="index-gimple_005feh_005ffilter_005fset_005ftypes"></a>GIMPLE function: <em>void</em> <strong>gimple_eh_filter_set_types</strong> <em>(geh_filter *g, tree types)</em></dt>
 <dd><p>Set <code>TYPES</code> to be the set of types handled by <code>GIMPLE_EH_FILTER</code> <code>G</code>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005feh_005ffilter_005fset_005ffailure"></a>GIMPLE function: <em>void</em> <strong>gimple_eh_filter_set_failure</strong> <em>(gimple g, gimple_seq failure)</em></dt>
+<dt><a name="index-gimple_005feh_005ffilter_005fset_005ffailure"></a>GIMPLE function: <em>void</em> <strong>gimple_eh_filter_set_failure</strong> <em>(geh_filter *g, gimple_seq failure)</em></dt>
 <dd><p>Set <code>FAILURE</code> to be the sequence of statements to execute on
 failure for <code>GIMPLE_EH_FILTER</code> <code>G</code>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005feh_005ffilter_005fmust_005fnot_005fthrow"></a>GIMPLE function: <em>bool</em> <strong>gimple_eh_filter_must_not_throw</strong> <em>(gimple g)</em></dt>
-<dd><p>Return the <code>EH_FILTER_MUST_NOT_THROW</code> flag.
+<dt><a name="index-gimple_005feh_005fmust_005fnot_005fthrow_005ffndecl"></a>GIMPLE function: <em>tree</em> <strong>gimple_eh_must_not_throw_fndecl</strong> <em>( geh_mnt *eh_mnt_stmt)</em></dt>
+<dd><p>Get the function decl to be called by the MUST_NOT_THROW region.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005feh_005ffilter_005fset_005fmust_005fnot_005fthrow"></a>GIMPLE function: <em>void</em> <strong>gimple_eh_filter_set_must_not_throw</strong> <em>(gimple g, bool mntp)</em></dt>
-<dd><p>Set the <code>EH_FILTER_MUST_NOT_THROW</code> flag.
+<dt><a name="index-gimple_005feh_005fmust_005fnot_005fthrow_005fset_005ffndecl"></a>GIMPLE function: <em>void</em> <strong>gimple_eh_must_not_throw_set_fndecl</strong> <em>( geh_mnt *eh_mnt_stmt, tree decl)</em></dt>
+<dd><p>Set the function decl to be called by GS to DECL.
 </p></dd></dl>
 
 

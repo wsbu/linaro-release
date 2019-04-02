@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -82,8 +82,8 @@ Next: <a href="Zero-Length.html#Zero-Length" accesskey="n" rel="next">Zero Lengt
 defined in the N1275 draft of ISO/IEC DTR 18037.  Support for named
 address spaces in GCC will evolve as the draft technical report
 changes.  Calling conventions for any target might also change.  At
-present, only the AVR, SPU, M32C, and RL78 targets support address
-spaces other than the generic address space.
+present, only the AVR, SPU, M32C, RL78, and x86 targets support
+address spaces other than the generic address space.
 </p>
 <p>Address space identifiers may be used exactly like any other C type
 qualifier (e.g., <code>const</code> or <code>volatile</code>).  See the N1275
@@ -191,7 +191,7 @@ int read_var (void)
 #endif /* __FLASH */
 </pre></div>
 
-<p>Notice that attribute <a href="Variable-Attributes.html#AVR-Variable-Attributes"><code>progmem</code></a>
+<p>Notice that attribute <a href="AVR-Variable-Attributes.html#AVR-Variable-Attributes"><code>progmem</code></a>
 locates data in flash but
 accesses to these data read from generic address space, i.e.
 from RAM,
@@ -229,8 +229,12 @@ const __memx void *pfoo = &amp;foo;
 </pre></div>
 
 <p>Such code requires at least binutils 2.23, see
-<a href="http://sourceware.org/PR13503">PR13503</a><!-- /@w -->.
+<a href="https://sourceware.org/PR13503">PR13503</a><!-- /@w -->.
 </p>
+</li><li> On the reduced Tiny devices like ATtiny40, no address spaces are supported.
+Data can be put into and read from flash memory by means of
+attribute <code>progmem</code>, see <a href="AVR-Variable-Attributes.html#AVR-Variable-Attributes">AVR Variable Attributes</a>.
+
 </li></ul>
 
 <a name="M32C-Named-Address-Spaces"></a>
@@ -269,6 +273,34 @@ It may use runtime library
 support, or generate special machine instructions to access that address
 space.
 </p>
+<a name="x86-Named-Address-Spaces"></a>
+<h4 class="subsection">6.16.5 x86 Named Address Spaces</h4>
+<a name="index-x86-named-address-spaces"></a>
+
+<p>On the x86 target, variables may be declared as being relative
+to the <code>%fs</code> or <code>%gs</code> segments.
+</p>
+<dl compact="compact">
+<dt><code>__seg_fs</code></dt>
+<dt><code>__seg_gs</code></dt>
+<dd><a name="index-_005f_005fseg_005ffs-x86-named-address-space"></a>
+<a name="index-_005f_005fseg_005fgs-x86-named-address-space"></a>
+<p>The object is accessed with the respective segment override prefix.
+</p>
+<p>The respective segment base must be set via some method specific to
+the operating system.  Rather than require an expensive system call
+to retrieve the segment base, these address spaces are not considered
+to be subspaces of the generic (flat) address space.  This means that
+explicit casts are required to convert pointers between these address
+spaces and the generic address space.  In practice the application
+should cast to <code>uintptr_t</code> and apply the segment base offset
+that it installed previously.
+</p>
+<p>The preprocessor symbols <code>__SEG_FS</code> and <code>__SEG_GS</code> are
+defined when these address spaces are supported.
+</p></dd>
+</dl>
+
 <hr>
 <div class="header">
 <p>

@@ -2,7 +2,7 @@
 <html>
 <!-- This file documents the GNU Assembler "as".
 
-Copyright (C) 1991-2013 Free Software Foundation, Inc.
+Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -67,7 +67,7 @@ Next: <a href="i386_002dPrefixes.html#i386_002dPrefixes" accesskey="n" rel="next
 </div>
 <hr>
 <a name="Register-Naming"></a>
-<h4 class="subsection">9.15.6 Register Naming</h4>
+<h4 class="subsection">9.15.5 Register Naming</h4>
 
 <a name="index-i386-registers"></a>
 <a name="index-registers_002c-i386"></a>
@@ -93,8 +93,8 @@ are the high-bytes and low-bytes of &lsquo;<samp>%ax</samp>&rsquo;, &lsquo;<samp
 (data section), &lsquo;<samp>%ss</samp>&rsquo; (stack section), &lsquo;<samp>%es</samp>&rsquo;, &lsquo;<samp>%fs</samp>&rsquo;,
 and &lsquo;<samp>%gs</samp>&rsquo;.
 
-</li><li> the 3 processor control registers &lsquo;<samp>%cr0</samp>&rsquo;, &lsquo;<samp>%cr2</samp>&rsquo;, and
-&lsquo;<samp>%cr3</samp>&rsquo;.
+</li><li> the 5 processor control registers &lsquo;<samp>%cr0</samp>&rsquo;, &lsquo;<samp>%cr2</samp>&rsquo;,
+&lsquo;<samp>%cr3</samp>&rsquo;, &lsquo;<samp>%cr4</samp>&rsquo;, and &lsquo;<samp>%cr8</samp>&rsquo;.
 
 </li><li> the 6 debug registers &lsquo;<samp>%db0</samp>&rsquo;, &lsquo;<samp>%db1</samp>&rsquo;, &lsquo;<samp>%db2</samp>&rsquo;,
 &lsquo;<samp>%db3</samp>&rsquo;, &lsquo;<samp>%db6</samp>&rsquo;, and &lsquo;<samp>%db7</samp>&rsquo;.
@@ -108,7 +108,7 @@ These registers are overloaded by 8 MMX registers &lsquo;<samp>%mm0</samp>&rsquo
 &lsquo;<samp>%mm1</samp>&rsquo;, &lsquo;<samp>%mm2</samp>&rsquo;, &lsquo;<samp>%mm3</samp>&rsquo;, &lsquo;<samp>%mm4</samp>&rsquo;, &lsquo;<samp>%mm5</samp>&rsquo;,
 &lsquo;<samp>%mm6</samp>&rsquo; and &lsquo;<samp>%mm7</samp>&rsquo;.
 
-</li><li> the 8 SSE registers registers &lsquo;<samp>%xmm0</samp>&rsquo;, &lsquo;<samp>%xmm1</samp>&rsquo;, &lsquo;<samp>%xmm2</samp>&rsquo;,
+</li><li> the 8 128-bit SSE registers registers &lsquo;<samp>%xmm0</samp>&rsquo;, &lsquo;<samp>%xmm1</samp>&rsquo;, &lsquo;<samp>%xmm2</samp>&rsquo;,
 &lsquo;<samp>%xmm3</samp>&rsquo;, &lsquo;<samp>%xmm4</samp>&rsquo;, &lsquo;<samp>%xmm5</samp>&rsquo;, &lsquo;<samp>%xmm6</samp>&rsquo; and &lsquo;<samp>%xmm7</samp>&rsquo;.
 </li></ul>
 
@@ -122,17 +122,46 @@ pointer)
 
 </li><li> the 8 extended registers &lsquo;<samp>%r8</samp>&rsquo;&ndash;&lsquo;<samp>%r15</samp>&rsquo;.
 
-</li><li> the 8 32-bit low ends of the extended registers: &lsquo;<samp>%r8d</samp>&rsquo;&ndash;&lsquo;<samp>%r15d</samp>&rsquo;
+</li><li> the 8 32-bit low ends of the extended registers: &lsquo;<samp>%r8d</samp>&rsquo;&ndash;&lsquo;<samp>%r15d</samp>&rsquo;.
 
-</li><li> the 8 16-bit low ends of the extended registers: &lsquo;<samp>%r8w</samp>&rsquo;&ndash;&lsquo;<samp>%r15w</samp>&rsquo;
+</li><li> the 8 16-bit low ends of the extended registers: &lsquo;<samp>%r8w</samp>&rsquo;&ndash;&lsquo;<samp>%r15w</samp>&rsquo;.
 
-</li><li> the 8 8-bit low ends of the extended registers: &lsquo;<samp>%r8b</samp>&rsquo;&ndash;&lsquo;<samp>%r15b</samp>&rsquo;
+</li><li> the 8 8-bit low ends of the extended registers: &lsquo;<samp>%r8b</samp>&rsquo;&ndash;&lsquo;<samp>%r15b</samp>&rsquo;.
 
 </li><li> the 4 8-bit registers: &lsquo;<samp>%sil</samp>&rsquo;, &lsquo;<samp>%dil</samp>&rsquo;, &lsquo;<samp>%bpl</samp>&rsquo;, &lsquo;<samp>%spl</samp>&rsquo;.
 
 </li><li> the 8 debug registers: &lsquo;<samp>%db8</samp>&rsquo;&ndash;&lsquo;<samp>%db15</samp>&rsquo;.
 
-</li><li> the 8 SSE registers: &lsquo;<samp>%xmm8</samp>&rsquo;&ndash;&lsquo;<samp>%xmm15</samp>&rsquo;.
+</li><li> the 8 128-bit SSE registers: &lsquo;<samp>%xmm8</samp>&rsquo;&ndash;&lsquo;<samp>%xmm15</samp>&rsquo;.
+</li></ul>
+
+<p>With the AVX extensions more registers were made available:
+</p>
+<ul>
+<li> the 16 256-bit SSE &lsquo;<samp>%ymm0</samp>&rsquo;&ndash;&lsquo;<samp>%ymm15</samp>&rsquo; (only the first 8
+available in 32-bit mode).  The bottom 128 bits are overlaid with the
+&lsquo;<samp>xmm0</samp>&rsquo;&ndash;&lsquo;<samp>xmm15</samp>&rsquo; registers.
+
+</li></ul>
+
+<p>The AVX2 extensions made in 64-bit mode more registers available:
+</p>
+<ul>
+<li> the 16 128-bit registers &lsquo;<samp>%xmm16</samp>&rsquo;&ndash;&lsquo;<samp>%xmm31</samp>&rsquo; and the 16 256-bit
+registers &lsquo;<samp>%ymm16</samp>&rsquo;&ndash;&lsquo;<samp>%ymm31</samp>&rsquo;.
+
+</li></ul>
+
+<p>The AVX512 extensions added the following registers:
+</p>
+<ul>
+<li> the 32 512-bit registers &lsquo;<samp>%zmm0</samp>&rsquo;&ndash;&lsquo;<samp>%zmm31</samp>&rsquo; (only the first 8
+available in 32-bit mode).  The bottom 128 bits are overlaid with the
+&lsquo;<samp>%xmm0</samp>&rsquo;&ndash;&lsquo;<samp>%xmm31</samp>&rsquo; registers and the first 256 bits are
+overlaid with the &lsquo;<samp>%ymm0</samp>&rsquo;&ndash;&lsquo;<samp>%ymm31</samp>&rsquo; registers.
+
+</li><li> the 8 mask registers &lsquo;<samp>%k0</samp>&rsquo;&ndash;&lsquo;<samp>%k7</samp>&rsquo;.
+
 </li></ul>
 
 <hr>

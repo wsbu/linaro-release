@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -74,7 +74,8 @@ Next: <a href="Remote-Configuration.html#Remote-Configuration" accesskey="n" rel
 <a name="index-remote-connection-without-stubs"></a>
 <p><code>gdbserver</code> is a control program for Unix-like systems, which
 allows you to connect your program with a remote <small>GDB</small> via
-<code>target remote</code>&mdash;but without linking in the usual debugging stub.
+<code>target remote</code> or <code>target extended-remote</code>&mdash;but without
+linking in the usual debugging stub.
 </p>
 <p><code>gdbserver</code> is not a complete replacement for the debugging stubs,
 because it requires essentially the same operating-system facilities
@@ -102,7 +103,7 @@ target system with the same privileges as the user running
 <code>gdbserver</code>.
 </p></blockquote>
 
-<a name="Running-gdbserver"></a>
+<a name="Running-gdbserver"></a><a name="Running-gdbserver-1"></a>
 <h4 class="subsection">20.3.1 Running <code>gdbserver</code></h4>
 <a name="index-arguments_002c-to-gdbserver"></a>
 <a name="index-gdbserver_002c-command_002dline-arguments"></a>
@@ -168,7 +169,7 @@ You could elide it if you want to.
 display through a pipe connected to gdbserver.
 Both <code>stdout</code> and <code>stderr</code> use the same pipe.
 </p>
-<a name="Attaching-to-a-Running-Program"></a>
+<a name="Attaching-to-a-program"></a><a name="Attaching-to-a-Running-Program"></a>
 <h4 class="subsubsection">20.3.1.1 Attaching to a Running Program</h4>
 <a name="index-attach-to-a-program_002c-gdbserver"></a>
 <a name="index-_002d_002dattach_002c-gdbserver-option"></a>
@@ -180,8 +181,12 @@ This is accomplished via the <code>--attach</code> argument.  The syntax is:
 <pre class="smallexample">target&gt; gdbserver --attach <var>comm</var> <var>pid</var>
 </pre></div>
 
-<p><var>pid</var> is the process ID of a currently running process.  It isn&rsquo;t necessary
-to point <code>gdbserver</code> at a binary for the running process.
+<p><var>pid</var> is the process ID of a currently running process.  It isn&rsquo;t
+necessary to point <code>gdbserver</code> at a binary for the running process.
+</p>
+<p>In <code>target extended-remote</code> mode, you can also attach using the
+<small>GDB</small> attach command
+(see <a href="Connecting.html#Attaching-in-Types-of-Remote-Connections">Attaching in Types of Remote Connections</a>).
 </p>
 <a name="index-pidof"></a>
 <p>You can debug processes by name instead of process ID if your target has the
@@ -195,42 +200,11 @@ to point <code>gdbserver</code> at a binary for the running process.
 has multiple threads, most versions of <code>pidof</code> support the
 <code>-s</code> option to only return the first process ID.
 </p>
-<a name="Multi_002dProcess-Mode-for-gdbserver"></a>
-<h4 class="subsubsection">20.3.1.2 Multi-Process Mode for <code>gdbserver</code></h4>
-<a name="index-gdbserver_002c-multiple-processes"></a>
-<a name="index-multiple-processes-with-gdbserver"></a>
-
-<p>When you connect to <code>gdbserver</code> using <code>target remote</code>,
-<code>gdbserver</code> debugs the specified program only once.  When the
-program exits, or you detach from it, <small>GDB</small> closes the connection
-and <code>gdbserver</code> exits.
-</p>
-<p>If you connect using <kbd>target extended-remote</kbd>, <code>gdbserver</code>
-enters multi-process mode.  When the debugged program exits, or you
-detach from it, <small>GDB</small> stays connected to <code>gdbserver</code> even
-though no program is running.  The <code>run</code> and <code>attach</code>
-commands instruct <code>gdbserver</code> to run or attach to a new program.
-The <code>run</code> command uses <code>set remote exec-file</code> (see <a href="Remote-Configuration.html#set-remote-exec_002dfile">set remote exec-file</a>) to select the program to run.  Command line
-arguments are supported, except for wildcard expansion and I/O
-redirection (see <a href="Arguments.html#Arguments">Arguments</a>).
-</p>
-<a name="index-_002d_002dmulti_002c-gdbserver-option"></a>
-<p>To start <code>gdbserver</code> without supplying an initial command to run
-or process ID to attach, use the <samp>--multi</samp> command line option.
-Then you can connect using <kbd>target extended-remote</kbd> and start
-the program you want to debug.
-</p>
-<p>In multi-process mode <code>gdbserver</code> does not automatically exit unless you
-use the option <samp>--once</samp>.  You can terminate it by using
-<code>monitor exit</code> (see <a href="#Monitor-Commands-for-gdbserver">Monitor Commands for gdbserver</a>).  Note that the
-conditions under which <code>gdbserver</code> terminates depend on how <small>GDB</small>
-connects to it (<kbd>target remote</kbd> or <kbd>target extended-remote</kbd>).  The
-<samp>--multi</samp> option to <code>gdbserver</code> has no influence on that.
-</p>
 <a name="TCP-port-allocation-lifecycle-of-gdbserver"></a>
-<h4 class="subsubsection">20.3.1.3 TCP port allocation lifecycle of <code>gdbserver</code></h4>
+<h4 class="subsubsection">20.3.1.2 TCP port allocation lifecycle of <code>gdbserver</code></h4>
 
-<p>This section applies only when <code>gdbserver</code> is run to listen on a TCP port.
+<p>This section applies only when <code>gdbserver</code> is run to listen on a TCP
+port.
 </p>
 <p><code>gdbserver</code> normally terminates after all of its debugged processes have
 terminated in <kbd>target remote</kbd> mode.  On the other hand, for <kbd>target
@@ -259,8 +233,14 @@ multiple instances of <code>gdbserver</code> running on the same host, since eac
 instance closes its port after the first connection.
 </p>
 <a name="Other-Command_002dLine-Arguments-for-gdbserver"></a><a name="Other-Command_002dLine-Arguments-for-gdbserver-1"></a>
-<h4 class="subsubsection">20.3.1.4 Other Command-Line Arguments for <code>gdbserver</code></h4>
+<h4 class="subsubsection">20.3.1.3 Other Command-Line Arguments for <code>gdbserver</code></h4>
 
+<p>You can use the <samp>--multi</samp> option to start <code>gdbserver</code> without
+specifying a program to debug or a process to attach to.  Then you can
+attach in <code>target extended-remote</code> mode and run or attach to a
+program.  For more information,
+see <a href="Connecting.html#g_t_002d_002dmulti-Option-in-Types-of-Remote-Connnections">--multi Option in Types of Remote Connnections</a>.
+</p>
 <a name="index-_002d_002ddebug_002c-gdbserver-option"></a>
 <p>The <samp>--debug</samp> option tells <code>gdbserver</code> to display extra
 status information about the debugging process.
@@ -313,36 +293,43 @@ environment:
 <pre class="smallexample">$ gdbserver --wrapper env LD_PRELOAD=libtest.so -- :2222 ./testprog
 </pre></div>
 
-<a name="Connecting-to-gdbserver"></a>
+<a name="index-_002d_002dselftest"></a>
+<p>The <samp>--selftest</samp> option runs the self tests in <code>gdbserver</code>:
+</p>
+<div class="smallexample">
+<pre class="smallexample">$ gdbserver --selftest
+Ran 2 unit tests, 0 failed
+</pre></div>
+
+<p>These tests are disabled in release.
+</p><a name="Connecting-to-gdbserver"></a>
 <h4 class="subsection">20.3.2 Connecting to <code>gdbserver</code></h4>
 
-<p>Run <small>GDB</small> on the host system.
-</p>
-<p>First make sure you have the necessary symbol files.  Load symbols for
-your application using the <code>file</code> command before you connect.  Use
-<code>set sysroot</code> to locate target libraries (unless your <small>GDB</small>
-was compiled with the correct sysroot using <code>--with-sysroot</code>).
-</p>
-<p>The symbol file and target libraries must exactly match the executable
-and libraries on the target, with one exception: the files on the host
-system should not be stripped, even if the files on the target system
-are.  Mismatched or missing files will lead to confusing results
-during debugging.  On <small>GNU</small>/Linux targets, mismatched or missing
-files may also prevent <code>gdbserver</code> from debugging multi-threaded
-programs.
-</p>
-<p>Connect to your target (see <a href="Connecting.html#Connecting">Connecting to a Remote Target</a>).
+<p>The basic procedure for connecting to the remote target is:
+</p><ul>
+<li> Run <small>GDB</small> on the host system.
+
+</li><li> Make sure you have the necessary symbol files
+(see <a href="Connecting.html#Host-and-target-files">Host and target files</a>).
+Load symbols for your application using the <code>file</code> command before you
+connect.  Use <code>set sysroot</code> to locate target libraries (unless your
+<small>GDB</small> was compiled with the correct sysroot using
+<code>--with-sysroot</code>).
+
+</li><li> Connect to your target (see <a href="Connecting.html#Connecting">Connecting to a Remote Target</a>).
 For TCP connections, you must start up <code>gdbserver</code> prior to using
-the <code>target remote</code> command.  Otherwise you may get an error whose
+the <code>target</code> command.  Otherwise you may get an error whose
 text depends on the host system, but which usually looks something like
 &lsquo;<samp>Connection refused</samp>&rsquo;.  Don&rsquo;t use the <code>load</code>
-command in <small>GDB</small> when using <code>gdbserver</code>, since the program is
-already on the target.
-</p>
-<a name="Monitor-Commands-for-gdbserver-1"></a>
+command in <small>GDB</small> when using <code>target remote</code> mode, since the
+program is already on the target.
+
+</li></ul>
+
+<a name="Monitor-Commands-for-gdbserver"></a><a name="Monitor-Commands-for-gdbserver-1"></a>
 <h4 class="subsection">20.3.3 Monitor Commands for <code>gdbserver</code></h4>
 <a name="index-monitor-commands_002c-for-gdbserver"></a>
-<a name="Monitor-Commands-for-gdbserver"></a>
+
 <p>During a <small>GDB</small> session using <code>gdbserver</code>, you can use the
 <code>monitor</code> command to send special requests to <code>gdbserver</code>.
 Here are the available commands.

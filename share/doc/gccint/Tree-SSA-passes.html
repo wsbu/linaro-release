@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -224,11 +224,19 @@ in <samp>tree-ssa-alias.c</samp> and is described by <code>pass_may_alias</code>
 </p>
 </li><li> Profiling
 
-<p>This pass rewrites the function in order to collect runtime block
+<p>This pass instruments the function in order to collect runtime block
 and value profiling data.  Such data may be fed back into the compiler
 on a subsequent run so as to allow optimization based on expected
-execution frequencies.  The pass is located in <samp>predict.c</samp> and
-is described by <code>pass_profile</code>.
+execution frequencies.  The pass is located in <samp>tree-profile.c</samp> and
+is described by <code>pass_ipa_tree_profile</code>.
+</p>
+</li><li> Static profile estimation
+
+<p>This pass implements series of heuristics to guess propababilities
+of branches.  The resulting predictions are turned into edge profile
+by propagating branches across the control flow graphs.
+The pass is located in <samp>tree-profile.c</samp> and is described by
+<code>pass_profile</code>.
 </p>
 </li><li> Lower complex arithmetic
 
@@ -307,10 +315,13 @@ merging and induction variable elimination.  The pass is implemented in
 <p>Loop unswitching.  This pass moves the conditional jumps that are invariant
 out of the loops.  To achieve this, a duplicate of the loop is created for
 each possible outcome of conditional jump(s).  The pass is implemented in
-<samp>tree-ssa-loop-unswitch.c</samp>.  This pass should eventually replace the
-RTL level loop unswitching in <samp>loop-unswitch.c</samp>, but currently
-the RTL level pass is not completely redundant yet due to deficiencies
-in tree level alias analysis.
+<samp>tree-ssa-loop-unswitch.c</samp>.
+</p>
+<p>Loop splitting.  If a loop contains a conditional statement that is
+always true for one part of the iteration space and false for the other
+this pass splits the loop into two, one dealing with one side the other
+only with the other, thereby removing one inner-loop conditional.  The
+pass is implemented in <samp>tree-ssa-loop-split.c</samp>.
 </p>
 <p>The optimizations also use various utility functions contained in
 <samp>tree-ssa-loop-manip.c</samp>, <samp>cfgloop.c</samp>, <samp>cfgloopanal.c</samp> and

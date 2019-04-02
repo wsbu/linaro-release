@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -159,6 +159,27 @@ the command to use to catch such exceptions is <kbd>catch exception
 Pck.Constraint_Error</kbd>.
 </p>
 </dd>
+<dt><code>handlers</code></dt>
+<dd><a name="index-catch-handlers"></a>
+<a name="index-Ada-exception-handlers-catching"></a>
+<a name="index-catch-Ada-exceptions-when-handled"></a>
+<p>An Ada exception being handled.  If an exception name is
+specified at the end of the command
+ (eg <kbd>catch handlers Program_Error</kbd>), the debugger will stop
+only when this specific exception is handled.
+Otherwise, the debugger stops execution when any Ada exception is handled.
+</p>
+<p>When inserting a handlers catchpoint on a user-defined
+exception whose name is identical to one of the exceptions
+defined by the language, the fully qualified name must be used
+as the exception name.  Otherwise, <small>GDB</small> will assume that it
+should stop on the pre-defined exception rather than the
+user-defined one.  For instance, assuming an exception called
+ <code>Constraint_Error</code> is defined in package <code>Pck</code>, then the
+command to use to catch such exceptions handling is
+<kbd>catch handlers Pck.Constraint_Error</kbd>.
+</p>
+</dd>
 <dt><code>exception unhandled</code></dt>
 <dd><a name="index-catch-exception-unhandled"></a>
 <p>An exception that was raised but is not handled by the program.
@@ -172,12 +193,11 @@ Pck.Constraint_Error</kbd>.
 <dt><code>exec</code></dt>
 <dd><a name="index-catch-exec"></a>
 <a name="index-break-on-fork_002fexec"></a>
-<p>A call to <code>exec</code>.  This is currently only available for HP-UX
-and <small>GNU</small>/Linux.
+<p>A call to <code>exec</code>.
 </p>
 </dd>
 <dt><code>syscall</code></dt>
-<dt><code>syscall <span class="roman">[</span><var>name</var> <span class="roman">|</span> <var>number</var><span class="roman">]</span> &hellip;</code></dt>
+<dt><code>syscall <span class="roman">[</span><var>name</var> <span class="roman">|</span> <var>number</var> <span class="roman">|</span> <span class="roman">group:</span><var>groupname</var> <span class="roman">|</span> <span class="roman">g:</span><var>groupname</var><span class="roman">]</span> &hellip;</code></dt>
 <dd><a name="index-catch-syscall"></a>
 <a name="index-break-on-a-system-call_002e"></a>
 <p>A call to or return from a system call, a.k.a. <em>syscall</em>.  A
@@ -207,6 +227,15 @@ into the corresponding numeric code, but using the number directly
 may be useful if <small>GDB</small>&rsquo;s database does not have the complete
 list of syscalls on your system (e.g., because <small>GDB</small> lags
 behind the OS upgrades).
+</p>
+<p>You may specify a group of related syscalls to be caught at once using
+the <code>group:</code> syntax (<code>g:</code> is a shorter equivalent).  For
+instance, on some platforms <small>GDB</small> allows you to catch all
+network related syscalls, by passing the argument <code>group:network</code>
+to <code>catch syscall</code>.  Note that not all syscall groups are
+available in every system.  You can use the command completion
+facilities (see <a href="Completion.html#Completion">command completion</a>) to list the
+syscall groups available on your environment.
 </p>
 <p>The example below illustrates how this command works if you don&rsquo;t provide
 arguments to it:
@@ -264,6 +293,23 @@ Program exited normally.
 (gdb)
 </pre></div>
 
+<p>Here is an example of catching a syscall group:
+</p>
+<div class="smallexample">
+<pre class="smallexample">(gdb) catch syscall group:process
+Catchpoint 1 (syscalls 'exit' [1] 'fork' [2] 'waitpid' [7]
+'execve' [11] 'wait4' [114] 'clone' [120] 'vfork' [190]
+'exit_group' [252] 'waitid' [284] 'unshare' [310])
+(gdb) r
+Starting program: /tmp/catch-syscall
+
+Catchpoint 1 (call to syscall fork), 0x00007ffff7df4e27 in open64 ()
+   from /lib64/ld-linux-x86-64.so.2
+
+(gdb) c
+Continuing.
+</pre></div>
+
 <p>However, there can be situations when there is no corresponding name
 in XML file for that syscall number.  In this case, <small>GDB</small> prints
 a warning message saying that it was not able to find the syscall name,
@@ -307,14 +353,12 @@ Catchpoint 1 (syscall(s) 252)
 </dd>
 <dt><code>fork</code></dt>
 <dd><a name="index-catch-fork"></a>
-<p>A call to <code>fork</code>.  This is currently only available for HP-UX
-and <small>GNU</small>/Linux.
+<p>A call to <code>fork</code>.
 </p>
 </dd>
 <dt><code>vfork</code></dt>
 <dd><a name="index-catch-vfork"></a>
-<p>A call to <code>vfork</code>.  This is currently only available for HP-UX
-and <small>GNU</small>/Linux.
+<p>A call to <code>vfork</code>.
 </p>
 </dd>
 <dt><code>load <span class="roman">[</span>regexp<span class="roman">]</span></code></dt>

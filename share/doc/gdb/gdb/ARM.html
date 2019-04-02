@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -26,8 +26,8 @@ developing GNU and promoting software freedom." -->
 <link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
 <link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
 <link href="Embedded-Processors.html#Embedded-Processors" rel="up" title="Embedded Processors">
-<link href="M32R_002fD.html#M32R_002fD" rel="next" title="M32R/D">
-<link href="Embedded-Processors.html#Embedded-Processors" rel="prev" title="Embedded Processors">
+<link href="M68K.html#M68K" rel="next" title="M68K">
+<link href="ARC.html#ARC" rel="prev" title="ARC">
 <style type="text/css">
 <!--
 a.summary-letter {text-decoration: none}
@@ -64,28 +64,11 @@ ul.no-bullet {list-style: none}
 <a name="ARM"></a>
 <div class="header">
 <p>
-Next: <a href="M32R_002fD.html#M32R_002fD" accesskey="n" rel="next">M32R/D</a>, Up: <a href="Embedded-Processors.html#Embedded-Processors" accesskey="u" rel="up">Embedded Processors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="M68K.html#M68K" accesskey="n" rel="next">M68K</a>, Previous: <a href="ARC.html#ARC" accesskey="p" rel="prev">ARC</a>, Up: <a href="Embedded-Processors.html#Embedded-Processors" accesskey="u" rel="up">Embedded Processors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
 <a name="ARM-1"></a>
-<h4 class="subsection">21.3.1 ARM</h4>
-<a name="index-ARM-RDI"></a>
-
-<dl compact="compact">
-<dd><a name="index-target-rdi"></a>
-</dd>
-<dt><code>target rdi <var>dev</var></code></dt>
-<dd><p>ARM Angel monitor, via RDI library interface to ADP protocol.  You may
-use this target to communicate with both boards running the Angel
-monitor, or with the EmbeddedICE JTAG debug device.
-</p>
-<a name="index-target-rdp"></a>
-</dd>
-<dt><code>target rdp <var>dev</var></code></dt>
-<dd><p>ARM Demon monitor.
-</p>
-</dd>
-</dl>
+<h4 class="subsection">21.3.2 ARM</h4>
 
 <p><small>GDB</small> provides the following ARM-specific commands:
 </p>
@@ -180,56 +163,6 @@ target support subsystem.
 </p></dd>
 </dl>
 
-<p>The following commands are available when an ARM target is debugged
-using the RDI interface:
-</p>
-<dl compact="compact">
-<dt><code>rdilogfile <span class="roman">[</span><var>file</var><span class="roman">]</span></code></dt>
-<dd><a name="index-rdilogfile"></a>
-<a name="index-ADP-_0028Angel-Debugger-Protocol_0029-logging"></a>
-<p>Set the filename for the ADP (Angel Debugger Protocol) packet log.
-With an argument, sets the log file to the specified <var>file</var>.  With
-no argument, show the current log file name.  The default log file is
-<samp>rdi.log</samp>.
-</p>
-</dd>
-<dt><code>rdilogenable <span class="roman">[</span><var>arg</var><span class="roman">]</span></code></dt>
-<dd><a name="index-rdilogenable"></a>
-<p>Control logging of ADP packets.  With an argument of 1 or <code>&quot;yes&quot;</code>
-enables logging, with an argument 0 or <code>&quot;no&quot;</code> disables it.  With
-no arguments displays the current setting.  When logging is enabled,
-ADP packets exchanged between <small>GDB</small> and the RDI target device
-are logged to a file.
-</p>
-</dd>
-<dt><code>set rdiromatzero</code></dt>
-<dd><a name="index-set-rdiromatzero"></a>
-<a name="index-ROM-at-zero-address_002c-RDI"></a>
-<p>Tell <small>GDB</small> whether the target has ROM at address 0.  If on,
-vector catching is disabled, so that zero address can be used.  If off
-(the default), vector catching is enabled.  For this command to take
-effect, it needs to be invoked prior to the <code>target rdi</code> command.
-</p>
-</dd>
-<dt><code>show rdiromatzero</code></dt>
-<dd><a name="index-show-rdiromatzero"></a>
-<p>Show the current setting of ROM at zero address.
-</p>
-</dd>
-<dt><code>set rdiheartbeat</code></dt>
-<dd><a name="index-set-rdiheartbeat"></a>
-<a name="index-RDI-heartbeat"></a>
-<p>Enable or disable RDI heartbeat packets.  It is not recommended to
-turn on this option, since it confuses ARM and EPI JTAG interface, as
-well as the Angel monitor.
-</p>
-</dd>
-<dt><code>show rdiheartbeat</code></dt>
-<dd><a name="index-show-rdiheartbeat"></a>
-<p>Show the setting of RDI heartbeat packets.
-</p></dd>
-</dl>
-
 <dl compact="compact">
 <dt><code>target sim <span class="roman">[</span><var>simargs</var><span class="roman">]</span> &hellip;</code></dt>
 <dd><p>The <small>GDB</small> ARM simulator accepts the following optional arguments.
@@ -255,7 +188,7 @@ The default value is <code>all</code>.
 <hr>
 <div class="header">
 <p>
-Next: <a href="M32R_002fD.html#M32R_002fD" accesskey="n" rel="next">M32R/D</a>, Up: <a href="Embedded-Processors.html#Embedded-Processors" accesskey="u" rel="up">Embedded Processors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="M68K.html#M68K" accesskey="n" rel="next">M68K</a>, Previous: <a href="ARC.html#ARC" accesskey="p" rel="prev">ARC</a>, Up: <a href="Embedded-Processors.html#Embedded-Processors" accesskey="u" rel="up">Embedded Processors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,11 +75,11 @@ Next: <a href="GIMPLE_005fCATCH.html#GIMPLE_005fCATCH" accesskey="n" rel="next">
 </div>
 <hr>
 <a name="GIMPLE_005fCALL-1"></a>
-<h4 class="subsection">11.7.4 <code>GIMPLE_CALL</code></h4>
+<h4 class="subsection">11.8.4 <code>GIMPLE_CALL</code></h4>
 <a name="index-GIMPLE_005fCALL"></a>
 
 <dl>
-<dt><a name="index-gimple_005fbuild_005fcall"></a>GIMPLE function: <em>gimple</em> <strong>gimple_build_call</strong> <em>(tree fn, unsigned nargs, ...)</em></dt>
+<dt><a name="index-_002agimple_005fbuild_005fcall"></a>GIMPLE function: <em>gcall</em> <strong>*gimple_build_call</strong> <em>(tree fn, unsigned nargs, ...)</em></dt>
 <dd><p>Build a <code>GIMPLE_CALL</code> statement to function <code>FN</code>.  The argument <code>FN</code>
 must be either a <code>FUNCTION_DECL</code> or a gimple call address as
 determined by <code>is_gimple_call_addr</code>.  <code>NARGS</code> are the number of
@@ -90,7 +90,7 @@ operand is validated with <code>is_gimple_operand</code>).
 
 
 <dl>
-<dt><a name="index-gimple_005fbuild_005fcall_005ffrom_005ftree"></a>GIMPLE function: <em>gimple</em> <strong>gimple_build_call_from_tree</strong> <em>(tree call_expr)</em></dt>
+<dt><a name="index-_002agimple_005fbuild_005fcall_005ffrom_005ftree"></a>GIMPLE function: <em>gcall</em> <strong>*gimple_build_call_from_tree</strong> <em>(tree call_expr)</em></dt>
 <dd><p>Build a <code>GIMPLE_CALL</code> from a <code>CALL_EXPR</code> node.  The arguments and the
 function are taken from the expression directly.  This routine
 assumes that <code>call_expr</code> is already in GIMPLE form.  That is, its
@@ -100,9 +100,9 @@ to the new <code>GIMPLE_CALL</code>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005fbuild_005fcall_005fvec"></a>GIMPLE function: <em>gimple</em> <strong>gimple_build_call_vec</strong> <em>(tree fn, <code>VEC</code>(tree, heap) *args)</em></dt>
+<dt><a name="index-_002agimple_005fbuild_005fcall_005fvec"></a>GIMPLE function: <em>gcall</em> <strong>*gimple_build_call_vec</strong> <em>(tree fn, <code>vec&lt;tree&gt;</code> args)</em></dt>
 <dd><p>Identical to <code>gimple_build_call</code> but the arguments are stored in a
-<code>VEC</code>().
+<code>vec&lt;tree&gt;</code>.
 </p></dd></dl>
 
 <dl>
@@ -127,7 +127,7 @@ statement <code>G</code>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005fcall_005fset_005ffn"></a>GIMPLE function: <em>void</em> <strong>gimple_call_set_fn</strong> <em>(gimple g, tree fn)</em></dt>
+<dt><a name="index-gimple_005fcall_005fset_005ffn"></a>GIMPLE function: <em>void</em> <strong>gimple_call_set_fn</strong> <em>(gcall *g, tree fn)</em></dt>
 <dd><p>Set <code>FN</code> to be the function called by call statement <code>G</code>.  This has
 to be a gimple value specifying the address of the called
 function.
@@ -146,7 +146,7 @@ Otherwise return <code>NULL</code>.  This function is analogous to
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005fcall_005freturn_005ftype"></a>GIMPLE function: <em>tree</em> <strong>gimple_call_return_type</strong> <em>(gimple g)</em></dt>
+<dt><a name="index-gimple_005fcall_005freturn_005ftype"></a>GIMPLE function: <em>tree</em> <strong>gimple_call_return_type</strong> <em>(const gcall *g)</em></dt>
 <dd><p>Return the type returned by call statement <code>G</code>.
 </p></dd></dl>
 
@@ -156,7 +156,7 @@ Otherwise return <code>NULL</code>.  This function is analogous to
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005fcall_005fset_005fchain"></a>GIMPLE function: <em>void</em> <strong>gimple_call_set_chain</strong> <em>(gimple g, tree chain)</em></dt>
+<dt><a name="index-gimple_005fcall_005fset_005fchain"></a>GIMPLE function: <em>void</em> <strong>gimple_call_set_chain</strong> <em>(gcall *g, tree chain)</em></dt>
 <dd><p>Set <code>CHAIN</code> to be the static chain for call statement <code>G</code>.
 </p></dd></dl>
 
@@ -184,25 +184,15 @@ statement <code>G</code>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005fcall_005fset_005ftail"></a>GIMPLE function: <em>void</em> <strong>gimple_call_set_tail</strong> <em>(gimple s)</em></dt>
+<dt><a name="index-gimple_005fcall_005fset_005ftail"></a>GIMPLE function: <em>void</em> <strong>gimple_call_set_tail</strong> <em>(gcall *s)</em></dt>
 <dd><p>Mark call statement <code>S</code> as being a tail call (i.e., a call just
 before the exit of a function). These calls are candidate for
 tail call optimization.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005fcall_005ftail_005fp"></a>GIMPLE function: <em>bool</em> <strong>gimple_call_tail_p</strong> <em>(gimple s)</em></dt>
+<dt><a name="index-gimple_005fcall_005ftail_005fp"></a>GIMPLE function: <em>bool</em> <strong>gimple_call_tail_p</strong> <em>(gcall *s)</em></dt>
 <dd><p>Return true if <code>GIMPLE_CALL</code> <code>S</code> is marked as a tail call.
-</p></dd></dl>
-
-<dl>
-<dt><a name="index-gimple_005fcall_005fmark_005funinlinable"></a>GIMPLE function: <em>void</em> <strong>gimple_call_mark_uninlinable</strong> <em>(gimple s)</em></dt>
-<dd><p>Mark <code>GIMPLE_CALL</code> <code>S</code> as being uninlinable.
-</p></dd></dl>
-
-<dl>
-<dt><a name="index-gimple_005fcall_005fcannot_005finline_005fp"></a>GIMPLE function: <em>bool</em> <strong>gimple_call_cannot_inline_p</strong> <em>(gimple s)</em></dt>
-<dd><p>Return true if <code>GIMPLE_CALL</code> <code>S</code> cannot be inlined.
 </p></dd></dl>
 
 <dl>
@@ -211,7 +201,7 @@ tail call optimization.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005fcall_005fcopy_005fskip_005fargs"></a>GIMPLE function: <em>gimple</em> <strong>gimple_call_copy_skip_args</strong> <em>(gimple stmt, bitmap args_to_skip)</em></dt>
+<dt><a name="index-gimple_005fcall_005fcopy_005fskip_005fargs"></a>GIMPLE function: <em>gimple</em> <strong>gimple_call_copy_skip_args</strong> <em>(gcall *stmt, bitmap args_to_skip)</em></dt>
 <dd><p>Build a <code>GIMPLE_CALL</code> identical to <code>STMT</code> but skipping the arguments
 in the positions marked by the set <code>ARGS_TO_SKIP</code>.
 </p></dd></dl>

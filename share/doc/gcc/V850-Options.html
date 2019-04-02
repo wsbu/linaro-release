@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,7 +75,7 @@ Next: <a href="VAX-Options.html#VAX-Options" accesskey="n" rel="next">VAX Option
 </div>
 <hr>
 <a name="V850-Options-1"></a>
-<h4 class="subsection">3.17.49 V850 Options</h4>
+<h4 class="subsection">3.18.50 V850 Options</h4>
 <a name="index-V850-Options"></a>
 
 <p>These &lsquo;<samp>-m</samp>&rsquo; options are defined for V850 implementations:
@@ -145,7 +145,7 @@ the first 32 kilobytes of memory.
 <dt><code>-mv850e3v5</code></dt>
 <dd><a name="index-mv850e3v5"></a>
 <p>Specify that the target processor is the V850E3V5.  The preprocessor
-constant &lsquo;<samp>__v850e3v5__</samp>&rsquo; is defined if this option is used.
+constant <code>__v850e3v5__</code> is defined if this option is used.
 </p>
 </dd>
 <dt><code>-mv850e2v4</code></dt>
@@ -157,19 +157,19 @@ the <samp>-mv850e3v5</samp> option.
 <dt><code>-mv850e2v3</code></dt>
 <dd><a name="index-mv850e2v3"></a>
 <p>Specify that the target processor is the V850E2V3.  The preprocessor
-constant &lsquo;<samp>__v850e2v3__</samp>&rsquo; is defined if this option is used.
+constant <code>__v850e2v3__</code> is defined if this option is used.
 </p>
 </dd>
 <dt><code>-mv850e2</code></dt>
 <dd><a name="index-mv850e2"></a>
 <p>Specify that the target processor is the V850E2.  The preprocessor
-constant &lsquo;<samp>__v850e2__</samp>&rsquo; is defined if this option is used.
+constant <code>__v850e2__</code> is defined if this option is used.
 </p>
 </dd>
 <dt><code>-mv850e1</code></dt>
 <dd><a name="index-mv850e1"></a>
 <p>Specify that the target processor is the V850E1.  The preprocessor
-constants &lsquo;<samp>__v850e1__</samp>&rsquo; and &lsquo;<samp>__v850e__</samp>&rsquo; are defined if
+constants <code>__v850e1__</code> and <code>__v850e__</code> are defined if
 this option is used.
 </p>
 </dd>
@@ -182,14 +182,14 @@ the <samp>-mv850e1</samp> option.
 <dt><code>-mv850e</code></dt>
 <dd><a name="index-mv850e"></a>
 <p>Specify that the target processor is the V850E.  The preprocessor
-constant &lsquo;<samp>__v850e__</samp>&rsquo; is defined if this option is used.
+constant <code>__v850e__</code> is defined if this option is used.
 </p>
 <p>If neither <samp>-mv850</samp> nor <samp>-mv850e</samp> nor <samp>-mv850e1</samp>
 nor <samp>-mv850e2</samp> nor <samp>-mv850e2v3</samp> nor <samp>-mv850e3v5</samp>
 are defined then a default target processor is chosen and the
 relevant &lsquo;<samp>__v850*__</samp>&rsquo; preprocessor constant is defined.
 </p>
-<p>The preprocessor constants &lsquo;<samp>__v850</samp>&rsquo; and &lsquo;<samp>__v851__</samp>&rsquo; are always
+<p>The preprocessor constants <code>__v850</code> and <code>__v851__</code> are always
 defined, regardless of which processor variant is the target.
 </p>
 </dd>
@@ -204,14 +204,14 @@ architecture.
 <p>This option is enabled by default when the RH850 ABI is
 in use (see <samp>-mrh850-abi</samp>), and disabled by default when the
 GCC ABI is in use.  If <code>CALLT</code> instructions are being generated
-then the C preprocessor symbol <code>__V850_CALLT__</code> will be defined.
+then the C preprocessor symbol <code>__V850_CALLT__</code> is defined.
 </p>
 </dd>
 <dt><code>-mrelax</code></dt>
 <dt><code>-mno-relax</code></dt>
 <dd><a name="index-mrelax-7"></a>
 <a name="index-mno_002drelax"></a>
-<p>Pass on (or do not pass on) the <samp>-mrelax</samp> command line option
+<p>Pass on (or do not pass on) the <samp>-mrelax</samp> command-line option
 to the assembler.
 </p>
 </dd>
@@ -224,14 +224,14 @@ to the assembler.
 </dd>
 <dt><code>-msoft-float</code></dt>
 <dt><code>-mhard-float</code></dt>
-<dd><a name="index-msoft_002dfloat-12"></a>
+<dd><a name="index-msoft_002dfloat-11"></a>
 <a name="index-mhard_002dfloat-7"></a>
 <p>Disable (or re-enable) the generation of hardware floating point
 instructions.  This option is only significant when the target
 architecture is &lsquo;<samp>V850E2V3</samp>&rsquo; or higher.  If hardware floating point
 instructions are being generated then the C preprocessor symbol
-<code>__FPU_OK__</code> will be defined, otherwise the symbol
-<code>__NO_FPU__</code> will be defined.
+<code>__FPU_OK__</code> is defined, otherwise the symbol
+<code>__NO_FPU__</code> is defined.
 </p>
 </dd>
 <dt><code>-mloop</code></dt>
@@ -257,10 +257,10 @@ value.
 
 </li><li> Functions are aligned to 16-bit boundaries.
 
-</li><li> The <samp>-m8byte-align</samp> command line option is supported.
+</li><li> The <samp>-m8byte-align</samp> command-line option is supported.
 
-</li><li> The <samp>-mdisable-callt</samp> command line option is enabled by
-default.  The <samp>-mno-disable-callt</samp> command line option is not
+</li><li> The <samp>-mdisable-callt</samp> command-line option is enabled by
+default.  The <samp>-mno-disable-callt</samp> command-line option is not
 supported.
 </li></ul>
 
@@ -282,9 +282,9 @@ reference.
 </li><li> Functions are aligned to 32-bit boundaries, unless optimizing for
 size.
 
-</li><li> The <samp>-m8byte-align</samp> command line option is not supported.
+</li><li> The <samp>-m8byte-align</samp> command-line option is not supported.
 
-</li><li> The <samp>-mdisable-callt</samp> command line option is supported but not
+</li><li> The <samp>-mdisable-callt</samp> command-line option is supported but not
 enabled by default.
 </li></ul>
 
@@ -296,11 +296,11 @@ enabled by default.
 <dt><code>-mno-8byte-align</code></dt>
 <dd><a name="index-m8byte_002dalign"></a>
 <a name="index-mno_002d8byte_002dalign"></a>
-<p>Enables support for <code>doubles</code> and <code>long long</code> types to be
+<p>Enables support for <code>double</code> and <code>long long</code> types to be
 aligned on 8-byte boundaries.  The default is to restrict the
 alignment of all objects to at most 4-bytes.  When
 <samp>-m8byte-align</samp> is in effect the C preprocessor symbol
-<code>__V850_8BYTE_ALIGN__</code> will be defined.
+<code>__V850_8BYTE_ALIGN__</code> is defined.
 </p>
 </dd>
 <dt><code>-mbig-switch</code></dt>

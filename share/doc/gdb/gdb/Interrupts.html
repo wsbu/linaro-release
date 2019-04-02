@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -70,11 +70,11 @@ Next: <a href="Notification-Packets.html#Notification-Packets" accesskey="n" rel
 <a name="Interrupts-1"></a>
 <h3 class="section">E.8 Interrupts</h3>
 <a name="index-interrupts-_0028remote-protocol_0029"></a>
-
-<p>When a program on the remote target is running, <small>GDB</small> may
-attempt to interrupt it by sending a &lsquo;<samp>Ctrl-C</samp>&rsquo;, <code>BREAK</code> or
-a <code>BREAK</code> followed by <code>g</code>,
-control of which is specified via <small>GDB</small>&rsquo;s &lsquo;<samp>interrupt-sequence</samp>&rsquo;.
+<a name="interrupting-remote-targets"></a>
+<p>In all-stop mode, when a program on the remote target is running,
+<small>GDB</small> may attempt to interrupt it by sending a &lsquo;<samp>Ctrl-C</samp>&rsquo;,
+<code>BREAK</code> or a <code>BREAK</code> followed by <code>g</code>, control of which
+is specified via <small>GDB</small>&rsquo;s &lsquo;<samp>interrupt-sequence</samp>&rsquo;.
 </p>
 <p>The precise meaning of <code>BREAK</code> is defined by the transport
 mechanism and may, in fact, be undefined.  <small>GDB</small> does not
@@ -95,6 +95,12 @@ and does <em>not</em> represent an interrupt.  E.g., an &lsquo;<samp>X</samp>&rs
 When Linux kernel receives this sequence from serial port,
 it stops execution and connects to gdb.
 </p>
+<p>In non-stop mode, because packet resumptions are asynchronous
+(see <a href="Packets.html#vCont-packet">vCont packet</a>), <small>GDB</small> is always free to send a remote
+command to the remote stub, even when the target is running.  For that
+reason, <small>GDB</small> instead sends a regular packet (see <a href="Packets.html#vCtrlC-packet">vCtrlC packet</a>) with the usual packet framing instead of the single byte
+<code>0x03</code>.
+</p>
 <p>Stubs are not required to recognize these interrupt mechanisms and the
 precise meaning associated with receipt of the interrupt is
 implementation defined.  If the target supports debugging of multiple
@@ -106,7 +112,8 @@ reply packets (see <a href="Stop-Reply-Packets.html#Stop-Reply-Packets">Stop Rep
 of successfully stopping the program in all-stop mode, and a stop reply
 for each stopped thread in non-stop mode.
 Interrupts received while the
-program is stopped are discarded.
+program is stopped are queued and the program will be interrupted when
+it is resumed next time.
 </p>
 <hr>
 <div class="header">

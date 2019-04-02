@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,7 +75,7 @@ Next: <a href="MCore-Options.html#MCore-Options" accesskey="n" rel="next">MCore 
 </div>
 <hr>
 <a name="M680x0-Options-1"></a>
-<h4 class="subsection">3.17.23 M680x0 Options</h4>
+<h4 class="subsection">3.18.22 M680x0 Options</h4>
 <a name="index-M680x0-options"></a>
 
 <p>These are the &lsquo;<samp>-m</samp>&rsquo; options defined for M680x0 and ColdFire processors.
@@ -85,7 +85,7 @@ are given below.
 </p>
 <dl compact="compact">
 <dt><code>-march=<var>arch</var></code></dt>
-<dd><a name="index-march-7"></a>
+<dd><a name="index-march-6"></a>
 <p>Generate code for a specific M680x0 or ColdFire instruction set
 architecture.  Permissible values of <var>arch</var> for M680x0
 architectures are: &lsquo;<samp>68000</samp>&rsquo;, &lsquo;<samp>68010</samp>&rsquo;, &lsquo;<samp>68020</samp>&rsquo;,
@@ -94,7 +94,7 @@ architectures are selected according to Freescale&rsquo;s ISA classification
 and the permissible values are: &lsquo;<samp>isaa</samp>&rsquo;, &lsquo;<samp>isaaplus</samp>&rsquo;,
 &lsquo;<samp>isab</samp>&rsquo; and &lsquo;<samp>isac</samp>&rsquo;.
 </p>
-<p>GCC defines a macro &lsquo;<samp>__mcf<var>arch</var>__</samp>&rsquo; whenever it is generating
+<p>GCC defines a macro <code>__mcf<var>arch</var>__</code> whenever it is generating
 code for a ColdFire target.  The <var>arch</var> in this macro is one of the
 <samp>-march</samp> arguments given above.
 </p>
@@ -104,7 +104,7 @@ for a particular microarchitecture.
 </p>
 </dd>
 <dt><code>-mcpu=<var>cpu</var></code></dt>
-<dd><a name="index-mcpu-7"></a>
+<dd><a name="index-mcpu-6"></a>
 <p>Generate code for a specific M680x0 or ColdFire processor.
 The M680x0 <var>cpu</var>s are: &lsquo;<samp>68000</samp>&rsquo;, &lsquo;<samp>68010</samp>&rsquo;, &lsquo;<samp>68020</samp>&rsquo;,
 &lsquo;<samp>68030</samp>&rsquo;, &lsquo;<samp>68040</samp>&rsquo;, &lsquo;<samp>68060</samp>&rsquo;, &lsquo;<samp>68302</samp>&rsquo;, &lsquo;<samp>68332</samp>&rsquo;
@@ -142,13 +142,13 @@ below, which also classifies the CPUs into families:
 <var>arch</var> is compatible with <var>cpu</var>.  Other combinations of
 <samp>-mcpu</samp> and <samp>-march</samp> are rejected.
 </p>
-<p>GCC defines the macro &lsquo;<samp>__mcf_cpu_<var>cpu</var></samp>&rsquo; when ColdFire target
-<var>cpu</var> is selected.  It also defines &lsquo;<samp>__mcf_family_<var>family</var></samp>&rsquo;,
+<p>GCC defines the macro <code>__mcf_cpu_<var>cpu</var></code> when ColdFire target
+<var>cpu</var> is selected.  It also defines <code>__mcf_family_<var>family</var></code>,
 where the value of <var>family</var> is given by the table above.
 </p>
 </dd>
 <dt><code>-mtune=<var>tune</var></code></dt>
-<dd><a name="index-mtune-8"></a>
+<dd><a name="index-mtune-7"></a>
 <p>Tune the code for a particular microarchitecture within the
 constraints set by <samp>-march</samp> and <samp>-mcpu</samp>.
 The M680x0 microarchitectures are: &lsquo;<samp>68000</samp>&rsquo;, &lsquo;<samp>68010</samp>&rsquo;,
@@ -162,14 +162,14 @@ to run relatively well on 68020, 68030 and 68040 targets.
 as well.  These two options select the same tuning decisions as
 <samp>-m68020-40</samp> and <samp>-m68020-60</samp> respectively.
 </p>
-<p>GCC defines the macros &lsquo;<samp>__mc<var>arch</var></samp>&rsquo; and &lsquo;<samp>__mc<var>arch</var>__</samp>&rsquo;
+<p>GCC defines the macros <code>__mc<var>arch</var></code> and <code>__mc<var>arch</var>__</code>
 when tuning for 680x0 architecture <var>arch</var>.  It also defines
-&lsquo;<samp>mc<var>arch</var></samp>&rsquo; unless either <samp>-ansi</samp> or a non-GNU <samp>-std</samp>
+<code>mc<var>arch</var></code> unless either <samp>-ansi</samp> or a non-GNU <samp>-std</samp>
 option is used.  If GCC is tuning for a range of architectures,
 as selected by <samp>-mtune=68020-40</samp> or <samp>-mtune=68020-60</samp>,
 it defines the macros for every architecture in the range.
 </p>
-<p>GCC also defines the macro &lsquo;<samp>__m<var>uarch</var>__</samp>&rsquo; when tuning for
+<p>GCC also defines the macro <code>__m<var>uarch</var>__</code> when tuning for
 ColdFire microarchitecture <var>uarch</var>, where <var>uarch</var> is one
 of the arguments given above.
 </p>
@@ -312,12 +312,12 @@ This results in code that can run relatively efficiently on either a
 <a name="index-m68881"></a>
 <p>Generate floating-point instructions.  This is the default for 68020
 and above, and for ColdFire devices that have an FPU.  It defines the
-macro &lsquo;<samp>__HAVE_68881__</samp>&rsquo; on M680x0 targets and &lsquo;<samp>__mcffpu__</samp>&rsquo;
+macro <code>__HAVE_68881__</code> on M680x0 targets and <code>__mcffpu__</code>
 on ColdFire targets.
 </p>
 </dd>
 <dt><code>-msoft-float</code></dt>
-<dd><a name="index-msoft_002dfloat-5"></a>
+<dd><a name="index-msoft_002dfloat-4"></a>
 <p>Do not generate floating-point instructions; use library calls instead.
 This is the default for 68000, 68010, and 68832 targets.  It is also
 the default for ColdFire devices that have no FPU.
@@ -335,7 +335,7 @@ architectures.  Otherwise, the default is taken from the target CPU
 example, the default is &ldquo;off&rdquo; for <samp>-mcpu=5206</samp> and &ldquo;on&rdquo; for
 <samp>-mcpu=5206e</samp>.
 </p>
-<p>GCC defines the macro &lsquo;<samp>__mcfhwdiv__</samp>&rsquo; when this option is enabled.
+<p>GCC defines the macro <code>__mcfhwdiv__</code> when this option is enabled.
 </p>
 </dd>
 <dt><code>-mshort</code></dt>
@@ -366,7 +366,7 @@ designed for a 68020.
 </p>
 </dd>
 <dt><code>-mrtd</code></dt>
-<dd><a name="index-mrtd-1"></a>
+<dd><a name="index-mrtd"></a>
 <p>Use a different function-calling convention, in which functions
 that take a fixed number of arguments return with the <code>rtd</code>
 instruction, which pops their arguments while returning.  This
@@ -489,6 +489,12 @@ object file that accesses more than 8192 GOT entries.  Very few do.
 </p>
 <p>These options have no effect unless GCC is generating
 position-independent code.
+</p>
+</dd>
+<dt><code>-mlong-jump-table-offsets</code></dt>
+<dd><a name="index-mlong_002djump_002dtable_002doffsets"></a>
+<p>Use 32-bit offsets in <code>switch</code> tables.  The default is to use
+16-bit offsets.
 </p>
 </dd>
 </dl>

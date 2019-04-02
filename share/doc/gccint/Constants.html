@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -122,17 +122,21 @@ only expression for integer value negative one is found in
 <a name="index-const_005fdouble"></a>
 </dd>
 <dt><code>(const_double:<var>m</var> <var>i0</var> <var>i1</var> &hellip;)</code></dt>
-<dd><p>Represents either a floating-point constant of mode <var>m</var> or an
-integer constant too large to fit into <code>HOST_BITS_PER_WIDE_INT</code>
-bits but small enough to fit within twice that number of bits (GCC
-does not provide a mechanism to represent even larger constants).  In
-the latter case, <var>m</var> will be <code>VOIDmode</code>.  For integral values
-constants for modes with more bits than twice the number in
-<code>HOST_WIDE_INT</code> the implied high order bits of that constant are
-copies of the top bit of <code>CONST_DOUBLE_HIGH</code>.  Note however that
-integral values are neither inherently signed nor inherently unsigned;
-where necessary, signedness is determined by the rtl operation
-instead.
+<dd><p>This represents either a floating-point constant of mode <var>m</var> or
+(on older ports that do not define
+<code>TARGET_SUPPORTS_WIDE_INT</code>) an integer constant too large to fit
+into <code>HOST_BITS_PER_WIDE_INT</code> bits but small enough to fit within
+twice that number of bits.  In the latter case, <var>m</var> will be
+<code>VOIDmode</code>.  For integral values constants for modes with more
+bits than twice the number in <code>HOST_WIDE_INT</code> the implied high
+order bits of that constant are copies of the top bit of
+<code>CONST_DOUBLE_HIGH</code>.  Note however that integral values are
+neither inherently signed nor inherently unsigned; where necessary,
+signedness is determined by the rtl operation instead.
+</p>
+<p>On more modern ports, <code>CONST_DOUBLE</code> only represents floating
+point values.  New ports define <code>TARGET_SUPPORTS_WIDE_INT</code> to
+make this designation.
 </p>
 <a name="index-CONST_005fDOUBLE_005fLOW"></a>
 <p>If <var>m</var> is <code>VOIDmode</code>, the bits of the value are stored in
@@ -146,6 +150,41 @@ represent a floating point number, but not precisely in the target
 machine&rsquo;s or host machine&rsquo;s floating point format.  To convert them to
 the precise bit pattern used by the target machine, use the macro
 <code>REAL_VALUE_TO_TARGET_DOUBLE</code> and friends (see <a href="Data-Output.html#Data-Output">Data Output</a>).
+</p>
+<a name="index-CONST_005fWIDE_005fINT"></a>
+</dd>
+<dt><code>(const_wide_int:<var>m</var> <var>nunits</var> <var>elt0</var> &hellip;)</code></dt>
+<dd><p>This contains an array of <code>HOST_WIDE_INT</code>s that is large enough
+to hold any constant that can be represented on the target.  This form
+of rtl is only used on targets that define
+<code>TARGET_SUPPORTS_WIDE_INT</code> to be nonzero and then
+<code>CONST_DOUBLE</code>s are only used to hold floating-point values.  If
+the target leaves <code>TARGET_SUPPORTS_WIDE_INT</code> defined as 0,
+<code>CONST_WIDE_INT</code>s are not used and <code>CONST_DOUBLE</code>s are as
+they were before.
+</p>
+<p>The values are stored in a compressed format.  The higher-order
+0s or -1s are not represented if they are just the logical sign
+extension of the number that is represented.
+</p>
+<a name="index-CONST_005fWIDE_005fINT_005fVEC"></a>
+</dd>
+<dt><code>CONST_WIDE_INT_VEC (<var>code</var>)</code></dt>
+<dd><p>Returns the entire array of <code>HOST_WIDE_INT</code>s that are used to
+store the value.  This macro should be rarely used.
+</p>
+<a name="index-CONST_005fWIDE_005fINT_005fNUNITS"></a>
+</dd>
+<dt><code>CONST_WIDE_INT_NUNITS (<var>code</var>)</code></dt>
+<dd><p>The number of <code>HOST_WIDE_INT</code>s used to represent the number.
+Note that this generally is smaller than the number of
+<code>HOST_WIDE_INT</code>s implied by the mode size.
+</p>
+<a name="index-CONST_005fWIDE_005fINT_005fELT"></a>
+</dd>
+<dt><code>CONST_WIDE_INT_NUNITS (<var>code</var>,<var>i</var>)</code></dt>
+<dd><p>Returns the <code>i</code>th element of the array.   Element 0 is contains
+the low order bits of the constant.
 </p>
 <a name="index-const_005ffixed"></a>
 </dd>

@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,7 +75,7 @@ Next: <a href="Volatiles.html#Volatiles" accesskey="n" rel="next">Volatiles</a>,
 </div>
 <hr>
 <a name="An-Inline-Function-is-As-Fast-As-a-Macro"></a>
-<h3 class="section">6.39 An Inline Function is As Fast As a Macro</h3>
+<h3 class="section">6.43 An Inline Function is As Fast As a Macro</h3>
 <a name="index-inline-functions"></a>
 <a name="index-integrating-function-code"></a>
 <a name="index-open-coding"></a>
@@ -141,21 +141,19 @@ function are integrated into the caller, and the function&rsquo;s address is
 never used, then the function&rsquo;s own assembler code is never referenced.
 In this case, GCC does not actually output assembler code for the
 function, unless you specify the option <samp>-fkeep-inline-functions</samp>.
-Some calls cannot be integrated for various reasons (in particular,
-calls that precede the function&rsquo;s definition cannot be integrated, and
-neither can recursive calls within the definition).  If there is a
-nonintegrated call, then the function is compiled to assembler code as
-usual.  The function must also be compiled as usual if the program
-refers to its address, because that can&rsquo;t be inlined.
+If there is a nonintegrated call, then the function is compiled to
+assembler code as usual.  The function must also be compiled as usual if
+the program refers to its address, because that cannot be inlined.
 </p>
 <a name="index-Winline-1"></a>
 <p>Note that certain usages in a function definition can make it unsuitable
-for inline substitution.  Among these usages are: variadic functions, use of
-<code>alloca</code>, use of variable-length data types (see <a href="Variable-Length.html#Variable-Length">Variable Length</a>),
-use of computed goto (see <a href="Labels-as-Values.html#Labels-as-Values">Labels as Values</a>), use of nonlocal goto,
-and nested functions (see <a href="Nested-Functions.html#Nested-Functions">Nested Functions</a>).  Using <samp>-Winline</samp>
-warns when a function marked <code>inline</code> could not be substituted,
-and gives the reason for the failure.
+for inline substitution.  Among these usages are: variadic functions,
+use of <code>alloca</code>, use of computed goto (see <a href="Labels-as-Values.html#Labels-as-Values">Labels as Values</a>),
+use of nonlocal goto, use of nested functions, use of <code>setjmp</code>, use
+of <code>__builtin_longjmp</code> and use of <code>__builtin_return</code> or
+<code>__builtin_apply_args</code>.  Using <samp>-Winline</samp> warns when a
+function marked <code>inline</code> could not be substituted, and gives the
+reason for the failure.
 </p>
 <a name="index-automatic-inline-for-C_002b_002b-member-fns"></a>
 <a name="index-inline-automatic-for-C_002b_002b-member-fns"></a>

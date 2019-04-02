@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -33,7 +33,7 @@ You have freedom to copy and modify this GNU Manual, like GNU
 <link href="Option-Index.html#Option-Index" rel="index" title="Option Index">
 <link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
 <link href="Target-Macros.html#Target-Macros" rel="up" title="Target Macros">
-<link href="Old-Constraints.html#Old-Constraints" rel="next" title="Old Constraints">
+<link href="Stack-and-Calling.html#Stack-and-Calling" rel="next" title="Stack and Calling">
 <link href="Stack-Registers.html#Stack-Registers" rel="prev" title="Stack Registers">
 <style type="text/css">
 <!--
@@ -71,7 +71,7 @@ ul.no-bullet {list-style: none}
 <a name="Register-Classes"></a>
 <div class="header">
 <p>
-Next: <a href="Old-Constraints.html#Old-Constraints" accesskey="n" rel="next">Old Constraints</a>, Previous: <a href="Registers.html#Registers" accesskey="p" rel="prev">Registers</a>, Up: <a href="Target-Macros.html#Target-Macros" accesskey="u" rel="up">Target Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="Stack-and-Calling.html#Stack-and-Calling" accesskey="n" rel="next">Stack and Calling</a>, Previous: <a href="Registers.html#Registers" accesskey="p" rel="prev">Registers</a>, Up: <a href="Target-Macros.html#Target-Macros" accesskey="u" rel="up">Target Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
 <a name="Register-Classes-1"></a>
@@ -369,7 +369,7 @@ force <var>x</var> into a memory location.  For example, rs6000 can load
 immediate values into general-purpose registers, but does not have an
 instruction for loading an immediate value into a floating-point
 register, so <code>PREFERRED_RELOAD_CLASS</code> returns <code>NO_REGS</code> when
-<var>x</var> is a floating-point constant.  If the constant can&rsquo;t be loaded
+<var>x</var> is a floating-point constant.  If the constant cannot be loaded
 into any kind of register, code generation will be better if
 <code>TARGET_LEGITIMATE_CONSTANT_P</code> makes the constant illegitimate instead
 of using <code>TARGET_PREFERRED_RELOAD_CLASS</code>.
@@ -402,7 +402,7 @@ to use when it is necessary to be able to hold a value of mode
 ordinarily be used.
 </p>
 <p>Unlike <code>PREFERRED_RELOAD_CLASS</code>, this macro should be used when
-there are certain modes that simply can&rsquo;t go in certain reload classes.
+there are certain modes that simply cannot go in certain reload classes.
 </p>
 <p>The value is a register class; perhaps <var>class</var>, or perhaps another,
 smaller class.
@@ -412,7 +412,7 @@ require the macro to do something nontrivial.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSECONDARY_005fRELOAD"></a>Target Hook: <em>reg_class_t</em> <strong>TARGET_SECONDARY_RELOAD</strong> <em>(bool <var>in_p</var>, rtx <var>x</var>, reg_class_t <var>reload_class</var>, enum machine_mode <var>reload_mode</var>, secondary_reload_info *<var>sri</var>)</em></dt>
+<dt><a name="index-TARGET_005fSECONDARY_005fRELOAD"></a>Target Hook: <em>reg_class_t</em> <strong>TARGET_SECONDARY_RELOAD</strong> <em>(bool <var>in_p</var>, rtx <var>x</var>, reg_class_t <var>reload_class</var>, machine_mode <var>reload_mode</var>, secondary_reload_info *<var>sri</var>)</em></dt>
 <dd><p>Many machines have some registers that cannot be copied directly to or
 from memory or even from other types of registers.  An example is the
 &lsquo;<samp>MQ</samp>&rsquo; register, which on most machines, can only be copied to or
@@ -616,7 +616,7 @@ pressure.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fCLASS_005fMAX_005fNREGS"></a>Target Hook: <em>unsigned char</em> <strong>TARGET_CLASS_MAX_NREGS</strong> <em>(reg_class_t <var>rclass</var>, enum machine_mode <var>mode</var>)</em></dt>
+<dt><a name="index-TARGET_005fCLASS_005fMAX_005fNREGS"></a>Target Hook: <em>unsigned char</em> <strong>TARGET_CLASS_MAX_NREGS</strong> <em>(reg_class_t <var>rclass</var>, machine_mode <var>mode</var>)</em></dt>
 <dd><p>A target hook returns the maximum number of consecutive registers
 of class <var>rclass</var> needed to hold a value of mode <var>mode</var>.
 </p>
@@ -652,8 +652,8 @@ in the reload pass.
 <dd><p>If defined, a C expression that returns nonzero for a <var>class</var> for which
 a change from mode <var>from</var> to mode <var>to</var> is invalid.
 </p>
-<p>For the example, loading 32-bit integer or floating-point objects into
-floating-point registers on the Alpha extends them to 64 bits.
+<p>For example, loading 32-bit integer or floating-point objects into
+floating-point registers on Alpha extends them to 64 bits.
 Therefore loading a 64-bit object and then storing it as a 32-bit object
 does not store the low-order 32 bits, as would be the case for a normal
 register.  Therefore, <samp>alpha.h</samp> defines <code>CANNOT_CHANGE_MODE_CLASS</code>
@@ -664,11 +664,30 @@ as below:
   (GET_MODE_SIZE (FROM) != GET_MODE_SIZE (TO) \
    ? reg_classes_intersect_p (FLOAT_REGS, (CLASS)) : 0)
 </pre></div>
+
+<p>Even if storing from a register in mode <var>to</var> would be valid,
+if both <var>from</var> and <code>raw_reg_mode</code> for <var>class</var> are wider
+than <code>word_mode</code>, then we must prevent <var>to</var> narrowing the
+mode.  This happens when the middle-end assumes that it can load
+or store pieces of an <var>N</var>-word pseudo, and that the pseudo will
+eventually be allocated to <var>N</var> <code>word_mode</code> hard registers.
+Failure to prevent this kind of mode change will result in the
+entire <code>raw_reg_mode</code> being modified instead of the partial
+value that the middle-end intended.
+</p>
 </dd></dl>
 
 <dl>
+<dt><a name="index-TARGET_005fIRA_005fCHANGE_005fPSEUDO_005fALLOCNO_005fCLASS"></a>Target Hook: <em>reg_class_t</em> <strong>TARGET_IRA_CHANGE_PSEUDO_ALLOCNO_CLASS</strong> <em>(int, <var>reg_class_t</var>, <var>reg_class_t</var>)</em></dt>
+<dd><p>A target hook which can change allocno class for given pseudo from
+  allocno and best class calculated by IRA.
+</p>  
+<p>The default version of this target hook always returns given class.
+</p></dd></dl>
+
+<dl>
 <dt><a name="index-TARGET_005fLRA_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_LRA_P</strong> <em>(void)</em></dt>
-<dd><p>A target hook which returns true if we use LRA instead of reload pass.  It means that LRA was ported to the target.    The default version of this target hook returns always false.
+<dd><p>A target hook which returns true if we use LRA instead of reload pass.    The default version of this target hook returns true.  New ports  should use LRA, and existing ports are encouraged to convert.
 </p></dd></dl>
 
 <dl>
@@ -687,19 +706,50 @@ as below:
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fSPILL_005fCLASS"></a>Target Hook: <em>reg_class_t</em> <strong>TARGET_SPILL_CLASS</strong> <em>(reg_class_t, enum <var>machine_mode</var>)</em></dt>
+<dt><a name="index-TARGET_005fCANNOT_005fSUBSTITUTE_005fMEM_005fEQUIV_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_CANNOT_SUBSTITUTE_MEM_EQUIV_P</strong> <em>(rtx <var>subst</var>)</em></dt>
+<dd><p>A target hook which returns <code>true</code> if <var>subst</var> can&rsquo;t
+substitute safely pseudos with equivalent memory values during
+register allocation.
+The default version of this target hook returns <code>false</code>.
+On most machines, this default should be used.  For generally
+machines with non orthogonal register usage for addressing, such
+as SH, this hook can be used to avoid excessive spilling.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fLEGITIMIZE_005fADDRESS_005fDISPLACEMENT"></a>Target Hook: <em>bool</em> <strong>TARGET_LEGITIMIZE_ADDRESS_DISPLACEMENT</strong> <em>(rtx *<var>disp</var>, rtx *<var>offset</var>, machine_mode <var>mode</var>)</em></dt>
+<dd><p>A target hook which returns <code>true</code> if *<var>disp</var> is
+legitimezed to valid address displacement with subtracting *<var>offset</var>
+at memory mode <var>mode</var>.
+The default version of this target hook returns <code>false</code>.
+This hook will benefit machines with limited base plus displacement
+addressing.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fSPILL_005fCLASS"></a>Target Hook: <em>reg_class_t</em> <strong>TARGET_SPILL_CLASS</strong> <em>(reg_class_t, <var>machine_mode</var>)</em></dt>
 <dd><p>This hook defines a class of registers which could be used for spilling  pseudos of the given mode and class, or <code>NO_REGS</code> if only memory  should be used.  Not defining this hook is equivalent to returning  <code>NO_REGS</code> for all inputs.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fCSTORE_005fMODE"></a>Target Hook: <em>enum machine_mode</em> <strong>TARGET_CSTORE_MODE</strong> <em>(enum insn_code <var>icode</var>)</em></dt>
+<dt><a name="index-TARGET_005fADDITIONAL_005fALLOCNO_005fCLASS_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_ADDITIONAL_ALLOCNO_CLASS_P</strong> <em>(reg_class_t)</em></dt>
+<dd><p>This hook should return <code>true</code> if given class of registers should  be an allocno class in any way.  Usually RA uses only one register  class from all classes containing the same register set.  In some  complicated cases, you need to have two or more such classes as  allocno ones for RA correct work.  Not defining this hook is  equivalent to returning <code>false</code> for all inputs.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fCSTORE_005fMODE"></a>Target Hook: <em>machine_mode</em> <strong>TARGET_CSTORE_MODE</strong> <em>(enum insn_code <var>icode</var>)</em></dt>
 <dd><p>This hook defines the machine mode to use for the boolean result of  conditional store patterns.  The ICODE argument is the instruction code  for the cstore being performed.  Not definiting this hook is the same  as accepting the mode encoded into operand 0 of the cstore expander  patterns.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fCOMPUTE_005fPRESSURE_005fCLASSES"></a>Target Hook: <em>int</em> <strong>TARGET_COMPUTE_PRESSURE_CLASSES</strong> <em>(enum reg_class *<var>pressure_classes</var>)</em></dt>
+<dd><p>A target hook which lets a backend compute the set of pressure classes to  be used by those optimization passes which take register pressure into  account, as opposed to letting IRA compute them.  It returns the number of  register classes stored in the array <var>pressure_classes</var>.
 </p></dd></dl>
 
 <hr>
 <div class="header">
 <p>
-Next: <a href="Old-Constraints.html#Old-Constraints" accesskey="n" rel="next">Old Constraints</a>, Previous: <a href="Registers.html#Registers" accesskey="p" rel="prev">Registers</a>, Up: <a href="Target-Macros.html#Target-Macros" accesskey="u" rel="up">Target Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="Stack-and-Calling.html#Stack-and-Calling" accesskey="n" rel="next">Stack and Calling</a>, Previous: <a href="Registers.html#Registers" accesskey="p" rel="prev">Registers</a>, Up: <a href="Target-Macros.html#Target-Macros" accesskey="u" rel="up">Target Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 
 

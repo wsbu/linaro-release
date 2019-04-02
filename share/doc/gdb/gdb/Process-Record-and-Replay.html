@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -145,7 +145,9 @@ execution.
 data.  Further, the data is collected in a ring buffer so old data will
 be overwritten when the buffer is full.  It allows limited reverse
 execution.  Variables and registers are not available during reverse
-execution.
+execution.  In remote debugging, recording continues on disconnect.
+Recorded data can be inspected after reconnecting.  The recording may
+be stopped using <code>record stop</code>.
 </p>
 <p>The recording format can be specified as parameter.  Without a parameter
 the command chooses the recording format.  The following recording
@@ -160,8 +162,8 @@ branch in the btrace ring buffer.
 </p>
 </dd>
 <dt><code>pt</code></dt>
-<dd><a name="index-Intel_0028R_0029-Processor-Trace"></a>
-<p>Use the <em>Intel(R) Processor Trace</em> recording format.  In this
+<dd><a name="index-Intel-Processor-Trace"></a>
+<p>Use the <em>Intel Processor Trace</em> recording format.  In this
 format, the processor stores the execution trace in a compressed form
 that is afterwards decoded by <small>GDB</small>.
 </p>
@@ -336,10 +338,72 @@ and to read-write memory.  Beware that the accessed memory corresponds
 to the live target and not necessarily to the current replay
 position.
 </p>
+</dd>
+<dt><code>set record btrace cpu <var>identifier</var></code></dt>
+<dd><p>Set the processor to be used for enabling workarounds for processor
+errata when decoding the trace.
+</p>
+<p>Processor errata are defects in processor operation, caused by its
+design or manufacture.  They can cause a trace not to match the
+specification.  This, in turn, may cause trace decode to fail.
+<small>GDB</small> can detect erroneous trace packets and correct them, thus
+avoiding the decoding failures.  These corrections are known as
+<em>errata workarounds</em>, and are enabled based on the processor on
+which the trace was recorded.
+</p>
+<p>By default, <small>GDB</small> attempts to detect the processor
+automatically, and apply the necessary workarounds for it.  However,
+you may need to specify the processor if <small>GDB</small> does not yet
+support it.  This command allows you to do that, and also allows to
+disable the workarounds.
+</p>
+<p>The argument <var>identifier</var> identifies the <small>CPU</small> and is of the
+form: <code><var>vendor</var>:<var>procesor identifier</var></code>.  In addition,
+there are two special identifiers, <code>none</code> and <code>auto</code>
+(default).
+</p>
+<p>The following vendor identifiers and corresponding processor
+identifiers are currently supported:
+</p>
+<table>
+<tr><td width="10%"><code>intel</code></td><td width="90%"><var>family</var>/<var>model</var>[/<var>stepping</var>]</td></tr>
+</table>
+
+<p>On GNU/Linux systems, the processor <var>family</var>, <var>model</var>, and
+<var>stepping</var> can be obtained from <code>/proc/cpuinfo</code>.
+</p>
+<p>If <var>identifier</var> is <code>auto</code>, enable errata workarounds for the
+processor on which the trace was recorded.  If <var>identifier</var> is
+<code>none</code>, errata workarounds are disabled.
+</p>
+<p>For example, when using an old <small>GDB</small> on a new system, decode
+may fail because <small>GDB</small> does not support the new processor.  It
+often suffices to specify an older processor that <small>GDB</small>
+supports.
+</p>
+<div class="smallexample">
+<pre class="smallexample">(gdb) info record
+Active record target: record-btrace
+Recording format: Intel Processor Trace.
+Buffer size: 16kB.
+Failed to configure the Intel Processor Trace decoder: unknown cpu.
+(gdb) set record btrace cpu intel:6/158
+(gdb) info record
+Active record target: record-btrace
+Recording format: Intel Processor Trace.
+Buffer size: 16kB.
+Recorded 84872 instructions in 3189 functions (0 gaps) for thread 1 (...).
+</pre></div>
+
 <a name="index-show-record-btrace"></a>
 </dd>
 <dt><code>show record btrace replay-memory-access</code></dt>
 <dd><p>Show the current setting of <code>replay-memory-access</code>.
+</p>
+</dd>
+<dt><code>show record btrace cpu</code></dt>
+<dd><p>Show the processor to be used for enabling trace decode errata
+workarounds.
 </p>
 <a name="index-set-record-btrace-bts"></a>
 </dd>
@@ -371,12 +435,12 @@ tracing in <acronym>BTS</acronym> format.
 </dd>
 <dt><code>set record btrace pt buffer-size <var>size</var></code></dt>
 <dt><code>set record btrace pt buffer-size unlimited</code></dt>
-<dd><p>Set the requested ring buffer size for branch tracing in Intel(R)
+<dd><p>Set the requested ring buffer size for branch tracing in Intel
 Processor Trace format.  Default is 16KB.
 </p>
 <p>If <var>size</var> is a positive number, then <small>GDB</small> will try to
 allocate a buffer of at least <var>size</var> bytes for each new thread
-that uses the btrace recording method and the Intel(R) Processor Trace
+that uses the btrace recording method and the Intel Processor Trace
 format.  The actually obtained buffer size may differ from the
 requested <var>size</var>.  Use the <code>info record</code> command to see the
 actual buffer size for each thread.
@@ -390,7 +454,7 @@ also need longer to process the branch trace data before it can be used.
 </dd>
 <dt><code>show record btrace pt buffer-size <var>size</var></code></dt>
 <dd><p>Show the current setting of the requested ring buffer size for branch
-tracing in Intel(R) Processor Trace format.
+tracing in Intel Processor Trace format.
 </p>
 <a name="index-info-record"></a>
 </dd>
@@ -452,8 +516,27 @@ recorded &ldquo;future&rdquo; and begin recording a new &ldquo;future&rdquo;.
 <dd><p>Disassembles instructions from the recorded execution log.  By
 default, ten instructions are disassembled.  This can be changed using
 the <code>set record instruction-history-size</code> command.  Instructions
-are printed in execution order.  There are several ways to specify
-what part of the execution log to disassemble:
+are printed in execution order.
+</p>
+<p>It can also print mixed source+disassembly if you specify the the
+<code>/m</code> or <code>/s</code> modifier, and print the raw instructions in hex
+as well as in symbolic form by specifying the <code>/r</code> modifier.
+</p>
+<p>The current position marker is printed for the instruction at the
+current program counter value.  This instruction can appear multiple
+times in the trace and the current position marker will be printed
+every time.  To omit the current position marker, specify the
+<code>/p</code> modifier.
+</p>
+<p>To better align the printed instructions when the trace contains
+instructions from more than one function, the function name may be
+omitted by specifying the <code>/f</code> modifier.
+</p>
+<p>Speculatively executed instructions are prefixed with &lsquo;<samp>?</samp>&rsquo;.  This
+feature is not available for all recording formats.
+</p>
+<p>There are several ways to specify what part of the execution log to
+disassemble:
 </p>
 <dl compact="compact">
 <dt><code>record instruction-history <var>insn</var></code></dt>
@@ -477,7 +560,7 @@ instructions before instruction number <var>insn</var>.
 <dd><p>Disassembles ten more instructions before the last disassembly.
 </p>
 </dd>
-<dt><code>record instruction-history <var>begin</var> <var>end</var></code></dt>
+<dt><code>record instruction-history <var>begin</var>, <var>end</var></code></dt>
 <dd><p>Disassembles instructions beginning with instruction number
 <var>begin</var> until instruction number <var>end</var>.  The instruction
 number <var>end</var> is included.
@@ -557,7 +640,7 @@ prints <var>n</var> functions before function number <var>func</var>.
 <dd><p>Prints ten more functions before the last ten-line print.
 </p>
 </dd>
-<dt><code>record function-call-history <var>begin</var> <var>end</var></code></dt>
+<dt><code>record function-call-history <var>begin</var>, <var>end</var></code></dt>
 <dd><p>Prints functions beginning with function number <var>begin</var> until
 function number <var>end</var>.  The function number <var>end</var> is included.
 </p></dd>

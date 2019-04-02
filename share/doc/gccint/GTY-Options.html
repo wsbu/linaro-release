@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -177,6 +177,15 @@ you should use <code>atomic</code>.
 This is somewhat dangerous; the only safe use is in a union when one
 field really isn&rsquo;t ever used.
 </p>
+<a name="index-for_005fuser"></a>
+</dd>
+<dt><code>for_user</code></dt>
+<dd>
+<p>Use this to mark types that need to be marked by user gc routines, but are not
+refered to in a template argument.  So if you have some user gc type T1 and a
+non user gc type T2 you can give T2 the for_user option so that the marking
+functions for T1 can call non mangled functions to mark T2.
+</p>
 <a name="index-desc"></a>
 <a name="index-tag"></a>
 <a name="index-default"></a>
@@ -220,56 +229,14 @@ will treat the field <code>scope</code> as being present.
 to denote which subclass an instance is.  See <a href="Inheritance-and-GTY.html#Inheritance-and-GTY">Inheritance and GTY</a>
 for more information.
 </p>
-<a name="index-param_005fis"></a>
-<a name="index-use_005fparam"></a>
+<a name="index-cache"></a>
 </dd>
-<dt><code>param_is (<var>type</var>)</code></dt>
-<dt><code>use_param</code></dt>
+<dt><code>cache</code></dt>
 <dd>
-<p>Sometimes it&rsquo;s convenient to define some data structure to work on
-generic pointers (that is, <code>PTR</code>) and then use it with a specific
-type.  <code>param_is</code> specifies the real type pointed to, and
-<code>use_param</code> says where in the generic data structure that type
-should be put.
-</p>
-<p>For instance, to have a <code>htab_t</code> that points to trees, one would
-write the definition of <code>htab_t</code> like this:
-</p><div class="smallexample">
-<pre class="smallexample">typedef struct GTY(()) {
-  &hellip;
-  void ** GTY ((use_param, &hellip;)) entries;
-  &hellip;
-} htab_t;
-</pre></div>
-<p>and then declare variables like this:
-</p><div class="smallexample">
-<pre class="smallexample">  static htab_t GTY ((param_is (union tree_node))) ict;
-</pre></div>
-
-<a name="index-paramn_005fis"></a>
-<a name="index-use_005fparamn"></a>
-</dd>
-<dt><code>param<var>n</var>_is (<var>type</var>)</code></dt>
-<dt><code>use_param<var>n</var></code></dt>
-<dd>
-<p>In more complicated cases, the data structure might need to work on
-several different types, which might not necessarily all be pointers.
-For this, <code>param1_is</code> through <code>param9_is</code> may be used to
-specify the real type of a field identified by <code>use_param1</code> through
-<code>use_param9</code>.
-</p>
-<a name="index-use_005fparams"></a>
-</dd>
-<dt><code>use_params</code></dt>
-<dd>
-<p>When a structure contains another structure that is parameterized,
-there&rsquo;s no need to do anything special, the inner structure inherits the
-parameters of the outer one.  When a structure contains a pointer to a
-parameterized structure, the type machinery won&rsquo;t automatically detect
-this (it could, it just doesn&rsquo;t yet), so it&rsquo;s necessary to tell it that
-the pointed-to structure should use the same parameters as the outer
-structure.  This is done by marking the pointer with the
-<code>use_params</code> option.
+<p>When the <code>cache</code> option is applied to a global variable gt_clear_cache is
+called on that variable between the mark and sweep phases of garbage
+collection.  The gt_clear_cache function is free to mark blocks as used, or to
+clear pointers in the variable.
 </p>
 <a name="index-deletable"></a>
 </dd>
@@ -279,35 +246,6 @@ structure.  This is done by marking the pointer with the
 garbage collection runs, there&rsquo;s no need to mark anything pointed to
 by this variable, it can just be set to <code>NULL</code> instead.  This is used
 to keep a list of free structures around for re-use.
-</p>
-<a name="index-if_005fmarked"></a>
-</dd>
-<dt><code>if_marked (&quot;<var>expression</var>&quot;)</code></dt>
-<dd>
-<p>Suppose you want some kinds of object to be unique, and so you put them
-in a hash table.  If garbage collection marks the hash table, these
-objects will never be freed, even if the last other reference to them
-goes away.  GGC has special handling to deal with this: if you use the
-<code>if_marked</code> option on a global hash table, GGC will call the
-routine whose name is the parameter to the option on each hash table
-entry.  If the routine returns nonzero, the hash table entry will
-be marked as usual.  If the routine returns zero, the hash table entry
-will be deleted.
-</p>
-<p>The routine <code>ggc_marked_p</code> can be used to determine if an element
-has been marked already; in fact, the usual case is to use
-<code>if_marked (&quot;ggc_marked_p&quot;)</code>.
-</p>
-<a name="index-mark_005fhook"></a>
-</dd>
-<dt><code>mark_hook (&quot;<var>hook-routine-name</var>&quot;)</code></dt>
-<dd>
-<p>If provided for a structure or union type, the given
-<var>hook-routine-name</var> (between double-quotes) is the name of a
-routine called when the garbage collector has just marked the data as
-reachable. This routine should not change the data, or call any ggc
-routine. Its only argument is a pointer to the just marked (const)
-structure or union.
 </p>
 <a name="index-maybe_005fundef"></a>
 </dd>
@@ -373,39 +311,6 @@ of pointers.  <code>reorder</code> functions can be expensive.  When
 possible, it is better to depend on properties of the data, like an ID
 number or the hash of a string instead.
 </p>
-<a name="index-variable_005fsize"></a>
-</dd>
-<dt><code>variable_size</code></dt>
-<dd>
-<p>The type machinery expects the types to be of constant size.  When this
-is not true, for example, with structs that have array fields or unions,
-the type machinery cannot tell how many bytes need to be allocated at
-each allocation.  The <code>variable_size</code> is used to mark such types.
-The type machinery then provides allocators that take a parameter
-indicating an exact size of object being allocated.  Note that the size
-must be provided in bytes whereas the <code>length</code> option works with
-array lengths in number of elements.
-</p>
-<p>For example,
-</p><div class="smallexample">
-<pre class="smallexample">struct GTY((variable_size)) sorted_fields_type {
-  int len;
-  tree GTY((length (&quot;%h.len&quot;))) elts[1];
-};
-</pre></div>
-
-<p>Then the objects of <code>struct sorted_fields_type</code> are allocated in GC
-memory as follows:
-</p><div class="smallexample">
-<pre class="smallexample">  field_vec = ggc_alloc_sorted_fields_type (size);
-</pre></div>
-
-<p>If <var>field_vec-&gt;elts</var> stores <var>n</var> elements, then <var>size</var>
-could be calculated as follows:
-</p><div class="smallexample">
-<pre class="smallexample">  size_t size = sizeof (struct sorted_fields_type) + n * sizeof (tree);
-</pre></div>
-
 <a name="index-atomic"></a>
 </dd>
 <dt><code>atomic</code></dt>

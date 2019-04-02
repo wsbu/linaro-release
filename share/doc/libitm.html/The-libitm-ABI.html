@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 2011-2014 Free Software Foundation, Inc.
+<!-- Copyright (C) 2011-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.2 or
@@ -233,17 +233,26 @@ transactions.
 <div class="example">
 <pre class="example">void _ITM_commitTransactionEH(void *exc_ptr) ITM_REGPARM;
 void *_ITM_cxa_allocate_exception (size_t);
+void _ITM_cxa_free_exception (void *exc_ptr);
 void _ITM_cxa_throw (void *obj, void *tinfo, void *dest);
 void *_ITM_cxa_begin_catch (void *exc_ptr);
 void _ITM_cxa_end_catch (void);
 </pre></div>
 
-<p><code>_ITM_commitTransactionEH</code> must be called to commit a transaction if an
-exception could be in flight at this position in the code. <code>exc_ptr</code> is
-the current exception or zero if there is no current exception.
-The <code>_ITM_cxa...</code> functions are transactional wrappers for the respective
+<p>The EH scheme changed in version 6 of GCC.  Previously, the compiler
+added a call to <code>_ITM_commitTransactionEH</code> to commit a transaction if
+an exception could be in flight at this position in the code; <code>exc_ptr</code> is
+the address of the current exception and must be non-zero.  Now, the
+compiler must catch all exceptions that are about to be thrown out of a
+transaction and call <code>_ITM_commitTransactionEH</code> from the catch clause,
+with <code>exc_ptr</code> being zero.
+</p>
+<p>Note that the old EH scheme never worked completely in GCC&rsquo;s implementation;
+libitm currently does not try to be compatible with the old scheme.
+</p>
+<p>The <code>_ITM_cxa...</code> functions are transactional wrappers for the respective
 <code>__cxa...</code> functions and must be called instead of these in transactional
-code.
+code.  <code>_ITM_cxa_free_exception</code> is new in GCC 6.
 </p>
 <p>To support this EH scheme, libstdc++ needs to provide one additional function
 (<code>_cxa_tm_cleanup</code>), which is used by the TM to clean up the exception
@@ -254,7 +263,8 @@ handling state while rolling back a transaction:
                        unsigned int caught_count);
 </pre></div>
 
-<p><code>unthrown_obj</code> is non-null if the program called
+<p>Since GCC 6, <code>unthrown_obj</code> is not used anymore and always null;
+prior to that, <code>unthrown_obj</code> is non-null if the program called
 <code>__cxa_allocate_exception</code> for this exception but did not yet called
 <code>__cxa_throw</code> for it. <code>cleanup_exc</code> is non-null if the program is
 currently processing a cleanup along an exception path but has not caught this
@@ -380,6 +390,10 @@ void _ITM_free (void *) ITM_PURE;
 <p>These functions are essentially transactional wrappers for <code>malloc</code>,
 <code>calloc</code>, and <code>free</code>. Within transactions, the compiler should
 replace calls to the original functions with calls to the wrapper functions.
+</p>
+<p>libitm also provides transactional clones of C++ memory management functions
+such as global operator new and delete.  They are part of libitm for historic
+reasons but do not need to be part of this ABI.
 </p>
 
 <a name="g_t_005bNo-changes_005d-Future-Enhancements-to-the-ABI"></a>

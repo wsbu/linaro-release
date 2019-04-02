@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,23 +75,30 @@ Next: <a href="_005f_005fatomic-Builtins.html#g_t_005f_005fatomic-Builtins" acce
 </div>
 <hr>
 <a name="Legacy-_005f_005fsync-Built_002din-Functions-for-Atomic-Memory-Access"></a>
-<h3 class="section">6.51 Legacy __sync Built-in Functions for Atomic Memory Access</h3>
+<h3 class="section">6.52 Legacy <code>__sync</code> Built-in Functions for Atomic Memory Access</h3>
 
 <p>The following built-in functions
 are intended to be compatible with those described
 in the <cite>Intel Itanium Processor-specific Application Binary Interface</cite>,
-section 7.4.  As such, they depart from the normal GCC practice of using
-the &lsquo;<samp>__builtin_</samp>&rsquo; prefix, and further that they are overloaded such that
-they work on multiple types.
+section 7.4.  As such, they depart from normal GCC practice by not using
+the &lsquo;<samp>__builtin_</samp>&rsquo; prefix and also by being overloaded so that they
+work on multiple types.
 </p>
 <p>The definition given in the Intel documentation allows only for the use of
-the types <code>int</code>, <code>long</code>, <code>long long</code> as well as their unsigned
-counterparts.  GCC allows any integral scalar or pointer type that is
-1, 2, 4 or 8 bytes in length.
+the types <code>int</code>, <code>long</code>, <code>long long</code> or their unsigned
+counterparts.  GCC allows any scalar type that is 1, 2, 4 or 8 bytes in
+size other than the C type <code>_Bool</code> or the C++ type <code>bool</code>.
+Operations on pointer arguments are performed as if the operands were
+of the <code>uintptr_t</code> type.  That is, they are not scaled by the size
+of the type to which the pointer points.
+</p>
+<p>These functions are implemented in terms of the &lsquo;<samp>__atomic</samp>&rsquo;
+builtins (see <a href="_005f_005fatomic-Builtins.html#g_t_005f_005fatomic-Builtins">__atomic Builtins</a>).  They should not be used for new
+code which should use the &lsquo;<samp>__atomic</samp>&rsquo; builtins instead.
 </p>
 <p>Not all operations are supported by all target processors.  If a particular
 operation cannot be implemented on the target processor, a warning is
-generated and a call an external function is generated.  The external
+generated and a call to an external function is generated.  The external
 function carries the same name as the built-in version,
 with an additional suffix
 &lsquo;<samp>_<var>n</var></samp>&rsquo; where <var>n</var> is the size of the data type.
@@ -107,11 +114,10 @@ after the operation.
 <p>All of the routines are described in the Intel documentation to take
 &ldquo;an optional list of variables protected by the memory barrier&rdquo;.  It&rsquo;s
 not clear what is meant by that; it could mean that <em>only</em> the
-following variables are protected, or it could mean that these variables
-should in addition be protected.  At present GCC ignores this list and
-protects all variables that are globally accessible.  If in the future
-we make some use of this list, an empty list will continue to mean all
-globally accessible variables.
+listed variables are protected, or it could mean a list of additional
+variables to be protected.  The list is ignored by GCC which treats it as
+empty.  GCC interprets an empty list as meaning that all globally
+accessible variables should be protected.
 </p>
 <dl compact="compact">
 <dt><code><var>type</var> __sync_fetch_and_add (<var>type</var> *ptr, <var>type</var> value, ...)</code></dt>
@@ -127,13 +133,20 @@ globally accessible variables.
 <a name="index-_005f_005fsync_005ffetch_005fand_005fxor"></a>
 <a name="index-_005f_005fsync_005ffetch_005fand_005fnand"></a>
 <p>These built-in functions perform the operation suggested by the name, and
-returns the value that had previously been in memory.  That is,
+returns the value that had previously been in memory.  That is, operations
+on integer operands have the following semantics.  Operations on pointer
+arguments are performed as if the operands were of the <code>uintptr_t</code>
+type.  That is, they are not scaled by the size of the type to which
+the pointer points.
 </p>
 <div class="smallexample">
 <pre class="smallexample">{ tmp = *ptr; *ptr <var>op</var>= value; return tmp; }
 { tmp = *ptr; *ptr = ~(tmp &amp; value); return tmp; }   // nand
 </pre></div>
 
+<p>The object pointed to by the first argument must be of integer or pointer
+type.  It must not be a boolean type.
+</p>
 <p><em>Note:</em> GCC 4.4 and later implement <code>__sync_fetch_and_nand</code>
 as <code>*ptr = ~(tmp &amp; value)</code> instead of <code>*ptr = ~tmp &amp; value</code>.
 </p>
@@ -151,13 +164,18 @@ as <code>*ptr = ~(tmp &amp; value)</code> instead of <code>*ptr = ~tmp &amp; val
 <a name="index-_005f_005fsync_005fxor_005fand_005ffetch"></a>
 <a name="index-_005f_005fsync_005fnand_005fand_005ffetch"></a>
 <p>These built-in functions perform the operation suggested by the name, and
-return the new value.  That is,
+return the new value.  That is, operations on integer operands have
+the following semantics.  Operations on pointer operands are performed as
+if the operand&rsquo;s type were <code>uintptr_t</code>.
 </p>
 <div class="smallexample">
 <pre class="smallexample">{ *ptr <var>op</var>= value; return *ptr; }
 { *ptr = ~(*ptr &amp; value); return *ptr; }   // nand
 </pre></div>
 
+<p>The same constraints on arguments apply as for the corresponding
+<code>__sync_op_and_fetch</code> built-in functions.
+</p>
 <p><em>Note:</em> GCC 4.4 and later implement <code>__sync_nand_and_fetch</code>
 as <code>*ptr = ~(*ptr &amp; value)</code> instead of
 <code>*ptr = ~*ptr &amp; value</code>.

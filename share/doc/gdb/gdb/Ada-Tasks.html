@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -68,7 +68,7 @@ Next: <a href="Ada-Tasks-and-Core-Files.html#Ada-Tasks-and-Core-Files" accesskey
 </div>
 <hr>
 <a name="Extensions-for-Ada-Tasks"></a>
-<h4 class="subsubsection">15.4.9.6 Extensions for Ada Tasks</h4>
+<h4 class="subsubsection">15.4.10.7 Extensions for Ada Tasks</h4>
 <a name="index-Ada_002c-tasking"></a>
 
 <p>Support for Ada tasks is analogous to that for threads (see <a href="Threads.html#Threads">Threads</a>).
@@ -213,7 +213,7 @@ State: Runnable
 </dd>
 <dt><code>task <var>taskno</var></code></dt>
 <dd><a name="index-Ada-task-switching"></a>
-<p>This command is like the <code>thread <var>threadno</var></code>
+<p>This command is like the <code>thread <var>thread-id</var></code>
 command (see <a href="Threads.html#Threads">Threads</a>).  It switches the context of debugging
 from the current task to the given task.
 </p>
@@ -234,14 +234,14 @@ from the current task to the given task.
 </pre></div>
 
 </dd>
-<dt><code>break <var>linespec</var> task <var>taskno</var></code></dt>
-<dt><code>break <var>linespec</var> task <var>taskno</var> if &hellip;</code></dt>
+<dt><code>break <var>location</var> task <var>taskno</var></code></dt>
+<dt><code>break <var>location</var> task <var>taskno</var> if &hellip;</code></dt>
 <dd><a name="index-breakpoints-and-tasks_002c-in-Ada"></a>
 <a name="index-task-breakpoints_002c-in-Ada"></a>
 <a name="index-break-_2026-task-taskno-_0028Ada_0029"></a>
 <p>These commands are like the <code>break &hellip; thread &hellip;</code>
 command (see <a href="Thread-Stops.html#Thread-Stops">Thread Stops</a>).  The
-<var>linespec</var> argument specifies source lines, as described
+<var>location</var> argument specifies source lines, as described
 in <a href="Specify-Location.html#Specify-Location">Specify Location</a>.
 </p>
 <p>Use the qualifier &lsquo;<samp>task <var>taskno</var></samp>&rsquo; with a breakpoint command

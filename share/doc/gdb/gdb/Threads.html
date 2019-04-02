@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -73,7 +73,7 @@ Next: <a href="Forks.html#Forks" accesskey="n" rel="next">Forks</a>, Previous: <
 <a name="index-threads-of-execution"></a>
 <a name="index-multiple-threads"></a>
 <a name="index-switching-threads"></a>
-<p>In some operating systems, such as HP-UX and Solaris, a single program
+<p>In some operating systems, such as GNU/Linux and Solaris, a single program
 may have more than one <em>thread</em> of execution.  The precise semantics
 of threads differ from one operating system to another, but in general
 the threads of a single program are akin to multiple processes&mdash;except
@@ -86,9 +86,9 @@ programs:
 </p>
 <ul>
 <li> automatic notification of new threads
-</li><li> &lsquo;<samp>thread <var>threadno</var></samp>&rsquo;, a command to switch among threads
+</li><li> &lsquo;<samp>thread <var>thread-id</var></samp>&rsquo;, a command to switch among threads
 </li><li> &lsquo;<samp>info threads</samp>&rsquo;, a command to inquire about existing threads
-</li><li> &lsquo;<samp>thread apply [<var>threadno</var>] [<var>all</var>] <var>args</var></samp>&rsquo;,
+</li><li> &lsquo;<samp>thread apply [<var>thread-id-list</var>] [<var>all</var>] <var>args</var></samp>&rsquo;,
 a command to apply a command to a list of threads
 </li><li> thread-specific breakpoints
 </li><li> &lsquo;<samp>set print thread-events</samp>&rsquo;, which controls printing of 
@@ -97,22 +97,6 @@ messages on thread start and exit.
 the user specify which <code>libthread_db</code> to use if the default choice
 isn&rsquo;t compatible with the program.
 </li></ul>
-
-<blockquote>
-<p><em>Warning:</em> These facilities are not yet available on every
-<small>GDB</small> configuration where the operating system supports threads.
-If your <small>GDB</small> does not support threads, these commands have no
-effect.  For example, a system without thread support shows no output
-from &lsquo;<samp>info threads</samp>&rsquo;, and always rejects the <code>thread</code> command,
-like this:
-</p>
-<div class="smallexample">
-<pre class="smallexample">(gdb) info threads
-(gdb) thread 1
-Thread ID 1 not known.  Use the &quot;info threads&quot; command to
-see the IDs of currently known threads.
-</pre></div>
-</blockquote>
 
 <a name="index-focus-of-debugging"></a>
 <a name="index-current-thread"></a>
@@ -134,27 +118,114 @@ whose form varies depending on the particular system.  For example, on
 <pre class="smallexample">[New Thread 0x41e02940 (LWP 25582)]
 </pre></div>
 
-<p>when <small>GDB</small> notices a new thread.  In contrast, on an SGI system,
+<p>when <small>GDB</small> notices a new thread.  In contrast, on other systems,
 the <var>systag</var> is simply something like &lsquo;<samp>process 368</samp>&rsquo;, with no
 further qualifier.
 </p>
 
-<a name="index-thread-number"></a>
+<a name="thread-numbers"></a><a name="index-thread-number_002c-per-inferior"></a>
 <a name="index-thread-identifier-_0028GDB_0029"></a>
-<p>For debugging purposes, <small>GDB</small> associates its own thread
-number&mdash;always a single integer&mdash;with each thread in your program.
+<p>For debugging purposes, <small>GDB</small> associates its own thread number
+&mdash;always a single integer&mdash;with each thread of an inferior.  This
+number is unique between all threads of an inferior, but not unique
+between threads of different inferiors.
 </p>
+<a name="index-qualified-thread-ID"></a>
+<p>You can refer to a given thread in an inferior using the qualified
+<var>inferior-num</var>.<var>thread-num</var> syntax, also known as
+<em>qualified thread ID</em>, with <var>inferior-num</var> being the inferior
+number and <var>thread-num</var> being the thread number of the given
+inferior.  For example, thread <code>2.3</code> refers to thread number 3 of
+inferior 2.  If you omit <var>inferior-num</var> (e.g., <code>thread 3</code>),
+then <small>GDB</small> infers you&rsquo;re referring to a thread of the current
+inferior.
+</p>
+<p>Until you create a second inferior, <small>GDB</small> does not show the
+<var>inferior-num</var> part of thread IDs, even though you can always use
+the full <var>inferior-num</var>.<var>thread-num</var> form to refer to threads
+of inferior 1, the initial inferior.
+</p>
+<a name="thread-ID-lists"></a><a name="index-thread-ID-lists"></a>
+<p>Some commands accept a space-separated <em>thread ID list</em> as
+argument.  A list element can be:
+</p>
+<ol>
+<li> A thread ID as shown in the first field of the &lsquo;<samp>info threads</samp>&rsquo;
+display, with or without an inferior qualifier.  E.g., &lsquo;<samp>2.1</samp>&rsquo; or
+&lsquo;<samp>1</samp>&rsquo;.
+
+</li><li> A range of thread numbers, again with or without an inferior
+qualifier, as in <var>inf</var>.<var>thr1</var>-<var>thr2</var> or
+<var>thr1</var>-<var>thr2</var>.  E.g., &lsquo;<samp>1.2-4</samp>&rsquo; or &lsquo;<samp>2-4</samp>&rsquo;.
+
+</li><li> All threads of an inferior, specified with a star wildcard, with or
+without an inferior qualifier, as in <var>inf</var>.<code>*</code> (e.g.,
+&lsquo;<samp>1.*</samp>&rsquo;) or <code>*</code>.  The former refers to all threads of the
+given inferior, and the latter form without an inferior qualifier
+refers to all threads of the current inferior.
+
+</li></ol>
+
+<p>For example, if the current inferior is 1, and inferior 7 has one
+thread with ID 7.1, the thread list &lsquo;<samp>1 2-3 4.5 6.7-9 7.*</samp>&rsquo;
+includes threads 1 to 3 of inferior 1, thread 5 of inferior 4, threads
+7 to 9 of inferior 6 and all threads of inferior 7.  That is, in
+expanded qualified form, the same as &lsquo;<samp>1.1 1.2 1.3 4.5 6.7 6.8 6.9
+7.1</samp>&rsquo;.
+</p>
+
+<a name="global-thread-numbers"></a><a name="index-global-thread-number"></a>
+<a name="index-global-thread-identifier-_0028GDB_0029"></a>
+<p>In addition to a <em>per-inferior</em> number, each thread is also
+assigned a unique <em>global</em> number, also known as <em>global
+thread ID</em>, a single integer.  Unlike the thread number component of
+the thread ID, no two threads have the same global ID, even when
+you&rsquo;re debugging multiple inferiors.
+</p>
+<p>From <small>GDB</small>&rsquo;s perspective, a process always has at least one
+thread.  In other words, <small>GDB</small> assigns a thread number to the
+program&rsquo;s &ldquo;main thread&rdquo; even if the program is not multi-threaded.
+</p>
+<a name="index-_0024_005fthread_002c-convenience-variable"></a>
+<a name="index-_0024_005fgthread_002c-convenience-variable"></a>
+<p>The debugger convenience variables &lsquo;<samp>$_thread</samp>&rsquo; and
+&lsquo;<samp>$_gthread</samp>&rsquo; contain, respectively, the per-inferior thread number
+and the global thread number of the current thread.  You may find this
+useful in writing breakpoint conditional expressions, command scripts,
+and so forth.  See <a href="Convenience-Vars.html#Convenience-Vars">Convenience Variables</a>, for
+general information on convenience variables.
+</p>
+<p>If <small>GDB</small> detects the program is multi-threaded, it augments the
+usual message about stopping at a breakpoint with the ID and name of
+the thread that hit the breakpoint.
+</p>
+<div class="smallexample">
+<pre class="smallexample">Thread 2 &quot;client&quot; hit Breakpoint 1, send_message () at client.c:68
+</pre></div>
+
+<p>Likewise when the program receives a signal:
+</p>
+<div class="smallexample">
+<pre class="smallexample">Thread 1 &quot;main&quot; received signal SIGINT, Interrupt.
+</pre></div>
+
 <dl compact="compact">
 <dd><a name="index-info-threads"></a>
 </dd>
-<dt><code>info threads <span class="roman">[</span><var>id</var>&hellip;<span class="roman">]</span></code></dt>
-<dd><p>Display a summary of all threads currently in your program.  Optional 
-argument <var>id</var>&hellip; is one or more thread ids separated by spaces, and
-means to print information only about the specified thread or threads.
-<small>GDB</small> displays for each thread (in this order):
+<dt><code>info threads <span class="roman">[</span><var>thread-id-list</var><span class="roman">]</span></code></dt>
+<dd>
+<p>Display information about one or more threads.  With no arguments
+displays information about all threads.  You can specify the list of
+threads that you want to display using the thread ID list syntax
+(see <a href="#thread-ID-lists">thread ID lists</a>).
+</p>
+<p><small>GDB</small> displays for each thread (in this order):
 </p>
 <ol>
-<li> the thread number assigned by <small>GDB</small>
+<li> the per-inferior thread number assigned by <small>GDB</small>
+
+</li><li> the global thread number assigned by <small>GDB</small>, if the &lsquo;<samp>-gid</samp>&rsquo;
+option was specified
 
 </li><li> the target system&rsquo;s thread identifier (<var>systag</var>)
 
@@ -175,10 +246,26 @@ indicates the current thread.
 <div class="smallexample">
 <pre class="smallexample">(gdb) info threads
   Id   Target Id         Frame
-  3    process 35 thread 27  0x34e5 in sigpause ()
-  2    process 35 thread 23  0x34e5 in sigpause ()
 * 1    process 35 thread 13  main (argc=1, argv=0x7ffffff8)
+  2    process 35 thread 23  0x34e5 in sigpause ()
+  3    process 35 thread 27  0x34e5 in sigpause ()
     at threadtest.c:68
+</pre></div>
+
+<p>If you&rsquo;re debugging multiple inferiors, <small>GDB</small> displays thread
+IDs using the qualified <var>inferior-num</var>.<var>thread-num</var> format.
+Otherwise, only <var>thread-num</var> is shown.
+</p>
+<p>If you specify the &lsquo;<samp>-gid</samp>&rsquo; option, <small>GDB</small> displays a column
+indicating each thread&rsquo;s global thread ID:
+</p>
+<div class="smallexample">
+<pre class="smallexample">(gdb) info threads
+  Id   GId  Target Id             Frame
+  1.1  1    process 35 thread 13  main (argc=1, argv=0x7ffffff8)
+  1.2  3    process 35 thread 23  0x34e5 in sigpause ()
+  1.3  4    process 35 thread 27  0x34e5 in sigpause ()
+* 2.1  2    process 65 thread 1   main (argc=1, argv=0x7ffffff8)
 </pre></div>
 
 <p>On Solaris, you can display more information about user threads with a
@@ -193,14 +280,16 @@ Solaris-specific command:
 </dl>
 
 <dl compact="compact">
-<dd><a name="index-thread-threadno"></a>
+<dd><a name="index-thread-thread_002did"></a>
 </dd>
-<dt><code>thread <var>threadno</var></code></dt>
-<dd><p>Make thread number <var>threadno</var> the current thread.  The command
-argument <var>threadno</var> is the internal <small>GDB</small> thread number, as
-shown in the first field of the &lsquo;<samp>info threads</samp>&rsquo; display.
-<small>GDB</small> responds by displaying the system identifier of the thread
-you selected, and its current stack frame summary:
+<dt><code>thread <var>thread-id</var></code></dt>
+<dd><p>Make thread ID <var>thread-id</var> the current thread.  The command
+argument <var>thread-id</var> is the <small>GDB</small> thread ID, as shown in
+the first field of the &lsquo;<samp>info threads</samp>&rsquo; display, with or without an
+inferior qualifier (e.g., &lsquo;<samp>2.1</samp>&rsquo; or &lsquo;<samp>1</samp>&rsquo;).
+</p>
+<p><small>GDB</small> responds by displaying the system identifier of the
+thread you selected, and its current stack frame summary:
 </p>
 <div class="smallexample">
 <pre class="smallexample">(gdb) thread 2
@@ -213,24 +302,14 @@ you selected, and its current stack frame summary:
 &lsquo;<samp>Switching to</samp>&rsquo; depends on your system&rsquo;s conventions for identifying
 threads.
 </p>
-<a name="index-_0024_005fthread_002c-convenience-variable"></a>
-<p>The debugger convenience variable &lsquo;<samp>$_thread</samp>&rsquo; contains the number
-of the current thread.  You may find this useful in writing breakpoint
-conditional expressions, command scripts, and so forth.  See
-See <a href="Convenience-Vars.html#Convenience-Vars">Convenience Variables</a>, for general
-information on convenience variables.
-</p>
 <a name="index-thread-apply"></a>
 <a name="index-apply-command-to-several-threads"></a>
 </dd>
-<dt><code>thread apply [<var>threadno</var> | all [-ascending]] <var>command</var></code></dt>
+<dt><code>thread apply [<var>thread-id-list</var> | all [-ascending]] <var>command</var></code></dt>
 <dd><p>The <code>thread apply</code> command allows you to apply the named
-<var>command</var> to one or more threads.  Specify the numbers of the
-threads that you want affected with the command argument
-<var>threadno</var>.  It can be a single thread number, one of the numbers
-shown in the first field of the &lsquo;<samp>info threads</samp>&rsquo; display; or it
-could be a range of thread numbers, as in <code>2-4</code>.  To apply
-a command to all threads in descending order, type <kbd>thread apply all
+<var>command</var> to one or more threads.  Specify the threads that you
+want affected using the thread ID list syntax (see <a href="#thread-ID-lists">thread ID lists</a>), or specify <code>all</code> to apply to all threads.  To apply a
+command to all threads in descending order, type <kbd>thread apply all
 <var>command</var></kbd>.  To apply a command to all threads in ascending order,
 type <kbd>thread apply all -ascending <var>command</var></kbd>.
 </p>

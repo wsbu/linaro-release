@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -92,10 +92,13 @@ threads running in it.
 <p>To find out what inferiors exist at any moment, use <code>info&nbsp;inferiors</code><!-- /@w -->:
 </p>
 <dl compact="compact">
-<dd><a name="index-info-inferiors"></a>
+<dd><a name="index-info-inferiors-_005b-id_2026-_005d"></a>
 </dd>
 <dt><code>info inferiors</code></dt>
 <dd><p>Print a list of all inferiors currently being managed by <small>GDB</small>.
+By default all inferiors are printed, but the argument <var>id</var>&hellip;
+&ndash; a space separated list of inferior numbers &ndash; can be used to limit
+the display to just the requested inferiors.
 </p>
 <p><small>GDB</small> displays for each inferior (in this order):
 </p>
@@ -134,7 +137,13 @@ in the first field of the &lsquo;<samp>info inferiors</samp>&rsquo; display.
 </p></dd>
 </dl>
 
-
+<a name="index-_0024_005finferior_002c-convenience-variable"></a>
+<p>The debugger convenience variable &lsquo;<samp>$_inferior</samp>&rsquo; contains the
+number of the current inferior.  You may find this useful in writing
+breakpoint conditional expressions, command scripts, and so forth.
+See <a href="Convenience-Vars.html#Convenience-Vars">Convenience Variables</a>, for general
+information on convenience variables.
+</p>
 <p>You can get multiple executables into a debugging session via the
 <code>add-inferior</code> and <code><span class="nolinebreak">clone-inferior</span></code><!-- /@w --> commands.  On some
 systems <small>GDB</small> can add inferiors to the debug session
@@ -273,9 +282,9 @@ example, the list of inferiors bound to the program space.
 <div class="smallexample">
 <pre class="smallexample">(gdb) maint info program-spaces
   Id   Executable
+* 1    hello
   2    goodbye
         Bound inferiors: ID 1 (process 21561)
-* 1    hello
 </pre></div>
 
 <p>Here we can see that no inferior is running the program <code>hello</code>,

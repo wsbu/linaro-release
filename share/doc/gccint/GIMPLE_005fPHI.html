@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,7 +75,7 @@ Next: <a href="GIMPLE_005fRESX.html#GIMPLE_005fRESX" accesskey="n" rel="next"><c
 </div>
 <hr>
 <a name="GIMPLE_005fPHI-1"></a>
-<h4 class="subsection">11.7.23 <code>GIMPLE_PHI</code></h4>
+<h4 class="subsection">11.8.24 <code>GIMPLE_PHI</code></h4>
 <a name="index-GIMPLE_005fPHI"></a>
 
 <dl>
@@ -101,7 +101,7 @@ holding <code>G</code>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005fphi_005fset_005fresult"></a>GIMPLE function: <em>void</em> <strong>gimple_phi_set_result</strong> <em>(gimple g, tree result)</em></dt>
+<dt><a name="index-gimple_005fphi_005fset_005fresult"></a>GIMPLE function: <em>void</em> <strong>gimple_phi_set_result</strong> <em>(gphi *g, tree result)</em></dt>
 <dd><p>Set <code>RESULT</code> to be the <code>SSA</code> name created by <code>GIMPLE_PHI</code> <code>G</code>.
 </p></dd></dl>
 
@@ -112,7 +112,7 @@ holding <code>G</code>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005fphi_005fset_005farg"></a>GIMPLE function: <em>void</em> <strong>gimple_phi_set_arg</strong> <em>(gimple g, index, struct phi_arg_d * phiarg)</em></dt>
+<dt><a name="index-gimple_005fphi_005fset_005farg"></a>GIMPLE function: <em>void</em> <strong>gimple_phi_set_arg</strong> <em>(gphi *g, index, struct phi_arg_d * phiarg)</em></dt>
 <dd><p>Set <code>PHIARG</code> to be the argument corresponding to incoming edge
 <code>INDEX</code> for <code>GIMPLE_PHI</code> <code>G</code>.
 </p></dd></dl>

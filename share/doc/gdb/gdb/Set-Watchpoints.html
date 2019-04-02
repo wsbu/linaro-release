@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -108,14 +108,14 @@ times slower than normal execution.  (But this may still be worth it, to
 catch errors where you have no clue what part of your program is the
 culprit.)
 </p>
-<p>On some systems, such as HP-UX, PowerPC, <small>GNU</small>/Linux and most other
-x86-based targets, <small>GDB</small> includes support for hardware
-watchpoints, which do not slow down the running of your program.
+<p>On some systems, such as most PowerPC or x86-based targets,
+<small>GDB</small> includes support for hardware watchpoints, which do not
+slow down the running of your program.
 </p>
 <dl compact="compact">
 <dd><a name="index-watch"></a>
 </dd>
-<dt><code>watch <span class="roman">[</span>-l<span class="roman">|</span>-location<span class="roman">]</span> <var>expr</var> <span class="roman">[</span>thread <var>threadnum</var><span class="roman">]</span> <span class="roman">[</span>mask <var>maskvalue</var><span class="roman">]</span></code></dt>
+<dt><code>watch <span class="roman">[</span>-l<span class="roman">|</span>-location<span class="roman">]</span> <var>expr</var> <span class="roman">[</span>thread <var>thread-id</var><span class="roman">]</span> <span class="roman">[</span>mask <var>maskvalue</var><span class="roman">]</span></code></dt>
 <dd><p>Set a watchpoint for an expression.  <small>GDB</small> will break when the
 expression <var>expr</var> is written into by the program and its value
 changes.  The simplest (and the most popular) use of this command is
@@ -125,9 +125,9 @@ to watch the value of a single variable:
 <pre class="smallexample">(gdb) watch foo
 </pre></div>
 
-<p>If the command includes a <code><span class="roman">[</span>thread <var>threadnum</var><span class="roman">]</span></code>
+<p>If the command includes a <code><span class="roman">[</span>thread <var>thread-id</var><span class="roman">]</span></code>
 argument, <small>GDB</small> breaks only when the thread identified by
-<var>threadnum</var> changes the value of <var>expr</var>.  If any other threads
+<var>thread-id</var> changes the value of <var>expr</var>.  If any other threads
 change the value of <var>expr</var>, <small>GDB</small> will not break.  Note
 that watchpoints restricted to a single thread in this way only work
 with Hardware Watchpoints.
@@ -159,19 +159,19 @@ Examples:
 
 <a name="index-rwatch"></a>
 </dd>
-<dt><code>rwatch <span class="roman">[</span>-l<span class="roman">|</span>-location<span class="roman">]</span> <var>expr</var> <span class="roman">[</span>thread <var>threadnum</var><span class="roman">]</span> <span class="roman">[</span>mask <var>maskvalue</var><span class="roman">]</span></code></dt>
+<dt><code>rwatch <span class="roman">[</span>-l<span class="roman">|</span>-location<span class="roman">]</span> <var>expr</var> <span class="roman">[</span>thread <var>thread-id</var><span class="roman">]</span> <span class="roman">[</span>mask <var>maskvalue</var><span class="roman">]</span></code></dt>
 <dd><p>Set a watchpoint that will break when the value of <var>expr</var> is read
 by the program.
 </p>
 <a name="index-awatch"></a>
 </dd>
-<dt><code>awatch <span class="roman">[</span>-l<span class="roman">|</span>-location<span class="roman">]</span> <var>expr</var> <span class="roman">[</span>thread <var>threadnum</var><span class="roman">]</span> <span class="roman">[</span>mask <var>maskvalue</var><span class="roman">]</span></code></dt>
+<dt><code>awatch <span class="roman">[</span>-l<span class="roman">|</span>-location<span class="roman">]</span> <var>expr</var> <span class="roman">[</span>thread <var>thread-id</var><span class="roman">]</span> <span class="roman">[</span>mask <var>maskvalue</var><span class="roman">]</span></code></dt>
 <dd><p>Set a watchpoint that will break when <var>expr</var> is either read from
 or written into by the program.
 </p>
-<a name="index-info-watchpoints-_005bn_2026_005d"></a>
+<a name="index-info-watchpoints-_005blist_2026_005d"></a>
 </dd>
-<dt><code>info watchpoints <span class="roman">[</span><var>n</var>&hellip;<span class="roman">]</span></code></dt>
+<dt><code>info watchpoints <span class="roman">[</span><var>list</var>&hellip;<span class="roman">]</span></code></dt>
 <dd><p>This command prints a list of watchpoints, using the same format as
 <code>info break</code> (see <a href="Set-Breaks.html#Set-Breaks">Set Breaks</a>).
 </p></dd>

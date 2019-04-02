@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,11 +75,11 @@ Next: <a href="SH-Built_002din-Functions.html#SH-Built_002din-Functions" accessk
 </div>
 <hr>
 <a name="S_002f390-System-z-Built_002din-Functions-1"></a>
-<h4 class="subsection">6.57.25 S/390 System z Built-in Functions</h4>
+<h4 class="subsection">6.60.25 S/390 System z Built-in Functions</h4>
 <dl>
 <dt><a name="index-_005f_005fbuiltin_005ftbegin"></a>Built-in Function: <em>int</em> <strong>__builtin_tbegin</strong> <em>(void*)</em></dt>
 <dd><p>Generates the <code>tbegin</code> machine instruction starting a
-non-constraint hardware transaction.  If the parameter is non-NULL the
+non-constrained hardware transaction.  If the parameter is non-NULL the
 memory area is used to store the transaction diagnostic buffer and
 will be passed as first operand to <code>tbegin</code>.  This buffer can be
 defined using the <code>struct __htm_tdb</code> C struct defined in
@@ -92,7 +92,7 @@ instruction by definition overwrites the content of all FPRs.  The
 compiler will generate code which saves and restores the FPRs.  For
 soft-float code it is recommended to used the <code>*_nofloat</code>
 variant.  In order to prevent a TDB from being written it is required
-to pass an constant zero value as parameter.  Passing the zero value
+to pass a constant zero value as parameter.  Passing a zero value
 through a variable is not sufficient.  Although modifications of
 access registers inside the transaction will not trigger an
 transaction abort it is not supported to actually modify them.  Access
@@ -163,7 +163,7 @@ handler code.
 
 <dl>
 <dt><a name="index-_005f_005fbuiltin_005ftbeginc"></a>Built-in Function: <em>void</em> <strong>__builtin_tbeginc</strong> <em>(void)</em></dt>
-<dd><p>Generates the <code>tbeginc</code> machine instruction starting a constraint
+<dd><p>Generates the <code>tbeginc</code> machine instruction starting a constrained
 hardware transaction.  The second operand is set to <code>0xff08</code>.
 </p></dd></dl>
 

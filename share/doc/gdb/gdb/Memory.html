@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -93,7 +93,8 @@ Several commands set convenient defaults for <var>addr</var>.
 <dl compact="compact">
 <dt><span class="roman"><var>n</var>, the repeat count</span></dt>
 <dd><p>The repeat count is a decimal integer; the default is 1.  It specifies
-how much memory (counting by units <var>u</var>) to display.
+how much memory (counting by units <var>u</var>) to display.  If a negative
+number is specified, memory is examined backward from <var>addr</var>.
 </p>
 </dd>
 <dt><span class="roman"><var>f</var>, the display format</span></dt>
@@ -154,6 +155,10 @@ starting at address <code>0x54320</code>.  &lsquo;<samp>x/4xw $sp</samp>&rsquo; 
 words (&lsquo;<samp>w</samp>&rsquo;) of memory above the stack pointer (here, &lsquo;<samp>$sp</samp>&rsquo;;
 see <a href="Registers.html#Registers">Registers</a>) in hexadecimal (&lsquo;<samp>x</samp>&rsquo;).
 </p>
+<p>You can also specify a negative repeat count to examine memory backward
+from the given address.  For example, &lsquo;<samp>x/-3uh 0x54320</samp>&rsquo; prints three
+halfwords (<code>h</code>) at <code>0x54314</code>, <code>0x54328</code>, and <code>0x5431c</code>.
+</p>
 <p>Since the letters indicating unit sizes are all distinct from the
 letters specifying output formats, you do not have to remember whether
 unit size or format comes first; either order works.  The output
@@ -169,6 +174,13 @@ slot instructions, if any, beyond the count specified, which immediately
 follow the last instruction that is within the count.  The command
 <code>disassemble</code> gives an alternative way of inspecting machine
 instructions; see <a href="Machine-Code.html#Machine-Code">Source and Machine Code</a>.
+</p>
+<p>If a negative repeat count is specified for the formats &lsquo;<samp>s</samp>&rsquo; or &lsquo;<samp>i</samp>&rsquo;,
+the command displays null-terminated strings or instructions before the given
+address as many as the absolute value of the given number.  For the &lsquo;<samp>i</samp>&rsquo;
+format, we use line number information in the debug info to accurately locate
+instruction boundaries while disassembling backward.  If line info is not
+available, the command stops examining memory with an error message.
 </p>
 <p>All the defaults for the arguments to <code>x</code> are designed to make it
 easy to continue scanning memory with minimal specifications each time

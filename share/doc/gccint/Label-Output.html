@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,7 +75,7 @@ Next: <a href="Initialization.html#Initialization" accesskey="n" rel="next">Init
 </div>
 <hr>
 <a name="Output-and-Generation-of-Labels"></a>
-<h4 class="subsection">17.21.4 Output and Generation of Labels</h4>
+<h4 class="subsection">17.20.4 Output and Generation of Labels</h4>
 
 <p>This is about outputting labels.
 </p>
@@ -236,6 +236,36 @@ of this macro.
 </p></dd></dl>
 
 <dl>
+<dt><a name="index-ASM_005fDECLARE_005fCOLD_005fFUNCTION_005fNAME"></a>Macro: <strong>ASM_DECLARE_COLD_FUNCTION_NAME</strong> <em>(<var>stream</var>, <var>name</var>, <var>decl</var>)</em></dt>
+<dd><p>A C statement (sans semicolon) to output to the stdio stream
+<var>stream</var> any text necessary for declaring the name <var>name</var> of a
+cold function partition which is being defined.  This macro is responsible
+for outputting the label definition (perhaps using
+<code>ASM_OUTPUT_FUNCTION_LABEL</code>).  The argument <var>decl</var> is the
+<code>FUNCTION_DECL</code> tree node representing the function.
+</p>
+<p>If this macro is not defined, then the cold partition name is defined in the
+usual manner as a label (by means of <code>ASM_OUTPUT_LABEL</code>).
+</p>
+<p>You may wish to use <code>ASM_OUTPUT_TYPE_DIRECTIVE</code> in the definition
+of this macro.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-ASM_005fDECLARE_005fCOLD_005fFUNCTION_005fSIZE"></a>Macro: <strong>ASM_DECLARE_COLD_FUNCTION_SIZE</strong> <em>(<var>stream</var>, <var>name</var>, <var>decl</var>)</em></dt>
+<dd><p>A C statement (sans semicolon) to output to the stdio stream
+<var>stream</var> any text necessary for declaring the size of a cold function
+partition which is being defined.  The argument <var>name</var> is the name of the
+cold partition of the function.  The argument <var>decl</var> is the
+<code>FUNCTION_DECL</code> tree node representing the function.
+</p>
+<p>If this macro is not defined, then the partition size is not defined.
+</p>
+<p>You may wish to use <code>ASM_OUTPUT_MEASURED_SIZE</code> in the definition
+of this macro.
+</p></dd></dl>
+
+<dl>
 <dt><a name="index-ASM_005fDECLARE_005fOBJECT_005fNAME"></a>Macro: <strong>ASM_DECLARE_OBJECT_NAME</strong> <em>(<var>stream</var>, <var>name</var>, <var>decl</var>)</em></dt>
 <dd><p>A C statement (sans semicolon) to output to the stdio stream
 <var>stream</var> any text necessary for declaring the name <var>name</var> of an
@@ -307,6 +337,14 @@ that is, available for reference from other files.
 global; that is, available for reference from other files.
 </p>
 <p>The default implementation uses the TARGET_ASM_GLOBALIZE_LABEL target hook.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fASM_005fASSEMBLE_005fUNDEFINED_005fDECL"></a>Target Hook: <em>void</em> <strong>TARGET_ASM_ASSEMBLE_UNDEFINED_DECL</strong> <em>(FILE *<var>stream</var>, const char *<var>name</var>, const_tree <var>decl</var>)</em></dt>
+<dd><p>This target hook is a function to output to the stdio stream
+<var>stream</var> some commands that will declare the name associated with
+<var>decl</var> which is not defined in the current translation unit.  Most
+assemblers do not require anything to be output in this case.
 </p></dd></dl>
 
 <dl>

@@ -2,7 +2,7 @@
 <html>
 <!-- This file documents the GNU Assembler "as".
 
-Copyright (C) 1991-2013 Free Software Foundation, Inc.
+Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -138,6 +138,7 @@ processor names are recognized:
 <code>corei7</code>,
 <code>l1om</code>,
 <code>k1om</code>,
+<code>iamcu</code>,
 <code>k6</code>,
 <code>k6_2</code>,
 <code>athlon</code>,
@@ -147,6 +148,8 @@ processor names are recognized:
 <code>bdver1</code>,
 <code>bdver2</code>,
 <code>bdver3</code>,
+<code>bdver4</code>,
+<code>znver1</code>,
 <code>btver1</code>,
 <code>btver2</code>,
 <code>generic32</code> and
@@ -159,7 +162,11 @@ accept various extension mnemonics.  For example,
 <code>8087</code>,
 <code>287</code>,
 <code>387</code>,
+<code>687</code>,
 <code>no87</code>,
+<code>no287</code>,
+<code>no387</code>,
+<code>no687</code>,
 <code>mmx</code>,
 <code>nommx</code>,
 <code>sse</code>,
@@ -170,24 +177,59 @@ accept various extension mnemonics.  For example,
 <code>sse4.2</code>,
 <code>sse4</code>,
 <code>nosse</code>,
+<code>nosse2</code>,
+<code>nosse3</code>,
+<code>nossse3</code>,
+<code>nosse4.1</code>,
+<code>nosse4.2</code>,
+<code>nosse4</code>,
 <code>avx</code>,
 <code>avx2</code>,
+<code>noavx</code>,
+<code>noavx2</code>,
 <code>adx</code>,
 <code>rdseed</code>,
 <code>prfchw</code>,
 <code>smap</code>,
 <code>mpx</code>,
 <code>sha</code>,
+<code>rdpid</code>,
+<code>ptwrite</code>,
+<code>prefetchwt1</code>,
+<code>clflushopt</code>,
+<code>se1</code>,
+<code>clwb</code>,
 <code>avx512f</code>,
 <code>avx512cd</code>,
 <code>avx512er</code>,
 <code>avx512pf</code>,
-<code>noavx</code>,
+<code>avx512vl</code>,
+<code>avx512bw</code>,
+<code>avx512dq</code>,
+<code>avx512ifma</code>,
+<code>avx512vbmi</code>,
+<code>avx512_4fmaps</code>,
+<code>avx512_4vnniw</code>,
+<code>avx512_vpopcntdq</code>,
+<code>noavx512f</code>,
+<code>noavx512cd</code>,
+<code>noavx512er</code>,
+<code>noavx512pf</code>,
+<code>noavx512vl</code>,
+<code>noavx512bw</code>,
+<code>noavx512dq</code>,
+<code>noavx512ifma</code>,
+<code>noavx512vbmi</code>,
+<code>noavx512_4fmaps</code>,
+<code>noavx512_4vnniw</code>,
+<code>noavx512_vpopcntdq</code>,
 <code>vmx</code>,
 <code>vmfunc</code>,
 <code>smx</code>,
 <code>xsave</code>,
 <code>xsaveopt</code>,
+<code>xsavec</code>,
+<code>xsaves</code>,
 <code>aes</code>,
 <code>pclmul</code>,
 <code>fsgsbase</code>,
@@ -202,6 +244,8 @@ accept various extension mnemonics.  For example,
 <code>rtm</code>,
 <code>invpcid</code>,
 <code>clflush</code>,
+<code>mwaitx</code>,
+<code>clzero</code>,
 <code>lwp</code>,
 <code>fma4</code>,
 <code>xop</code>,
@@ -319,6 +363,85 @@ The <code>.att_syntax</code> and <code>.intel_syntax</code> directives will take
 <dt><code>-madd-bnd-prefix</code></dt>
 <dd><p>This option forces the assembler to add BND prefix to all branches, even
 if such prefix was not explicitly specified in the source code.
+</p>
+<a name="index-_002dmshared-option_002c-i386"></a>
+<a name="index-_002dmshared-option_002c-x86_002d64"></a>
+</dd>
+<dt><code>-mno-shared</code></dt>
+<dd><p>On ELF target, the assembler normally optimizes out non-PLT relocations
+against defined non-weak global branch targets with default visibility.
+The &lsquo;<samp>-mshared</samp>&rsquo; option tells the assembler to generate code which
+may go into a shared library where all non-weak global branch targets
+with default visibility can be preempted.  The resulting code is
+slightly bigger.  This option only affects the handling of branch
+instructions.
+</p>
+<a name="index-_002dmbig_002dobj-option_002c-x86_002d64"></a>
+</dd>
+<dt><code>-mbig-obj</code></dt>
+<dd><p>On x86-64 PE/COFF target this option forces the use of big object file
+format, which allows more than 32768 sections.
+</p>
+<a name="index-_002dmomit_002dlock_002dprefix_003d-option_002c-i386"></a>
+<a name="index-_002dmomit_002dlock_002dprefix_003d-option_002c-x86_002d64"></a>
+</dd>
+<dt><code>-momit-lock-prefix=<var>no</var></code></dt>
+<dt><code>-momit-lock-prefix=<var>yes</var></code></dt>
+<dd><p>These options control how the assembler should encode lock prefix.
+This option is intended as a workaround for processors, that fail on
+lock prefix. This option can only be safely used with single-core,
+single-thread computers
+<samp>-momit-lock-prefix=<var>yes</var></samp> will omit all lock prefixes.
+<samp>-momit-lock-prefix=<var>no</var></samp> will encode lock prefix as usual,
+which is the default.
+</p>
+<a name="index-_002dmfence_002das_002dlock_002dadd_003d-option_002c-i386"></a>
+<a name="index-_002dmfence_002das_002dlock_002dadd_003d-option_002c-x86_002d64"></a>
+</dd>
+<dt><code>-mfence-as-lock-add=<var>no</var></code></dt>
+<dt><code>-mfence-as-lock-add=<var>yes</var></code></dt>
+<dd><p>These options control how the assembler should encode lfence, mfence and
+sfence.
+<samp>-mfence-as-lock-add=<var>yes</var></samp> will encode lfence, mfence and
+sfence as &lsquo;<samp>lock addl $0x0, (%rsp)</samp>&rsquo; in 64-bit mode and
+&lsquo;<samp>lock addl $0x0, (%esp)</samp>&rsquo; in 32-bit mode.
+<samp>-mfence-as-lock-add=<var>no</var></samp> will encode lfence, mfence and
+sfence as usual, which is the default.
+</p>
+<a name="index-_002dmrelax_002drelocations_003d-option_002c-i386"></a>
+<a name="index-_002dmrelax_002drelocations_003d-option_002c-x86_002d64"></a>
+</dd>
+<dt><code>-mrelax-relocations=<var>no</var></code></dt>
+<dt><code>-mrelax-relocations=<var>yes</var></code></dt>
+<dd><p>These options control whether the assembler should generate relax
+relocations, R_386_GOT32X, in 32-bit mode, or R_X86_64_GOTPCRELX and
+R_X86_64_REX_GOTPCRELX, in 64-bit mode.
+<samp>-mrelax-relocations=<var>yes</var></samp> will generate relax relocations.
+<samp>-mrelax-relocations=<var>no</var></samp> will not generate relax
+relocations.  The default can be controlled by a configure option
+<samp>--enable-x86-relax-relocations</samp>.
+</p>
+<a name="index-_002dmevexrcig_003d-option_002c-i386"></a>
+<a name="index-_002dmevexrcig_003d-option_002c-x86_002d64"></a>
+</dd>
+<dt><code>-mevexrcig=<var>rne</var></code></dt>
+<dt><code>-mevexrcig=<var>rd</var></code></dt>
+<dt><code>-mevexrcig=<var>ru</var></code></dt>
+<dt><code>-mevexrcig=<var>rz</var></code></dt>
+<dd><p>These options control how the assembler should encode SAE-only
+EVEX instructions.  <samp>-mevexrcig=<var>rne</var></samp> will encode RC bits
+of EVEX instruction with 00, which is the default.
+<samp>-mevexrcig=<var>rd</var></samp>, <samp>-mevexrcig=<var>ru</var></samp>
+and <samp>-mevexrcig=<var>rz</var></samp> will encode SAE-only EVEX instructions
+with 01, 10 and 11 RC bits, respectively.
+</p>
+<a name="index-_002dmamd64-option_002c-x86_002d64"></a>
+<a name="index-_002dmintel64-option_002c-x86_002d64"></a>
+</dd>
+<dt><code>-mamd64</code></dt>
+<dt><code>-mintel64</code></dt>
+<dd><p>This option specifies that the assembler should accept only AMD64 or
+Intel64 ISA in 64-bit mode.  The default is to accept both.
 </p>
 </dd>
 </dl>

@@ -2,7 +2,7 @@
 <html>
 <!-- This file documents the GNU Assembler "as".
 
-Copyright (C) 1991-2013 Free Software Foundation, Inc.
+Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -116,16 +116,26 @@ VxWorks-style position-independent macro expansions.
 <dt><code>-mips5</code></dt>
 <dt><code>-mips32</code></dt>
 <dt><code>-mips32r2</code></dt>
+<dt><code>-mips32r3</code></dt>
+<dt><code>-mips32r5</code></dt>
+<dt><code>-mips32r6</code></dt>
 <dt><code>-mips64</code></dt>
 <dt><code>-mips64r2</code></dt>
+<dt><code>-mips64r3</code></dt>
+<dt><code>-mips64r5</code></dt>
+<dt><code>-mips64r6</code></dt>
 <dd><p>Generate code for a particular MIPS Instruction Set Architecture level.
 &lsquo;<samp>-mips1</samp>&rsquo; corresponds to the R2000 and R3000 processors,
 &lsquo;<samp>-mips2</samp>&rsquo; to the R6000 processor, &lsquo;<samp>-mips3</samp>&rsquo; to the
 R4000 processor, and &lsquo;<samp>-mips4</samp>&rsquo; to the R8000 and R10000 processors.
-&lsquo;<samp>-mips5</samp>&rsquo;, &lsquo;<samp>-mips32</samp>&rsquo;, &lsquo;<samp>-mips32r2</samp>&rsquo;, &lsquo;<samp>-mips64</samp>&rsquo;, and
-&lsquo;<samp>-mips64r2</samp>&rsquo; correspond to generic MIPS V, MIPS32, MIPS32 Release 2,
-MIPS64, and MIPS64 Release 2 ISA processors, respectively.  You can also
-switch instruction sets during the assembly; see <a href="MIPS-ISA.html#MIPS-ISA">Directives to override the ISA level</a>.
+&lsquo;<samp>-mips5</samp>&rsquo;, &lsquo;<samp>-mips32</samp>&rsquo;, &lsquo;<samp>-mips32r2</samp>&rsquo;, &lsquo;<samp>-mips32r3</samp>&rsquo;,
+&lsquo;<samp>-mips32r5</samp>&rsquo;, &lsquo;<samp>-mips32r6</samp>&rsquo;, &lsquo;<samp>-mips64</samp>&rsquo;, &lsquo;<samp>-mips64r2</samp>&rsquo;,
+&lsquo;<samp>-mips64r3</samp>&rsquo;, &lsquo;<samp>-mips64r5</samp>&rsquo;, and &lsquo;<samp>-mips64r6</samp>&rsquo; correspond to
+generic MIPS V, MIPS32, MIPS32 Release 2, MIPS32 Release 3, MIPS32
+Release 5, MIPS32 Release 6, MIPS64, and MIPS64 Release 2, MIPS64
+Release 3, MIPS64 Release 5, and MIPS64 Release 6 ISA processors,
+respectively.  You can also switch instruction sets during the assembly;
+see <a href="MIPS-ISA.html#MIPS-ISA">Directives to override the ISA level</a>.
 </p>
 </dd>
 <dt><code>-mgp32</code></dt>
@@ -154,6 +164,24 @@ interests of symmetry with &lsquo;<samp>-mgp32</samp>&rsquo; and &lsquo;<samp>-m
 <p>The <code>.set gp=64</code> and <code>.set fp=64</code> directives allow the size
 of registers to be changed for parts of an object. The default value is
 restored by <code>.set gp=default</code> and <code>.set fp=default</code>.
+</p>
+</dd>
+<dt><code>-mfpxx</code></dt>
+<dd><p>Make no assumptions about whether 32-bit or 64-bit floating-point
+registers are available. This is provided to support having modules
+compatible with either &lsquo;<samp>-mfp32</samp>&rsquo; or &lsquo;<samp>-mfp64</samp>&rsquo;. This option can
+only be used with MIPS II and above.
+</p>
+<p>The <code>.set fp=xx</code> directive allows a part of an object to be marked
+as not making assumptions about 32-bit or 64-bit FP registers.  The
+default value is restored by <code>.set fp=default</code>.
+</p>
+</dd>
+<dt><code>-modd-spreg</code></dt>
+<dt><code>-mno-odd-spreg</code></dt>
+<dd><p>Enable use of floating-point operations on odd-numbered single-precision
+registers when supported by the ISA.  &lsquo;<samp>-mfpxx</samp>&rsquo; implies
+&lsquo;<samp>-mno-odd-spreg</samp>&rsquo;, otherwise the default is &lsquo;<samp>-modd-spreg</samp>&rsquo;
 </p>
 </dd>
 <dt><code>-mips16</code></dt>
@@ -204,9 +232,17 @@ This tells the assembler to accept DSP Release 1 instructions.
 <dt><code>-mdspr2</code></dt>
 <dt><code>-mno-dspr2</code></dt>
 <dd><p>Generate code for the DSP Release 2 Application Specific Extension.
-This option implies -mdsp.
+This option implies &lsquo;<samp>-mdsp</samp>&rsquo;.
 This tells the assembler to accept DSP Release 2 instructions.
 &lsquo;<samp>-mno-dspr2</samp>&rsquo; turns off this option.
+</p>
+</dd>
+<dt><code>-mdspr3</code></dt>
+<dt><code>-mno-dspr3</code></dt>
+<dd><p>Generate code for the DSP Release 3 Application Specific Extension.
+This option implies &lsquo;<samp>-mdsp</samp>&rsquo; and &lsquo;<samp>-mdspr2</samp>&rsquo;.
+This tells the assembler to accept DSP Release 3 instructions.
+&lsquo;<samp>-mno-dspr3</samp>&rsquo; turns off this option.
 </p>
 </dd>
 <dt><code>-mmt</code></dt>
@@ -221,6 +257,20 @@ This tells the assembler to accept MT instructions.
 <dd><p>Generate code for the MCU Application Specific Extension.
 This tells the assembler to accept MCU instructions.
 &lsquo;<samp>-mno-mcu</samp>&rsquo; turns off this option.
+</p>
+</dd>
+<dt><code>-mmsa</code></dt>
+<dt><code>-mno-msa</code></dt>
+<dd><p>Generate code for the MIPS SIMD Architecture Extension.
+This tells the assembler to accept MSA instructions.
+&lsquo;<samp>-mno-msa</samp>&rsquo; turns off this option.
+</p>
+</dd>
+<dt><code>-mxpa</code></dt>
+<dt><code>-mno-xpa</code></dt>
+<dd><p>Generate code for the MIPS eXtended Physical Address (XPA) Extension.
+This tells the assembler to accept XPA instructions.
+&lsquo;<samp>-mno-xpa</samp>&rsquo; turns off this option.
 </p>
 </dd>
 <dt><code>-mvirt</code></dt>
@@ -245,6 +295,12 @@ selected, allowing all instructions to be used.
 <dt><code>-mno-fix7000</code></dt>
 <dd><p>Cause nops to be inserted if the read of the destination register
 of an mfhi or mflo instruction occurs in the following two instructions.
+</p>
+</dd>
+<dt><code>-mfix-rm7000</code></dt>
+<dt><code>-mno-fix-rm7000</code></dt>
+<dd><p>Cause nops to be inserted if a dmult or dmultu instruction is
+followed by a load instruction.
 </p>
 </dd>
 <dt><code>-mfix-loongson2f-jump</code></dt>
@@ -384,18 +440,25 @@ m14kec,
 1004kf2_1,
 1004kf,
 1004kf1_1,
+interaptiv,
+m5100,
+m5101,
+p5600,
 5kc,
 5kf,
 20kc,
 25kf,
 sb1,
 sb1a,
+i6400,
+p6600,
 loongson2e,
 loongson2f,
 loongson3a,
 octeon,
 octeon+,
 octeon2,
+octeon3,
 xlr,
 xlp
 </p></blockquote>
@@ -480,6 +543,38 @@ reach, they produce an error even if branch relaxation is enabled.
 </p>
 <p>By default &lsquo;<samp>--no-relax-branch</samp>&rsquo; is selected, causing any out-of-range
 branches to produce an error.
+</p>
+</dd>
+<dt><code>-mignore-branch-isa</code></dt>
+<dt><code>-mno-ignore-branch-isa</code></dt>
+<dd><p>Ignore branch checks for invalid transitions between ISA modes.
+</p>
+<p>The semantics of branches does not provide for an ISA mode switch, so in
+most cases the ISA mode a branch has been encoded for has to be the same
+as the ISA mode of the branch&rsquo;s target label.  If the ISA modes do not
+match, then such a branch, if taken, will cause the ISA mode to remain
+unchanged and instructions that follow will be executed in the wrong ISA
+mode causing the program to misbehave or crash.
+</p>
+<p>In the case of the <code>BAL</code> instruction it may be possible to relax
+it to an equivalent <code>JALX</code> instruction so that the ISA mode is
+switched at the run time as required.  For other branches no relaxation
+is possible and therefore GAS has checks implemented that verify in
+branch assembly that the two ISA modes match, and report an error
+otherwise so that the problem with code can be diagnosed at the assembly
+time rather than at the run time.
+</p>
+<p>However some assembly code, including generated code produced by some
+versions of GCC, may incorrectly include branches to data labels, which
+appear to require a mode switch but are either dead or immediately
+followed by valid instructions encoded for the same ISA the branch has
+been encoded for.  While not strictly correct at the source level such
+code will execute as intended, so to help with these cases
+&lsquo;<samp>-mignore-branch-isa</samp>&rsquo; is supported which disables ISA mode checks
+for branches.
+</p>
+<p>By default &lsquo;<samp>-mno-ignore-branch-isa</samp>&rsquo; is selected, causing any invalid
+branch requiring a transition between ISA modes to produce an error.
 </p>
 <a name="index-_002dmnan_003d-command-line-option_002c-MIPS"></a>
 </dd>

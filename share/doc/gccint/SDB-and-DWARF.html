@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,13 +75,13 @@ Next: <a href="VMS-Debug.html#VMS-Debug" accesskey="n" rel="next">VMS Debug</a>,
 </div>
 <hr>
 <a name="Macros-for-SDB-and-DWARF-Output"></a>
-<h4 class="subsection">17.22.5 Macros for SDB and DWARF Output</h4>
+<h4 class="subsection">17.21.5 Macros for SDB and DWARF Output</h4>
 
 <p>Here are macros for SDB and DWARF output.
 </p>
 <dl>
 <dt><a name="index-SDB_005fDEBUGGING_005fINFO"></a>Macro: <strong>SDB_DEBUGGING_INFO</strong></dt>
-<dd><p>Define this macro if GCC should produce COFF-style debugging output
+<dd><p>Define this macro to 1 if GCC should produce COFF-style debugging output
 for SDB in response to the <samp>-g</samp> option.
 </p></dd></dl>
 
@@ -140,18 +140,22 @@ tables, and hence is desirable if it works.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fFORCE_005fAT_005fCOMP_005fDIR"></a>Target Hook: <em>bool</em> <strong>TARGET_FORCE_AT_COMP_DIR</strong></dt>
-<dd><p>True if the <code>DW_AT_comp_dir</code> attribute should be emitted for each  compilation unit.  This attribute is required for the darwin linker  to emit debug information.
-</p></dd></dl>
-
-<dl>
 <dt><a name="index-TARGET_005fDELAY_005fSCHED2"></a>Target Hook: <em>bool</em> <strong>TARGET_DELAY_SCHED2</strong></dt>
-<dd><p>True if sched2 is not to be run at its normal place.  This usually means it will be run as part of machine-specific reorg.
+<dd><p>True if sched2 is not to be run at its normal place.
+This usually means it will be run as part of machine-specific reorg.
 </p></dd></dl>
 
 <dl>
 <dt><a name="index-TARGET_005fDELAY_005fVARTRACK"></a>Target Hook: <em>bool</em> <strong>TARGET_DELAY_VARTRACK</strong></dt>
-<dd><p>True if vartrack is not to be run at its normal place.  This usually means it will be run as part of machine-specific reorg.
+<dd><p>True if vartrack is not to be run at its normal place.
+This usually means it will be run as part of machine-specific reorg.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fNO_005fREGISTER_005fALLOCATION"></a>Target Hook: <em>bool</em> <strong>TARGET_NO_REGISTER_ALLOCATION</strong></dt>
+<dd><p>True if register allocation and the passes
+following it should not be run.  Usually true only for virtual assembler
+targets.
 </p></dd></dl>
 
 <dl>
@@ -168,16 +172,23 @@ slots on IA64 VMS, using an integer of the given size.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-ASM_005fOUTPUT_005fDWARF_005fOFFSET"></a>Macro: <strong>ASM_OUTPUT_DWARF_OFFSET</strong> <em>(<var>stream</var>, <var>size</var>, <var>label</var>, <var>section</var>)</em></dt>
+<dt><a name="index-ASM_005fOUTPUT_005fDWARF_005fOFFSET"></a>Macro: <strong>ASM_OUTPUT_DWARF_OFFSET</strong> <em>(<var>stream</var>, <var>size</var>, <var>label</var>, <var>offset</var>, <var>section</var>)</em></dt>
 <dd><p>A C statement to issue assembly directives that create a
-section-relative reference to the given <var>label</var>, using an integer of the
-given <var>size</var>.  The label is known to be defined in the given <var>section</var>.
+section-relative reference to the given <var>label</var> plus <var>offset</var>, using
+an integer of the given <var>size</var>.  The label is known to be defined in the
+given <var>section</var>.
 </p></dd></dl>
 
 <dl>
 <dt><a name="index-ASM_005fOUTPUT_005fDWARF_005fPCREL"></a>Macro: <strong>ASM_OUTPUT_DWARF_PCREL</strong> <em>(<var>stream</var>, <var>size</var>, <var>label</var>)</em></dt>
 <dd><p>A C statement to issue assembly directives that create a self-relative
 reference to the given <var>label</var>, using an integer of the given <var>size</var>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-ASM_005fOUTPUT_005fDWARF_005fDATAREL"></a>Macro: <strong>ASM_OUTPUT_DWARF_DATAREL</strong> <em>(<var>stream</var>, <var>size</var>, <var>label</var>)</em></dt>
+<dd><p>A C statement to issue assembly directives that create a reference to the
+given <var>label</var> relative to the dbase, using an integer of the given <var>size</var>.
 </p></dd></dl>
 
 <dl>

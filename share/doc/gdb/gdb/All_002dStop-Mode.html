@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -111,17 +111,20 @@ locking the OS scheduler to allow only a single thread to run.
 <dt><code>set scheduler-locking <var>mode</var></code></dt>
 <dd><a name="index-scheduler-locking-mode"></a>
 <a name="index-lock-scheduler"></a>
-<p>Set the scheduler locking mode.  If it is <code>off</code>, then there is no
-locking and any thread may run at any time.  If <code>on</code>, then only the
-current thread may run when the inferior is resumed.  The <code>step</code>
-mode optimizes for single-stepping; it prevents other threads 
-from preempting the current thread while you are stepping, so that 
-the focus of debugging does not change unexpectedly.
-Other threads never get a chance to run when you step, and they are
-completely free to run when you use commands
-like &lsquo;<samp>continue</samp>&rsquo;, &lsquo;<samp>until</samp>&rsquo;, or &lsquo;<samp>finish</samp>&rsquo;.  However, unless another
-thread hits a breakpoint during its timeslice, <small>GDB</small> does not change
-the current thread away from the thread that you are debugging.
+<p>Set the scheduler locking mode.  It applies to normal execution,
+record mode, and replay mode.  If it is <code>off</code>, then there is no
+locking and any thread may run at any time.  If <code>on</code>, then only
+the current thread may run when the inferior is resumed.  The
+<code>step</code> mode optimizes for single-stepping; it prevents other
+threads from preempting the current thread while you are stepping, so
+that the focus of debugging does not change unexpectedly.  Other
+threads never get a chance to run when you step, and they are
+completely free to run when you use commands like &lsquo;<samp>continue</samp>&rsquo;,
+&lsquo;<samp>until</samp>&rsquo;, or &lsquo;<samp>finish</samp>&rsquo;.  However, unless another thread hits a
+breakpoint during its timeslice, <small>GDB</small> does not change the
+current thread away from the thread that you are debugging.  The
+<code>replay</code> mode behaves like <code>off</code> in record mode and like
+<code>on</code> in replay mode.
 </p>
 </dd>
 <dt><code>show scheduler-locking</code></dt>

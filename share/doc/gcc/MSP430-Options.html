@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,7 +75,7 @@ Next: <a href="NDS32-Options.html#NDS32-Options" accesskey="n" rel="next">NDS32 
 </div>
 <hr>
 <a name="MSP430-Options-1"></a>
-<h4 class="subsection">3.17.31 MSP430 Options</h4>
+<h4 class="subsection">3.18.30 MSP430 Options</h4>
 <a name="index-MSP430-Options"></a>
 
 <p>These options are defined for the MSP430:
@@ -92,34 +92,45 @@ testsuite and/or aesthetic purposes.
 <dd><a name="index-mmcu_003d"></a>
 <p>Select the MCU to target.  This is used to create a C preprocessor
 symbol based upon the MCU name, converted to upper case and pre- and
-post- fixed with <code>__</code>.  This in turn will be used by the
-<code>msp430.h</code> header file to select an MCU specific supplimentary
+post-fixed with &lsquo;<samp>__</samp>&rsquo;.  This in turn is used by the
+<samp>msp430.h</samp> header file to select an MCU-specific supplementary
 header file.
 </p>
 <p>The option also sets the ISA to use.  If the MCU name is one that is
 known to only support the 430 ISA then that is selected, otherwise the
-430X ISA is selected.  A generic MCU name of <code>msp430</code> can also be
-used to select the 430 ISA.  Similarly the generic <code>msp430x</code> MCU
-name will select the 430X ISA.
+430X ISA is selected.  A generic MCU name of &lsquo;<samp>msp430</samp>&rsquo; can also be
+used to select the 430 ISA.  Similarly the generic &lsquo;<samp>msp430x</samp>&rsquo; MCU
+name selects the 430X ISA.
 </p>
-<p>In addition an MCU specific linker script will be added to the linker
+<p>In addition an MCU-specific linker script is added to the linker
 command line.  The script&rsquo;s name is the name of the MCU with
-<code>.ld</code> appended.  Thus specifying <samp>-mmcu=xxx</samp> on the gcc
-command line will define the C preprocessor symbol <code>__XXX__</code> and
+<samp>.ld</samp> appended.  Thus specifying <samp>-mmcu=xxx</samp> on the <code>gcc</code>
+command line defines the C preprocessor symbol <code>__XXX__</code> and
 cause the linker to search for a script called <samp>xxx.ld</samp>.
 </p>
 <p>This option is also passed on to the assembler.
 </p>
 </dd>
+<dt><code>-mwarn-mcu</code></dt>
+<dt><code>-mno-warn-mcu</code></dt>
+<dd><a name="index-mwarn_002dmcu"></a>
+<a name="index-mno_002dwarn_002dmcu"></a>
+<p>This option enables or disables warnings about conflicts between the
+MCU name specified by the <samp>-mmcu</samp> option and the ISA set by the
+<samp>-mcpu</samp> option and/or the hardware multiply support set by the
+<samp>-mhwmult</samp> option.  It also toggles warnings about unrecognized
+MCU names.  This option is on by default.
+</p>
+</dd>
 <dt><code>-mcpu=</code></dt>
-<dd><a name="index-_002dmcpu_003d"></a>
-<p>Specifies the ISA to use.  Accepted values are <code>msp430</code>,
-<code>msp430x</code> and <code>msp430xv2</code>.  This option is deprecated.  The
+<dd><a name="index-mcpu_003d-3"></a>
+<p>Specifies the ISA to use.  Accepted values are &lsquo;<samp>msp430</samp>&rsquo;,
+&lsquo;<samp>msp430x</samp>&rsquo; and &lsquo;<samp>msp430xv2</samp>&rsquo;.  This option is deprecated.  The
 <samp>-mmcu=</samp> option should be used to select the ISA.
 </p>
 </dd>
 <dt><code>-msim</code></dt>
-<dd><a name="index-msim-5"></a>
+<dd><a name="index-msim-6"></a>
 <p>Link to the simulator runtime libraries and linker script.  Overrides
 any scripts that would be selected by the <samp>-mmcu=</samp> option.
 </p>
@@ -144,19 +155,19 @@ the final link.
 <dt><code>mhwmult=</code></dt>
 <dd><a name="index-mhwmult_003d"></a>
 <p>Describes the type of hardware multiply supported by the target.
-Accepted values are <code>none</code> for no hardware multiply, <code>16bit</code>
+Accepted values are &lsquo;<samp>none</samp>&rsquo; for no hardware multiply, &lsquo;<samp>16bit</samp>&rsquo;
 for the original 16-bit-only multiply supported by early MCUs.
-<code>32bit</code> for the 16/32-bit multiply supported by later MCUs and
-<code>f5series</code> for the 16/32-bit multiply supported by F5-series MCUs.
-A value of <code>auto</code> can also be given.  This tells GCC to deduce
+&lsquo;<samp>32bit</samp>&rsquo; for the 16/32-bit multiply supported by later MCUs and
+&lsquo;<samp>f5series</samp>&rsquo; for the 16/32-bit multiply supported by F5-series MCUs.
+A value of &lsquo;<samp>auto</samp>&rsquo; can also be given.  This tells GCC to deduce
 the hardware multiply support based upon the MCU name provided by the
-<samp>-mmcu</samp> option.  If no <samp>-mmcu</samp> option is specified then
-<code>32bit</code> hardware multiply support is assumed.  <code>auto</code> is the
-default setting.
+<samp>-mmcu</samp> option.  If no <samp>-mmcu</samp> option is specified or if
+the MCU name is not recognized then no hardware multiply support is
+assumed.  <code>auto</code> is the default setting.
 </p>
 <p>Hardware multiplies are normally performed by calling a library
 routine.  This saves space in the generated code.  When compiling at
-<code>-O3</code> or higher however the hardware multiplier is invoked
+<samp>-O3</samp> or higher however the hardware multiplier is invoked
 inline.  This makes for bigger, but faster code.
 </p>
 <p>The hardware multiply routines disable interrupts whilst running and
@@ -168,8 +179,34 @@ them safe to use inside interrupt handlers as well as in normal code.
 <dd><a name="index-minrt"></a>
 <p>Enable the use of a minimum runtime environment - no static
 initializers or constructors.  This is intended for memory-constrained
-devices.  The compiler will include special symbols in some objects
+devices.  The compiler includes special symbols in some objects
 that tell the linker and runtime which code fragments are required.
+</p>
+</dd>
+<dt><code>-mcode-region=</code></dt>
+<dt><code>-mdata-region=</code></dt>
+<dd><a name="index-mcode_002dregion"></a>
+<a name="index-mdata_002dregion"></a>
+<p>These options tell the compiler where to place functions and data that
+do not have one of the <code>lower</code>, <code>upper</code>, <code>either</code> or
+<code>section</code> attributes.  Possible values are <code>lower</code>,
+<code>upper</code>, <code>either</code> or <code>any</code>.  The first three behave
+like the corresponding attribute.  The fourth possible value -
+<code>any</code> - is the default.  It leaves placement entirely up to the
+linker script and how it assigns the standard sections
+(<code>.text</code>, <code>.data</code>, etc) to the memory regions.
+</p>
+</dd>
+<dt><code>-msilicon-errata=</code></dt>
+<dd><a name="index-msilicon_002derrata"></a>
+<p>This option passes on a request to assembler to enable the fixes for
+the named silicon errata.
+</p>
+</dd>
+<dt><code>-msilicon-errata-warn=</code></dt>
+<dd><a name="index-msilicon_002derrata_002dwarn"></a>
+<p>This option passes on a request to the assembler to enable warning
+messages when a silicon errata might need to be applied.
 </p>
 </dd>
 </dl>

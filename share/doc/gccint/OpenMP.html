@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -33,7 +33,7 @@ You have freedom to copy and modify this GNU Manual, like GNU
 <link href="Option-Index.html#Option-Index" rel="index" title="Option Index">
 <link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
 <link href="Statements.html#Statements" rel="up" title="Statements">
-<link href="Functions.html#Functions" rel="next" title="Functions">
+<link href="OpenACC.html#OpenACC" rel="next" title="OpenACC">
 <link href="Cleanups.html#Cleanups" rel="prev" title="Cleanups">
 <style type="text/css">
 <!--
@@ -71,7 +71,7 @@ ul.no-bullet {list-style: none}
 <a name="OpenMP"></a>
 <div class="header">
 <p>
-Previous: <a href="Cleanups.html#Cleanups" accesskey="p" rel="prev">Cleanups</a>, Up: <a href="Statements.html#Statements" accesskey="u" rel="up">Statements</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="OpenACC.html#OpenACC" accesskey="n" rel="next">OpenACC</a>, Previous: <a href="Cleanups.html#Cleanups" accesskey="p" rel="prev">Cleanups</a>, Up: <a href="Statements.html#Statements" accesskey="u" rel="up">Statements</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
 <a name="OpenMP-1"></a>
@@ -121,8 +121,8 @@ variables.
 </dd>
 <dt><code>OMP_FOR</code></dt>
 <dd>
-<p>Represents <code>#pragma omp for [clause1 &hellip; clauseN]</code>.  It
-has 5 operands:
+<p>Represents <code>#pragma omp for [clause1 &hellip; clauseN]</code>.  It has
+six operands:
 </p>
 <p>Operand <code>OMP_FOR_BODY</code> contains the loop body.
 </p>
@@ -220,10 +220,9 @@ building code (<code>omp-low.c</code>).
 <dt><code>OMP_CONTINUE</code></dt>
 <dd>
 <p>Similarly, this instruction does not represent an OpenMP
-directive, it is used by <code>OMP_FOR</code> and
+directive, it is used by <code>OMP_FOR</code> (and similar codes) as well as
 <code>OMP_SECTIONS</code> to mark the place where the code needs to
-loop to the next iteration (in the case of <code>OMP_FOR</code>) or
-the next section (in the case of <code>OMP_SECTIONS</code>).
+loop to the next iteration, or the next section, respectively.
 </p>
 <p>In some cases, <code>OMP_CONTINUE</code> is placed right before
 <code>OMP_RETURN</code>.  But if there are cleanups that need to
@@ -272,11 +271,10 @@ compilation.
 </dd>
 </dl>
 
-
 <hr>
 <div class="header">
 <p>
-Previous: <a href="Cleanups.html#Cleanups" accesskey="p" rel="prev">Cleanups</a>, Up: <a href="Statements.html#Statements" accesskey="u" rel="up">Statements</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="OpenACC.html#OpenACC" accesskey="n" rel="next">OpenACC</a>, Previous: <a href="Cleanups.html#Cleanups" accesskey="p" rel="prev">Cleanups</a>, Up: <a href="Statements.html#Statements" accesskey="u" rel="up">Statements</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 
 

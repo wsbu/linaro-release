@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -321,6 +321,7 @@ are:
 <tr><td width="28%"><code>get-thread-information-block-address</code></td><td width="32%"><code>qGetTIBAddr</code></td><td width="25%">Display MS-Windows Thread Information Block.</td></tr>
 <tr><td width="28%"><code>search-memory</code></td><td width="32%"><code>qSearch:memory</code></td><td width="25%"><code>find</code></td></tr>
 <tr><td width="28%"><code>supported-packets</code></td><td width="32%"><code>qSupported</code></td><td width="25%">Remote communications parameters</td></tr>
+<tr><td width="28%"><code>catch-syscalls</code></td><td width="32%"><code>QCatchSyscalls</code></td><td width="25%"><code>catch syscall</code></td></tr>
 <tr><td width="28%"><code>pass-signals</code></td><td width="32%"><code>QPassSignals</code></td><td width="25%"><code>handle <var>signal</var></code></td></tr>
 <tr><td width="28%"><code>program-signals</code></td><td width="32%"><code>QProgramSignals</code></td><td width="25%"><code>handle <var>signal</var></code></td></tr>
 <tr><td width="28%"><code>hostio-close-packet</code></td><td width="32%"><code>vFile:close</code></td><td width="25%"><code>remote get</code>, <code>remote put</code></td></tr>
@@ -339,11 +340,20 @@ are:
 <tr><td width="28%"><code>traceframe-info</code></td><td width="32%"><code>qXfer:traceframe-info:read</code></td><td width="25%">Traceframe info</td></tr>
 <tr><td width="28%"><code>install-in-trace</code></td><td width="32%"><code>InstallInTrace</code></td><td width="25%">Install tracepoint in tracing</td></tr>
 <tr><td width="28%"><code>disable-randomization</code></td><td width="32%"><code>QDisableRandomization</code></td><td width="25%"><code>set disable-randomization</code></td></tr>
+<tr><td width="28%"><code>startup-with-shell</code></td><td width="32%"><code>QStartupWithShell</code></td><td width="25%"><code>set startup-with-shell</code></td></tr>
+<tr><td width="28%"><code>environment-hex-encoded</code></td><td width="32%"><code>QEnvironmentHexEncoded</code></td><td width="25%"><code>set environment</code></td></tr>
+<tr><td width="28%"><code>environment-unset</code></td><td width="32%"><code>QEnvironmentUnset</code></td><td width="25%"><code>unset environment</code></td></tr>
+<tr><td width="28%"><code>environment-reset</code></td><td width="32%"><code>QEnvironmentReset</code></td><td width="25%"><code>Reset the inferior environment (i.e., unset user-set variables)</code></td></tr>
+<tr><td width="28%"><code>set-working-dir</code></td><td width="32%"><code>QSetWorkingDir</code></td><td width="25%"><code>set cwd</code></td></tr>
 <tr><td width="28%"><code>conditional-breakpoints-packet</code></td><td width="32%"><code>Z0 and Z1</code></td><td width="25%"><code>Support for target-side breakpoint condition evaluation</code></td></tr>
+<tr><td width="28%"><code>multiprocess-extensions</code></td><td width="32%"><code>multiprocess extensions</code></td><td width="25%">Debug multiple processes and remote process PID awareness</td></tr>
 <tr><td width="28%"><code>swbreak-feature</code></td><td width="32%"><code>swbreak stop reason</code></td><td width="25%"><code>break</code></td></tr>
 <tr><td width="28%"><code>hwbreak-feature</code></td><td width="32%"><code>hwbreak stop reason</code></td><td width="25%"><code>hbreak</code></td></tr>
 <tr><td width="28%"><code>fork-event-feature</code></td><td width="32%"><code>fork stop reason</code></td><td width="25%"><code>fork</code></td></tr>
 <tr><td width="28%"><code>vfork-event-feature</code></td><td width="32%"><code>vfork stop reason</code></td><td width="25%"><code>vfork</code></td></tr>
+<tr><td width="28%"><code>exec-event-feature</code></td><td width="32%"><code>exec stop reason</code></td><td width="25%"><code>exec</code></td></tr>
+<tr><td width="28%"><code>thread-events</code></td><td width="32%"><code>QThreadEvents</code></td><td width="25%">Tracking thread lifetime.</td></tr>
+<tr><td width="28%"><code>no-resumed-stop-reply</code></td><td width="32%"><code>no resumed thread left stop reply</code></td><td width="25%">Tracking thread lifetime.</td></tr>
 </table>
 
 <hr>

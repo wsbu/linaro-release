@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -127,9 +127,7 @@ variable-length arrays are more elegant.
 <p>There are other differences between these two methods.  Space allocated
 with <code>alloca</code> exists until the containing <em>function</em> returns.
 The space for a variable-length array is deallocated as soon as the array
-name&rsquo;s scope ends.  (If you use both variable-length arrays and
-<code>alloca</code> in the same function, deallocation of a variable-length array
-also deallocates anything more recently allocated with <code>alloca</code>.)
+name&rsquo;s scope ends, unless you also use <code>alloca</code> in this scope.
 </p>
 <p>You can also use variable-length arrays as arguments to functions:
 </p>

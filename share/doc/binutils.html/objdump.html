@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1991-2013 Free Software Foundation, Inc.
+<!-- Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -97,7 +97,10 @@ Next: <a href="ranlib.html#ranlib" accesskey="n" rel="next">ranlib</a>, Previous
         [<samp>-R</samp>|<samp>--dynamic-reloc</samp>]
         [<samp>-s</samp>|<samp>--full-contents</samp>]
         [<samp>-W[lLiaprmfFsoRt]</samp>|
-         <samp>--dwarf</samp>[=rawline,=decodedline,=info,=abbrev,=pubnames,=aranges,=macro,=frames,=frames-interp,=str,=loc,=Ranges,=pubtypes,=trace_info,=trace_abbrev,=trace_aranges,=gdb_index]]
+         <samp>--dwarf</samp>[=rawline,=decodedline,=info,=abbrev,=pubnames]
+                 [=aranges,=macro,=frames,=frames-interp,=str,=loc]
+                 [=Ranges,=pubtypes,=trace_info,=trace_abbrev]
+                 [=trace_aranges,=gdb_index]
         [<samp>-G</samp>|<samp>--stabs</samp>]
         [<samp>-t</samp>|<samp>--syms</samp>]
         [<samp>-T</samp>|<samp>--dynamic-syms</samp>]
@@ -108,6 +111,8 @@ Next: <a href="ranlib.html#ranlib" accesskey="n" rel="next">ranlib</a>, Previous
         [<samp>--prefix-addresses</samp>]
         [<samp>--[no-]show-raw-insn</samp>]
         [<samp>--adjust-vma=</samp><var>offset</var>]
+        [<samp>--dwarf-depth=<var>n</var></samp>]
+        [<samp>--dwarf-start=<var>n</var></samp>]
         [<samp>--special-syms</samp>]
         [<samp>--prefix=</samp><var>prefix</var>]
         [<samp>--prefix-strip=</samp><var>level</var>]
@@ -212,6 +217,15 @@ expected to contain instructions.
 <dd><p>Like <samp>-d</samp>, but disassemble the contents of all sections, not just
 those expected to contain instructions.
 </p>
+<p>This option also has a subtle effect on the disassembly of
+instructions in code sections.  When option <samp>-d</samp> is in effect
+objdump will assume that any symbols present in a code section occur
+on the boundary between instructions and it will refuse to disassemble
+across such a boundary.  When option <samp>-D</samp> is in effect however
+this assumption is supressed.  This means that it is possible for the
+output of <samp>-d</samp> and <samp>-D</samp> to differ if, for example, data
+is stored in code sections.
+</p>
 <p>If the target is an ARM architecture this switch also has the effect
 of forcing the disassembler to decode pieces of data found in code
 sections as if they were instructions.
@@ -273,6 +287,11 @@ although <code>ld</code> relocates the sections correctly, using &lsquo;<samp>ob
 Instead, it shows the usual addresses, which are implicit for the
 target.
 </p>
+<p>Note, in some cases it is possible for a section to have both the
+READONLY and the NOREAD attributes set.  In such cases the NOREAD
+attribute takes precedence, but <code>objdump</code> will report both
+since the exact setting of the flag bits might be important.
+</p>
 </dd>
 <dt><code>-H</code></dt>
 <dt><code>--help</code></dt>
@@ -325,6 +344,15 @@ some targets.  If it is necessary to specify more than one
 disassembler option then multiple <samp>-M</samp> options can be used or
 can be placed together into a comma separated list.
 </p>
+<p>For ARC, <samp>dsp</samp> controls the printing of DSP instructions,
+<samp>spfp</samp> selects the printing of FPX single precision FP
+instructions, <samp>dpfp</samp> selects the printing of FPX double
+precision FP instructions, <samp>quarkse_em</samp> selects the printing of
+special QuarkSE-EM instructions, <samp>fpuda</samp> selects the printing
+of double precision assist instructions, <samp>fpus</samp> selects the
+printing of FPU single precision FP instructions, while <samp>fpud</samp>
+selects the printing of FPU souble precision FP instructions.
+</p>
 <p>If the target is an ARM architecture then this switch can be used to
 select which register name set is used during disassembler.  Specifying
 <samp>-M reg-names-std</samp> (the default) will select the register names as
@@ -348,20 +376,46 @@ compilers.
 <p>For the x86, some of the options duplicate functions of the <samp>-m</samp>
 switch, but allow finer grained control.  Multiple selections from the
 following may be specified as a comma separated string.
-<samp>x86-64</samp>, <samp>i386</samp> and <samp>i8086</samp> select disassembly for
-the given architecture.  <samp>intel</samp> and <samp>att</samp> select between
-intel syntax mode and AT&amp;T syntax mode.
-<samp>intel-mnemonic</samp> and <samp>att-mnemonic</samp> select between
-intel mnemonic mode and AT&amp;T mnemonic mode. <samp>intel-mnemonic</samp>
-implies <samp>intel</samp> and <samp>att-mnemonic</samp> implies <samp>att</samp>.
-<samp>addr64</samp>, <samp>addr32</samp>,
-<samp>addr16</samp>, <samp>data32</samp> and <samp>data16</samp> specify the default
-address size and operand size.  These four options will be overridden if
-<samp>x86-64</samp>, <samp>i386</samp> or <samp>i8086</samp> appear later in the
-option string.  Lastly, <samp>suffix</samp>, when in AT&amp;T mode,
-instructs the disassembler to print a mnemonic suffix even when the
-suffix could be inferred by the operands.
+</p><dl compact="compact">
+<dt><code>x86-64</code></dt>
+<dt><code>i386</code></dt>
+<dt><code>i8086</code></dt>
+<dd><p>Select disassembly for the given architecture.
 </p>
+</dd>
+<dt><code>intel</code></dt>
+<dt><code>att</code></dt>
+<dd><p>Select between intel syntax mode and AT&amp;T syntax mode.
+</p>
+</dd>
+<dt><code>amd64</code></dt>
+<dt><code>intel64</code></dt>
+<dd><p>Select between AMD64 ISA and Intel64 ISA.
+</p>
+</dd>
+<dt><code>intel-mnemonic</code></dt>
+<dt><code>att-mnemonic</code></dt>
+<dd><p>Select between intel mnemonic mode and AT&amp;T mnemonic mode.
+Note: <code>intel-mnemonic</code> implies <code>intel</code> and
+<code>att-mnemonic</code> implies <code>att</code>.
+</p>
+</dd>
+<dt><code>addr64</code></dt>
+<dt><code>addr32</code></dt>
+<dt><code>addr16</code></dt>
+<dt><code>data32</code></dt>
+<dt><code>data16</code></dt>
+<dd><p>Specify the default address size and operand size.  These four options
+will be overridden if <code>x86-64</code>, <code>i386</code> or <code>i8086</code>
+appear later in the option string.
+</p>
+</dd>
+<dt><code>suffix</code></dt>
+<dd><p>When in AT&amp;T mode, instructs the disassembler to print a mnemonic
+suffix even when the suffix could be inferred by the operands.
+</p></dd>
+</dl>
+
 <p>For PowerPC, <samp>booke</samp> controls the disassembly of BookE
 instructions.  <samp>32</samp> and <samp>64</samp> select PowerPC and
 PowerPC64 disassembly, respectively.  <samp>e300</samp> selects
@@ -381,8 +435,16 @@ instruction mnemonic.  I.e., print &rsquo;daddu&rsquo; or &rsquo;or&rsquo; inste
 &rsquo;sll&rsquo; instead of &rsquo;nop&rsquo;, etc.
 </p>
 </dd>
+<dt><code>msa</code></dt>
+<dd><p>Disassemble MSA instructions.
+</p>
+</dd>
 <dt><code>virt</code></dt>
 <dd><p>Disassemble the virtualization ASE instructions.
+</p>
+</dd>
+<dt><code>xpa</code></dt>
+<dd><p>Disassemble the eXtended Physical Address (XPA) ASE instructions.
 </p>
 </dd>
 <dt><code>gpr-names=<var>ABI</var></code></dt>
@@ -448,10 +510,24 @@ object file formats, no additional information is printed.
 argument <var>options</var> is a comma separated list that depends on the
 format (the lists of options is displayed with the help).
 </p>
-<p>For XCOFF, the available options are: <samp>header</samp>, <samp>aout</samp>,
-<samp>sections</samp>, <samp>syms</samp>, <samp>relocs</samp>, <samp>lineno</samp>,
-<samp>loader</samp>, <samp>except</samp>, <samp>typchk</samp>, <samp>traceback</samp>,
-<samp>toc</samp> and <samp>ldinfo</samp>.
+<p>For XCOFF, the available options are:
+</p><dl compact="compact">
+<dt><code>header</code></dt>
+<dt><code>aout</code></dt>
+<dt><code>sections</code></dt>
+<dt><code>syms</code></dt>
+<dt><code>relocs</code></dt>
+<dt><code>lineno,</code></dt>
+<dt><code>loader</code></dt>
+<dt><code>except</code></dt>
+<dt><code>typchk</code></dt>
+<dt><code>traceback</code></dt>
+<dt><code>toc</code></dt>
+<dt><code>ldinfo</code></dt>
+</dl>
+
+<p>Not all object formats support this option.  In particular the ELF
+format does not use it.
 </p>
 </dd>
 <dt><code>-r</code></dt>
@@ -518,7 +594,10 @@ instructions.
 </p>
 </dd>
 <dt><code>-W[lLiaprmfFsoRt]</code></dt>
-<dt><code>--dwarf[=rawline,=decodedline,=info,=abbrev,=pubnames,=aranges,=macro,=frames,=frames-interp,=str,=loc,=Ranges,=pubtypes,=trace_info,=trace_abbrev,=trace_aranges,=gdb_index]</code></dt>
+<dt><code>--dwarf[=rawline,=decodedline,=info,=abbrev,=pubnames]</code></dt>
+<dt><code>--dwarf[=aranges,=macro,=frames,=frames-interp,=str,=loc]</code></dt>
+<dt><code>--dwarf[=Ranges,=pubtypes,=trace_info,=trace_abbrev]</code></dt>
+<dt><code>--dwarf[=trace_aranges,=gdb_index]</code></dt>
 <dd><a name="index-DWARF"></a>
 <a name="index-debug-symbols"></a>
 <p>Displays the contents of the debug sections in the file, if any are
@@ -685,6 +764,13 @@ normal symbol (a space).
 meaningful for dynamic objects, such as certain types of shared
 libraries.  This is similar to the information provided by the &lsquo;<samp>nm</samp>&rsquo;
 program when given the <samp>-D</samp> (<samp>--dynamic</samp>) option.
+</p>
+<p>The output format is similar to that produced by the <samp>--syms</samp>
+option, except that an extra field is inserted before the symbol&rsquo;s
+name, giving the version information associated with the symbol.
+If the version is the default version to be used when resolving
+unversioned references to the symbol then it&rsquo;s displayed as is,
+otherwise it&rsquo;s put into parentheses.
 </p>
 </dd>
 <dt><code>--special-syms</code></dt>

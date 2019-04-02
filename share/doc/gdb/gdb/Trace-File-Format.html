@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -86,6 +86,43 @@ as tracepoint definitions or register set size.  <small>GDB</small> will
 ignore any line that it does not recognize.  An empty line marks the end
 of this section.
 </p>
+<dl compact="compact">
+<dt><code>R <var>size</var></code></dt>
+<dd><p>Specifies the size of a register block in bytes.  This is equal to the
+size of a <code>g</code> packet payload in the remote protocol.  <var>size</var>
+is an ascii decimal number.  There should be only one such line in
+a single trace file.
+</p>
+</dd>
+<dt><code>status <var>status</var></code></dt>
+<dd><p>Trace status.  <var>status</var> has the same format as a <code>qTStatus</code>
+remote packet reply.  There should be only one such line in a single trace
+file.
+</p>
+</dd>
+<dt><code>tp <var>payload</var></code></dt>
+<dd><p>Tracepoint definition.  The <var>payload</var> has the same format as
+<code>qTfP</code>/<code>qTsP</code> remote packet reply payload.  A single tracepoint
+may take multiple lines of definition, corresponding to the multiple
+reply packets.
+</p>
+</dd>
+<dt><code>tsv <var>payload</var></code></dt>
+<dd><p>Trace state variable definition.  The <var>payload</var> has the same format as
+<code>qTfV</code>/<code>qTsV</code> remote packet reply payload.  A single variable
+may take multiple lines of definition, corresponding to the multiple
+reply packets.
+</p>
+</dd>
+<dt><code>tdesc <var>payload</var></code></dt>
+<dd><p>Target description in XML format.  The <var>payload</var> is a single line of
+the XML file.  All such lines should be concatenated together to get
+the original XML file.  This file is in the same format as <code>qXfer</code>
+<code>features</code> payload, and corresponds to the main <code>target.xml</code>
+file.  Includes are not allowed.
+</p>
+</dd>
+</dl>
 
 <p>The trace frame section consists of a number of consecutive frames.
 Each frame begins with a two-byte tracepoint number, followed by a
@@ -101,8 +138,7 @@ endianness.
 <dt><code>R <var>bytes</var></code></dt>
 <dd><p>Register block.  The number and ordering of bytes matches that of a
 <code>g</code> packet in the remote protocol.  Note that these are the
-actual bytes, in target order and <small>GDB</small> register order, not a
-hexadecimal encoding.
+actual bytes, in target order, not a hexadecimal encoding.
 </p>
 </dd>
 <dt><code>M <var>address</var> <var>length</var> <var>bytes</var>...</code></dt>

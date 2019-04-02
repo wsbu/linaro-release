@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -76,12 +76,11 @@ Next: <a href="Enable-and-Disable-Tracepoints.html#Enable-and-Disable-Tracepoint
 </dd>
 <dt><code>trace <var>location</var></code></dt>
 <dd><p>The <code>trace</code> command is very similar to the <code>break</code> command.
-Its argument <var>location</var> can be a source line, a function name, or
-an address in the target program.  See <a href="Specify-Location.html#Specify-Location">Specify Location</a>.  The
-<code>trace</code> command defines a tracepoint, which is a point in the
-target program where the debugger will briefly stop, collect some
-data, and then allow the program to continue.  Setting a tracepoint or
-changing its actions takes effect immediately if the remote stub
+Its argument <var>location</var> can be any valid location.
+See <a href="Specify-Location.html#Specify-Location">Specify Location</a>.  The <code>trace</code> command defines a tracepoint,
+which is a point in the target program where the debugger will briefly stop,
+collect some data, and then allow the program to continue.  Setting a tracepoint
+or changing its actions takes effect immediately if the remote stub
 supports the &lsquo;<samp>InstallInTrace</samp>&rsquo; feature (see <a href="General-Query-Packets.html#install-tracepoint-in-tracing">install tracepoint in tracing</a>).
 If remote stub doesn&rsquo;t support the &lsquo;<samp>InstallInTrace</samp>&rsquo; feature, all
 these changes don&rsquo;t take effect until the next <code>tstart</code>

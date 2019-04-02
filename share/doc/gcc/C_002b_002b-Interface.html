@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -74,8 +74,8 @@ ul.no-bullet {list-style: none}
 Next: <a href="Template-Instantiation.html#Template-Instantiation" accesskey="n" rel="next">Template Instantiation</a>, Previous: <a href="Vague-Linkage.html#Vague-Linkage" accesskey="p" rel="prev">Vague Linkage</a>, Up: <a href="C_002b_002b-Extensions.html#C_002b_002b-Extensions" accesskey="u" rel="up">C++ Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
-<a name="g_t_0023pragma-interface-and-implementation"></a>
-<h3 class="section">7.4 #pragma interface and implementation</h3>
+<a name="C_002b_002b-Interface-and-Implementation-Pragmas"></a>
+<h3 class="section">7.4 C++ Interface and Implementation Pragmas</h3>
 
 <a name="index-interface-and-implementation-headers_002c-C_002b_002b"></a>
 <a name="index-C_002b_002b-interface-and-implementation-headers"></a>
@@ -86,14 +86,11 @@ user with a way of explicitly directing the compiler to emit entities
 with vague linkage (and debugging information) in a particular
 translation unit.
 </p>
-<p><em>Note:</em> As of GCC 2.7.2, these <code>#pragma</code>s are not useful in
-most cases, because of COMDAT support and the &ldquo;key method&rdquo; heuristic
+<p><em>Note:</em> These <code>#pragma</code>s have been superceded as of GCC 2.7.2
+by COMDAT support and the &ldquo;key method&rdquo; heuristic
 mentioned in <a href="Vague-Linkage.html#Vague-Linkage">Vague Linkage</a>.  Using them can actually cause your
 program to grow due to unnecessary out-of-line copies of inline
-functions.  Currently (3.4) the only benefit of these
-<code>#pragma</code>s is reduced duplication of debugging information, and
-that should be addressed soon on DWARF 2 targets with the use of
-COMDAT groups.
+functions.
 </p>
 <dl compact="compact">
 <dt><code>#pragma interface</code></dt>
@@ -135,12 +132,6 @@ an include file with the same basename<a name="DOCF4" href="#FOOT4"><sup>4</sup>
 file.  For example, in <samp>allclass.cc</samp>, giving just
 &lsquo;<samp>#pragma implementation</samp>&rsquo;
 by itself is equivalent to &lsquo;<samp>#pragma implementation &quot;allclass.h&quot;</samp>&rsquo;.
-</p>
-<p>In versions of GNU C++ prior to 2.6.0 <samp>allclass.h</samp> was treated as
-an implementation file whenever you would include it from
-<samp>allclass.cc</samp> even if you never specified &lsquo;<samp>#pragma
-implementation</samp>&rsquo;.  This was deemed to be more trouble than it was worth,
-however, and disabled.
 </p>
 <p>Use the string argument if you want a single implementation file to
 include code from multiple header files.  (You must also use

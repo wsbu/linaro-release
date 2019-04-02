@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,11 +75,11 @@ Next: <a href="GIMPLE_005fBIND.html#GIMPLE_005fBIND" accesskey="n" rel="next"><c
 </div>
 <hr>
 <a name="GIMPLE_005fASSIGN-1"></a>
-<h4 class="subsection">11.7.2 <code>GIMPLE_ASSIGN</code></h4>
+<h4 class="subsection">11.8.2 <code>GIMPLE_ASSIGN</code></h4>
 <a name="index-GIMPLE_005fASSIGN"></a>
 
 <dl>
-<dt><a name="index-gimple_005fbuild_005fassign"></a>GIMPLE function: <em>gimple</em> <strong>gimple_build_assign</strong> <em>(tree lhs, tree rhs)</em></dt>
+<dt><a name="index-_002agimple_005fbuild_005fassign"></a>GIMPLE function: <em>gassign</em> <strong>*gimple_build_assign</strong> <em>(tree lhs, tree rhs)</em></dt>
 <dd><p>Build a <code>GIMPLE_ASSIGN</code> statement.  The left-hand side is an lvalue
 passed in lhs.  The right-hand side can be either a unary or
 binary tree expression.  The expression tree rhs will be
@@ -89,9 +89,35 @@ already have a tree expression that you want to convert into a
 tuple.  However, try to avoid building expression trees for the
 sole purpose of calling this function.  If you already have the
 operands in separate trees, it is better to use
-<code>gimple_build_assign_with_ops</code>.
+<code>gimple_build_assign</code> with <code>enum tree_code</code> argument and separate
+arguments for each operand.
 </p></dd></dl>
 
+<dl>
+<dt><a name="index-_002agimple_005fbuild_005fassign-1"></a>GIMPLE function: <em>gassign</em> <strong>*gimple_build_assign</strong> <em>(tree lhs, enum tree_code subcode, tree op1, tree op2, tree op3)</em></dt>
+<dd><p>This function is similar to two operand <code>gimple_build_assign</code>,
+but is used to build a <code>GIMPLE_ASSIGN</code> statement when the operands of the
+right-hand side of the assignment are already split into
+different operands.
+</p>
+<p>The left-hand side is an lvalue passed in lhs.  Subcode is the
+<code>tree_code</code> for the right-hand side of the assignment.  Op1, op2 and op3
+are the operands.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-_002agimple_005fbuild_005fassign-2"></a>GIMPLE function: <em>gassign</em> <strong>*gimple_build_assign</strong> <em>(tree lhs, enum tree_code subcode, tree op1, tree op2)</em></dt>
+<dd><p>Like the above 5 operand <code>gimple_build_assign</code>, but with the last
+argument <code>NULL</code> - this overload should not be used for
+<code>GIMPLE_TERNARY_RHS</code> assignments.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-_002agimple_005fbuild_005fassign-3"></a>GIMPLE function: <em>gassign</em> <strong>*gimple_build_assign</strong> <em>(tree lhs, enum tree_code subcode, tree op1)</em></dt>
+<dd><p>Like the above 4 operand <code>gimple_build_assign</code>, but with the last
+argument <code>NULL</code> - this overload should be used only for
+<code>GIMPLE_UNARY_RHS</code> and <code>GIMPLE_SINGLE_RHS</code> assignments.
+</p></dd></dl>
 
 <dl>
 <dt><a name="index-gimplify_005fassign"></a>GIMPLE function: <em>gimple</em> <strong>gimplify_assign</strong> <em>(tree dst, tree src, gimple_seq *seq_p)</em></dt>
@@ -105,19 +131,6 @@ case they will be converted to a gimple operand if necessary.
 </p>
 <p>This function returns the newly created <code>GIMPLE_ASSIGN</code> tuple.
 </p>
-<dl>
-<dt><a name="index-gimple_005fbuild_005fassign_005fwith_005fops"></a>GIMPLE function: <em>gimple</em> <strong>gimple_build_assign_with_ops</strong> <em>(enum tree_code subcode, tree lhs, tree op1, tree op2)</em></dt>
-<dd><p>This function is similar to <code>gimple_build_assign</code>, but is used to
-build a <code>GIMPLE_ASSIGN</code> statement when the operands of the
-right-hand side of the assignment are already split into
-different operands.
-</p>
-<p>The left-hand side is an lvalue passed in lhs.  Subcode is the
-<code>tree_code</code> for the right-hand side of the assignment.  Op1 and op2
-are the operands.  If op2 is null, subcode must be a <code>tree_code</code>
-for a unary expression.
-</p></dd></dl>
-
 <dl>
 <dt><a name="index-gimple_005fassign_005frhs_005fcode"></a>GIMPLE function: <em>enum tree_code</em> <strong>gimple_assign_rhs_code</strong> <em>(gimple g)</em></dt>
 <dd><p>Return the code of the expression computed on the <code>RHS</code> of
@@ -199,7 +212,7 @@ statement <code>G</code>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005fassign_005fcast_005fp-1"></a>GIMPLE function: <em>bool</em> <strong>gimple_assign_cast_p</strong> <em>(gimple s)</em></dt>
+<dt><a name="index-gimple_005fassign_005fcast_005fp-1"></a>GIMPLE function: <em>bool</em> <strong>gimple_assign_cast_p</strong> <em>(const_gimple s)</em></dt>
 <dd><p>Return true if <code>S</code> is a type-cast assignment.
 </p></dd></dl>
 

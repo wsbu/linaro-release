@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -33,8 +33,8 @@ You have freedom to copy and modify this GNU Manual, like GNU
 <link href="Option-Index.html#Option-Index" rel="index" title="Option Index">
 <link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
 <link href="C_002b_002b-Extensions.html#C_002b_002b-Extensions" rel="up" title="C++ Extensions">
-<link href="Java-Exceptions.html#Java-Exceptions" rel="next" title="Java Exceptions">
-<link href="Namespace-Association.html#Namespace-Association" rel="prev" title="Namespace Association">
+<link href="C_002b_002b-Concepts.html#C_002b_002b-Concepts" rel="next" title="C++ Concepts">
+<link href="Function-Multiversioning.html#Function-Multiversioning" rel="prev" title="Function Multiversioning">
 <style type="text/css">
 <!--
 a.summary-letter {text-decoration: none}
@@ -71,11 +71,11 @@ ul.no-bullet {list-style: none}
 <a name="Type-Traits"></a>
 <div class="header">
 <p>
-Next: <a href="Java-Exceptions.html#Java-Exceptions" accesskey="n" rel="next">Java Exceptions</a>, Previous: <a href="Namespace-Association.html#Namespace-Association" accesskey="p" rel="prev">Namespace Association</a>, Up: <a href="C_002b_002b-Extensions.html#C_002b_002b-Extensions" accesskey="u" rel="up">C++ Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="C_002b_002b-Concepts.html#C_002b_002b-Concepts" accesskey="n" rel="next">C++ Concepts</a>, Previous: <a href="Function-Multiversioning.html#Function-Multiversioning" accesskey="p" rel="prev">Function Multiversioning</a>, Up: <a href="C_002b_002b-Extensions.html#C_002b_002b-Extensions" accesskey="u" rel="up">C++ Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
 <a name="Type-Traits-1"></a>
-<h3 class="section">7.10 Type Traits</h3>
+<h3 class="section">7.9 Type Traits</h3>
 
 <p>The C++ front end implements syntactic extensions that allow
 compile-time determination of 
@@ -164,7 +164,7 @@ class type is considered is own base.  Requires: if <code>__is_class
 (base_type)</code> and <code>__is_class (derived_type)</code> are true and
 <code>base_type</code> and <code>derived_type</code> are not the same type
 (disregarding cv-qualifiers), <code>derived_type</code> shall be a complete
-type.  Diagnostic is produced if this requirement is not met.
+type.  A diagnostic is produced if this requirement is not met.
 </p>
 </dd>
 <dt><code>__is_class (type)</code></dt>
@@ -231,10 +231,11 @@ an enumeration type ([dcl.enum]).
 </dd>
 </dl>
 
+
 <hr>
 <div class="header">
 <p>
-Next: <a href="Java-Exceptions.html#Java-Exceptions" accesskey="n" rel="next">Java Exceptions</a>, Previous: <a href="Namespace-Association.html#Namespace-Association" accesskey="p" rel="prev">Namespace Association</a>, Up: <a href="C_002b_002b-Extensions.html#C_002b_002b-Extensions" accesskey="u" rel="up">C++ Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="C_002b_002b-Concepts.html#C_002b_002b-Concepts" accesskey="n" rel="next">C++ Concepts</a>, Previous: <a href="Function-Multiversioning.html#Function-Multiversioning" accesskey="p" rel="prev">Function Multiversioning</a>, Up: <a href="C_002b_002b-Extensions.html#C_002b_002b-Extensions" accesskey="u" rel="up">C++ Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 
 

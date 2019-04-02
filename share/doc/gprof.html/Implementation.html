@@ -2,8 +2,7 @@
 <html>
 <!-- This file documents the gprof profiler of the GNU system.
 
-Copyright (C) 1988, 1992, 1997, 1998, 1999, 2000, 2001, 2003,
-2007, 2008, 2009 Free Software Foundation, Inc.
+Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -136,7 +135,7 @@ more overhead than kernel-based profiling.  Also, due to the
 added delay required to deliver the signal, this method is
 less accurate as well.
 </p>
-<p>A special startup routine allocates memory for the histogram and 
+<p>A special startup routine allocates memory for the histogram and
 either calls <code>profil()</code> or sets up
 a clock signal handler.
 This routine (<code>monstartup</code>) can be invoked in several ways.

@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1999-2014 Free Software Foundation, Inc.
+<!-- Copyright (C) 1999-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -33,8 +33,8 @@ You have freedom to copy and modify this GNU Manual, like GNU
 <link href="Option-Index.html#Option-Index" rel="index" title="Option Index">
 <link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
 <link href="Intrinsic-Modules.html#Intrinsic-Modules" rel="up" title="Intrinsic Modules">
-<link href="Contributing.html#Contributing" rel="next" title="Contributing">
-<link href="ISO_005fC_005fBINDING.html#ISO_005fC_005fBINDING" rel="prev" title="ISO_C_BINDING">
+<link href="OpenACC-Module-OPENACC.html#OpenACC-Module-OPENACC" rel="next" title="OpenACC Module OPENACC">
+<link href="IEEE-modules.html#IEEE-modules" rel="prev" title="IEEE modules">
 <style type="text/css">
 <!--
 a.summary-letter {text-decoration: none}
@@ -71,14 +71,14 @@ ul.no-bullet {list-style: none}
 <a name="OpenMP-Modules-OMP_005fLIB-and-OMP_005fLIB_005fKINDS"></a>
 <div class="header">
 <p>
-Previous: <a href="ISO_005fC_005fBINDING.html#ISO_005fC_005fBINDING" accesskey="p" rel="prev">ISO_C_BINDING</a>, Up: <a href="Intrinsic-Modules.html#Intrinsic-Modules" accesskey="u" rel="up">Intrinsic Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="OpenACC-Module-OPENACC.html#OpenACC-Module-OPENACC" accesskey="n" rel="next">OpenACC Module OPENACC</a>, Previous: <a href="IEEE-modules.html#IEEE-modules" accesskey="p" rel="prev">IEEE modules</a>, Up: <a href="Intrinsic-Modules.html#Intrinsic-Modules" accesskey="u" rel="up">Intrinsic Modules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
 <a name="OpenMP-Modules-OMP_005fLIB-and-OMP_005fLIB_005fKINDS-1"></a>
-<h3 class="section">9.3 OpenMP Modules <code>OMP_LIB</code> and <code>OMP_LIB_KINDS</code></h3>
+<h3 class="section">10.4 OpenMP Modules <code>OMP_LIB</code> and <code>OMP_LIB_KINDS</code></h3>
 <dl compact="compact">
 <dt><em>Standard</em>:</dt>
-<dd><p>OpenMP Application Program Interface v4.0
+<dd><p>OpenMP Application Program Interface v4.5
 </p></dd>
 </dl>
 
@@ -87,12 +87,13 @@ Previous: <a href="ISO_005fC_005fBINDING.html#ISO_005fC_005fBINDING" accesskey="
 a form of two Fortran 90 modules, named <code>OMP_LIB</code> and 
 <code>OMP_LIB_KINDS</code>, and in a form of a Fortran <code>include</code> file named
 <samp>omp_lib.h</samp>. The procedures provided by <code>OMP_LIB</code> can be found
-in the <a href="http://gcc.gnu.org/onlinedocs/libgomp/index.html#Top">Introduction</a> in <cite>GNU OpenMP runtime library</cite> manual,
+in the <a href="http://gcc.gnu.org/onlinedocs/libgomp/index.html#Top">Introduction</a> in <cite>GNU Offloading and Multi
+Processing Runtime Library</cite> manual,
 the named constants defined in the modules are listed
 below.
 </p>
 <p>For details refer to the actual
-<a href="http://www.openmp.org/mp-documents/OpenMP4.0.0.pdf">OpenMP Application Program Interface v4.0</a>.
+<a href="http://www.openmp.org/wp-content/uploads/openmp-4.5.pdf">OpenMP Application Program Interface v4.5</a>.
 </p>
 <p><code>OMP_LIB_KINDS</code> provides the following scalar default-integer
 named constants:
@@ -107,7 +108,7 @@ named constants:
 <p><code>OMP_LIB</code> provides the scalar default-integer
 named constant <code>openmp_version</code> with a value of the form
 <var>yyyymm</var>, where <code>yyyy</code> is the year and <var>mm</var> the month
-of the OpenMP version; for OpenMP v4.0 the value is <code>201307</code>.
+of the OpenMP version; for OpenMP v4.5 the value is <code>201511</code>.
 </p>
 <p>The following scalar integer named constants of the
 kind <code>omp_sched_kind</code>:
@@ -129,7 +130,6 @@ kind <code>omp_proc_bind_kind</code>:
 <dt><code>omp_proc_bind_close</code></dt>
 <dt><code>omp_proc_bind_spread</code></dt>
 </dl>
-
 
 
 

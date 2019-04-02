@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -26,7 +26,7 @@ developing GNU and promoting software freedom." -->
 <link href="Concept-Index.html#Concept-Index" rel="index" title="Concept Index">
 <link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
 <link href="GDB-Files.html#GDB-Files" rel="up" title="GDB Files">
-<link href="Separate-Debug-Files.html#Separate-Debug-Files" rel="next" title="Separate Debug Files">
+<link href="File-Caching.html#File-Caching" rel="next" title="File Caching">
 <link href="GDB-Files.html#GDB-Files" rel="prev" title="GDB Files">
 <style type="text/css">
 <!--
@@ -64,7 +64,7 @@ ul.no-bullet {list-style: none}
 <a name="Files"></a>
 <div class="header">
 <p>
-Next: <a href="Separate-Debug-Files.html#Separate-Debug-Files" accesskey="n" rel="next">Separate Debug Files</a>, Up: <a href="GDB-Files.html#GDB-Files" accesskey="u" rel="up">GDB Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="File-Caching.html#File-Caching" accesskey="n" rel="next">File Caching</a>, Up: <a href="GDB-Files.html#GDB-Files" accesskey="u" rel="up">GDB Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
 <a name="Commands-to-Specify-Files"></a>
@@ -125,10 +125,15 @@ discard information on the executable file.
 </p>
 <a name="index-symbol_002dfile"></a>
 </dd>
-<dt><code>symbol-file <span class="roman">[</span> <var>filename</var> <span class="roman">]</span></code></dt>
+<dt><code>symbol-file <span class="roman">[</span> <var>filename</var> <span class="roman">[</span> -o <var>offset</var> <span class="roman">]]</span></code></dt>
 <dd><p>Read symbol table information from file <var>filename</var>.  <code>PATH</code> is
 searched when necessary.  Use the <code>file</code> command to get both symbol
 table and program to run from the same file.
+</p>
+<p>If an optional <var>offset</var> is specified, it is added to the start
+address of each section in the symbol file.  This is useful if the
+program is relocated at runtime, such as the Linux kernel with kASLR
+enabled.
 </p>
 <p><code>symbol-file</code> with no argument clears out <small>GDB</small> information on your
 program&rsquo;s symbol table.
@@ -180,6 +185,16 @@ tables by using the &lsquo;<samp>-readnow</samp>&rsquo; option with any of the c
 load symbol table information, if you want to be sure <small>GDB</small> has the
 entire symbol table available.
 </p>
+<a name="index-_002dreadnever_002c-option-for-symbol_002dfile-command"></a>
+<a name="index-never-read-symbols"></a>
+<a name="index-symbols_002c-never-read"></a>
+</dd>
+<dt><code>symbol-file <span class="roman">[</span> -readnever <span class="roman">]</span> <var>filename</var></code></dt>
+<dt><code>file <span class="roman">[</span> -readnever <span class="roman">]</span> <var>filename</var></code></dt>
+<dd><p>You can instruct <small>GDB</small> to never read the symbolic information
+contained in <var>filename</var> by using the &lsquo;<samp>-readnever</samp>&rsquo; option.
+See <a href="File-Options.html#g_t_002d_002dreadnever">--readnever</a>.
+</p>
 
 <a name="index-core_002dfile"></a>
 </dd>
@@ -202,18 +217,21 @@ the program is running.  To do this, use the <code>kill</code> command
 <a name="index-add_002dsymbol_002dfile"></a>
 <a name="index-dynamic-linking"></a>
 </dd>
-<dt><code>add-symbol-file <var>filename</var> <var>address</var></code></dt>
-<dt><code>add-symbol-file <var>filename</var> <var>address</var> <span class="roman">[</span> -readnow <span class="roman">]</span></code></dt>
-<dt><code>add-symbol-file <var>filename</var> <var>address</var> -s <var>section</var> <var>address</var> &hellip;</code></dt>
+<dt><code>add-symbol-file <var>filename</var> <span class="roman">[</span> -readnow <span class="roman">|</span> -readnever <span class="roman">]</span> <span class="roman">[</span> -o <var>offset</var> <span class="roman">]</span> <span class="roman">[</span> <var>textaddress</var> <span class="roman">]</span> <span class="roman">[</span> -s <var>section</var> <var>address</var> &hellip; <span class="roman">]</span></code></dt>
 <dd><p>The <code>add-symbol-file</code> command reads additional symbol table
 information from the file <var>filename</var>.  You would use this command
 when <var>filename</var> has been dynamically loaded (by some other means)
-into the program that is running.  The <var>address</var> should give the memory
-address at which the file has been loaded; <small>GDB</small> cannot figure
-this out for itself.  You can additionally specify an arbitrary number
-of &lsquo;<samp>-s <var>section</var> <var>address</var></samp>&rsquo; pairs, to give an explicit
-section name and base address for that section.  You can specify any
-<var>address</var> as an expression.
+into the program that is running.  The <var>textaddress</var> parameter gives
+the memory address at which the file&rsquo;s text section has been loaded.
+You can additionally specify the base address of other sections using
+an arbitrary number of &lsquo;<samp>-s <var>section</var> <var>address</var></samp>&rsquo; pairs.
+If a section is omitted, <small>GDB</small> will use its default addresses
+as found in <var>filename</var>.  Any <var>address</var> or <var>textaddress</var>
+can be given as an expression.
+</p>
+<p>If an optional <var>offset</var> is specified, it is added to the start
+address of each section, except those for which the address was
+specified explicitly.
 </p>
 <p>The symbol table of the file <var>filename</var> is added to the symbol table
 originally read with the <code>symbol-file</code> command.  You can use the
@@ -406,8 +424,9 @@ as arguments.  <small>GDB</small> always converts the file name to an absolute f
 name and remembers it that way.
 </p>
 <a name="index-shared-libraries"></a>
-<a name="Shared-Libraries"></a><p><small>GDB</small> supports <small>GNU</small>/Linux, MS-Windows, HP-UX, SunOS, SVr4, Irix,
-and IBM RS/6000 AIX shared libraries.
+<a name="Shared-Libraries"></a><p><small>GDB</small> supports <small>GNU</small>/Linux, MS-Windows, SunOS,
+Darwin/Mach-O, SVr4, IBM RS/6000 AIX, QNX Neutrino, FDPIC (FR-V), and
+DSBT (TIC6X) shared libraries.
 </p>
 <p>On MS-Windows <small>GDB</small> must be linked with the Expat library to support
 shared libraries.  See <a href="Requirements.html#Expat">Expat</a>.
@@ -417,9 +436,6 @@ when you use the <code>run</code> command, or when you examine a core file.
 (Before you issue the <code>run</code> command, <small>GDB</small> does not understand
 references to a function in a shared library, however&mdash;unless you are
 debugging a core file).
-</p>
-<p>On HP-UX, if the program loads a library explicitly, <small>GDB</small>
-automatically loads the symbols at the time of the <code>shl_load</code> call.
 </p>
 
 <p>There are times, however, when you may wish to not automatically load
@@ -754,7 +770,7 @@ provided by prefixing <var>path</var> with <samp>remote:</samp></p>
 <hr>
 <div class="header">
 <p>
-Next: <a href="Separate-Debug-Files.html#Separate-Debug-Files" accesskey="n" rel="next">Separate Debug Files</a>, Up: <a href="GDB-Files.html#GDB-Files" accesskey="u" rel="up">GDB Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="File-Caching.html#File-Caching" accesskey="n" rel="next">File Caching</a>, Up: <a href="GDB-Files.html#GDB-Files" accesskey="u" rel="up">GDB Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-Index.html#Concept-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 
 

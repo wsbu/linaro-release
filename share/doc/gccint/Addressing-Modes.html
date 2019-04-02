@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,7 +75,7 @@ Next: <a href="Anchored-Addresses.html#Anchored-Addresses" accesskey="n" rel="ne
 </div>
 <hr>
 <a name="Addressing-Modes-1"></a>
-<h3 class="section">17.14 Addressing Modes</h3>
+<h3 class="section">17.13 Addressing Modes</h3>
 <a name="index-addressing-modes"></a>
 
 <p>This is about addressing modes.
@@ -131,7 +131,7 @@ accept.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fLEGITIMATE_005fADDRESS_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_LEGITIMATE_ADDRESS_P</strong> <em>(enum machine_mode <var>mode</var>, rtx <var>x</var>, bool <var>strict</var>)</em></dt>
+<dt><a name="index-TARGET_005fLEGITIMATE_005fADDRESS_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_LEGITIMATE_ADDRESS_P</strong> <em>(machine_mode <var>mode</var>, rtx <var>x</var>, bool <var>strict</var>)</em></dt>
 <dd><p>A function that returns whether <var>x</var> (an RTX) is a legitimate memory
 address on the target machine for a memory operand of mode <var>mode</var>.
 </p>
@@ -221,7 +221,7 @@ a label_ref or symbol_ref within an UNSPEC.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fLEGITIMIZE_005fADDRESS"></a>Target Hook: <em>rtx</em> <strong>TARGET_LEGITIMIZE_ADDRESS</strong> <em>(rtx <var>x</var>, rtx <var>oldx</var>, enum machine_mode <var>mode</var>)</em></dt>
+<dt><a name="index-TARGET_005fLEGITIMIZE_005fADDRESS"></a>Target Hook: <em>rtx</em> <strong>TARGET_LEGITIMIZE_ADDRESS</strong> <em>(rtx <var>x</var>, rtx <var>oldx</var>, machine_mode <var>mode</var>)</em></dt>
 <dd><p>This hook is given an invalid memory address <var>x</var> for an
 operand of mode <var>mode</var> and should try to return a valid memory
 address.
@@ -313,7 +313,7 @@ addresses.  Many RISC machines have no mode-dependent addresses.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fLEGITIMATE_005fCONSTANT_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_LEGITIMATE_CONSTANT_P</strong> <em>(enum machine_mode <var>mode</var>, rtx <var>x</var>)</em></dt>
+<dt><a name="index-TARGET_005fLEGITIMATE_005fCONSTANT_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_LEGITIMATE_CONSTANT_P</strong> <em>(machine_mode <var>mode</var>, rtx <var>x</var>)</em></dt>
 <dd><p>This hook returns true if <var>x</var> is a legitimate constant for a
 <var>mode</var>-mode immediate operand on the target machine.  You can assume that
 <var>x</var> satisfies <code>CONSTANT_P</code>, so you need not check this.
@@ -339,7 +339,7 @@ debug sections.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fCANNOT_005fFORCE_005fCONST_005fMEM"></a>Target Hook: <em>bool</em> <strong>TARGET_CANNOT_FORCE_CONST_MEM</strong> <em>(enum machine_mode <var>mode</var>, rtx <var>x</var>)</em></dt>
+<dt><a name="index-TARGET_005fCANNOT_005fFORCE_005fCONST_005fMEM"></a>Target Hook: <em>bool</em> <strong>TARGET_CANNOT_FORCE_CONST_MEM</strong> <em>(machine_mode <var>mode</var>, rtx <var>x</var>)</em></dt>
 <dd><p>This hook should return true if <var>x</var> is of a form that cannot (or
 should not) be spilled to the constant pool.  <var>mode</var> is the mode
 of <var>x</var>.
@@ -354,7 +354,7 @@ of TLS symbols for various targets.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fUSE_005fBLOCKS_005fFOR_005fCONSTANT_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_USE_BLOCKS_FOR_CONSTANT_P</strong> <em>(enum machine_mode <var>mode</var>, const_rtx <var>x</var>)</em></dt>
+<dt><a name="index-TARGET_005fUSE_005fBLOCKS_005fFOR_005fCONSTANT_005fP"></a>Target Hook: <em>bool</em> <strong>TARGET_USE_BLOCKS_FOR_CONSTANT_P</strong> <em>(machine_mode <var>mode</var>, const_rtx <var>x</var>)</em></dt>
 <dd><p>This hook should return true if pool entries for constant <var>x</var> can
 be placed in an <code>object_block</code> structure.  <var>mode</var> is the mode
 of <var>x</var>.
@@ -371,14 +371,10 @@ be placed in an <code>object_block</code> structure.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fBUILTIN_005fRECIPROCAL"></a>Target Hook: <em>tree</em> <strong>TARGET_BUILTIN_RECIPROCAL</strong> <em>(unsigned <var>fn</var>, bool <var>md_fn</var>, bool <var>sqrt</var>)</em></dt>
-<dd><p>This hook should return the DECL of a function that implements reciprocal of
-the builtin function with builtin function code <var>fn</var>, or
-<code>NULL_TREE</code> if such a function is not available.  <var>md_fn</var> is true
-when <var>fn</var> is a code of a machine-dependent builtin function.  When
-<var>sqrt</var> is true, additional optimizations that apply only to the reciprocal
-of a square root function are performed, and only reciprocals of <code>sqrt</code>
-function are valid.
+<dt><a name="index-TARGET_005fBUILTIN_005fRECIPROCAL"></a>Target Hook: <em>tree</em> <strong>TARGET_BUILTIN_RECIPROCAL</strong> <em>(tree <var>fndecl</var>)</em></dt>
+<dd><p>This hook should return the DECL of a function that implements the
+reciprocal of the machine-specific builtin function <var>fndecl</var>, or
+<code>NULL_TREE</code> if such a function is not available.
 </p></dd></dl>
 
 <dl>
@@ -420,11 +416,11 @@ misalignment value (<var>misalign</var>).
 
 <dl>
 <dt><a name="index-TARGET_005fVECTORIZE_005fVECTOR_005fALIGNMENT_005fREACHABLE"></a>Target Hook: <em>bool</em> <strong>TARGET_VECTORIZE_VECTOR_ALIGNMENT_REACHABLE</strong> <em>(const_tree <var>type</var>, bool <var>is_packed</var>)</em></dt>
-<dd><p>Return true if vector alignment is reachable (by peeling N iterations) for the given type.
+<dd><p>Return true if vector alignment is reachable (by peeling N iterations) for the given scalar type <var>type</var>.  <var>is_packed</var> is false if the scalar access using <var>type</var> is known to be naturally aligned.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fVECTORIZE_005fVEC_005fPERM_005fCONST_005fOK"></a>Target Hook: <em>bool</em> <strong>TARGET_VECTORIZE_VEC_PERM_CONST_OK</strong> <em>(enum <var>machine_mode</var>, const unsigned char *<var>sel</var>)</em></dt>
+<dt><a name="index-TARGET_005fVECTORIZE_005fVEC_005fPERM_005fCONST_005fOK"></a>Target Hook: <em>bool</em> <strong>TARGET_VECTORIZE_VEC_PERM_CONST_OK</strong> <em>(machine_mode, const unsigned char *<var>sel</var>)</em></dt>
 <dd><p>Return true if a vector created for <code>vec_perm_const</code> is valid.
 </p></dd></dl>
 
@@ -442,17 +438,24 @@ conversion. Otherwise, it will return <code>NULL_TREE</code>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fVECTORIZE_005fBUILTIN_005fVECTORIZED_005fFUNCTION"></a>Target Hook: <em>tree</em> <strong>TARGET_VECTORIZE_BUILTIN_VECTORIZED_FUNCTION</strong> <em>(tree <var>fndecl</var>, tree <var>vec_type_out</var>, tree <var>vec_type_in</var>)</em></dt>
+<dt><a name="index-TARGET_005fVECTORIZE_005fBUILTIN_005fVECTORIZED_005fFUNCTION"></a>Target Hook: <em>tree</em> <strong>TARGET_VECTORIZE_BUILTIN_VECTORIZED_FUNCTION</strong> <em>(unsigned <var>code</var>, tree <var>vec_type_out</var>, tree <var>vec_type_in</var>)</em></dt>
 <dd><p>This hook should return the decl of a function that implements the
-vectorized variant of the builtin function with builtin function code
+vectorized variant of the function with the <code>combined_fn</code> code
 <var>code</var> or <code>NULL_TREE</code> if such a function is not available.
-The value of <var>fndecl</var> is the builtin function declaration.  The
+The return type of the vectorized function shall be of vector type
+<var>vec_type_out</var> and the argument types should be <var>vec_type_in</var>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fVECTORIZE_005fBUILTIN_005fMD_005fVECTORIZED_005fFUNCTION"></a>Target Hook: <em>tree</em> <strong>TARGET_VECTORIZE_BUILTIN_MD_VECTORIZED_FUNCTION</strong> <em>(tree <var>fndecl</var>, tree <var>vec_type_out</var>, tree <var>vec_type_in</var>)</em></dt>
+<dd><p>This hook should return the decl of a function that implements the
+vectorized variant of target built-in function <code>fndecl</code>.  The
 return type of the vectorized function shall be of vector type
 <var>vec_type_out</var> and the argument types should be <var>vec_type_in</var>.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fVECTORIZE_005fSUPPORT_005fVECTOR_005fMISALIGNMENT"></a>Target Hook: <em>bool</em> <strong>TARGET_VECTORIZE_SUPPORT_VECTOR_MISALIGNMENT</strong> <em>(enum machine_mode <var>mode</var>, const_tree <var>type</var>, int <var>misalignment</var>, bool <var>is_packed</var>)</em></dt>
+<dt><a name="index-TARGET_005fVECTORIZE_005fSUPPORT_005fVECTOR_005fMISALIGNMENT"></a>Target Hook: <em>bool</em> <strong>TARGET_VECTORIZE_SUPPORT_VECTOR_MISALIGNMENT</strong> <em>(machine_mode <var>mode</var>, const_tree <var>type</var>, int <var>misalignment</var>, bool <var>is_packed</var>)</em></dt>
 <dd><p>This hook should return true if the target supports misaligned vector
 store/load of a specific factor denoted in the <var>misalignment</var>
 parameter.  The vector store/load should be of machine mode <var>mode</var> and
@@ -461,7 +464,7 @@ parameter is true if the memory access is defined in a packed struct.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fVECTORIZE_005fPREFERRED_005fSIMD_005fMODE"></a>Target Hook: <em>enum machine_mode</em> <strong>TARGET_VECTORIZE_PREFERRED_SIMD_MODE</strong> <em>(enum machine_mode <var>mode</var>)</em></dt>
+<dt><a name="index-TARGET_005fVECTORIZE_005fPREFERRED_005fSIMD_005fMODE"></a>Target Hook: <em>machine_mode</em> <strong>TARGET_VECTORIZE_PREFERRED_SIMD_MODE</strong> <em>(machine_mode <var>mode</var>)</em></dt>
 <dd><p>This hook should return the preferred mode for vectorizing scalar
 mode <var>mode</var>.  The default is
 equal to <code>word_mode</code>, because the vectorizer can do some
@@ -474,6 +477,13 @@ transformations even in absence of specialized <acronym>SIMD</acronym> hardware.
 after trying to autovectorize using the vector size derived from the
 mode returned by <code>TARGET_VECTORIZE_PREFERRED_SIMD_MODE</code>.
 The default is zero which means to not iterate over other vector sizes.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fVECTORIZE_005fGET_005fMASK_005fMODE"></a>Target Hook: <em>machine_mode</em> <strong>TARGET_VECTORIZE_GET_MASK_MODE</strong> <em>(unsigned <var>nunits</var>, unsigned <var>length</var>)</em></dt>
+<dd><p>This hook returns mode to be used for a mask to be used for a vector
+of specified <var>length</var> with <var>nunits</var> elements.  By default an integer
+vector mode of a proper size is returned.
 </p></dd></dl>
 
 <dl>
@@ -497,22 +507,21 @@ The default is zero which means to not iterate over other vector sizes.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-TARGET_005fVECTORIZE_005fBUILTIN_005fTM_005fLOAD"></a>Target Hook: <em>tree</em> <strong>TARGET_VECTORIZE_BUILTIN_TM_LOAD</strong> <em>(tree)</em></dt>
-<dd><p>This hook should return the built-in decl needed to load a vector of the given type within a transaction.
-</p></dd></dl>
-
-<dl>
-<dt><a name="index-TARGET_005fVECTORIZE_005fBUILTIN_005fTM_005fSTORE"></a>Target Hook: <em>tree</em> <strong>TARGET_VECTORIZE_BUILTIN_TM_STORE</strong> <em>(tree)</em></dt>
-<dd><p>This hook should return the built-in decl needed to store a vector of the given type within a transaction.
-</p></dd></dl>
-
-<dl>
 <dt><a name="index-TARGET_005fVECTORIZE_005fBUILTIN_005fGATHER"></a>Target Hook: <em>tree</em> <strong>TARGET_VECTORIZE_BUILTIN_GATHER</strong> <em>(const_tree <var>mem_vectype</var>, const_tree <var>index_type</var>, int <var>scale</var>)</em></dt>
 <dd><p>Target builtin that implements vector gather operation.  <var>mem_vectype</var>
 is the vector type of the load and <var>index_type</var> is scalar type of
 the index, scaled by <var>scale</var>.
 The default is <code>NULL_TREE</code> which means to not vectorize gather
 loads.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fVECTORIZE_005fBUILTIN_005fSCATTER"></a>Target Hook: <em>tree</em> <strong>TARGET_VECTORIZE_BUILTIN_SCATTER</strong> <em>(const_tree <var>vectype</var>, const_tree <var>index_type</var>, int <var>scale</var>)</em></dt>
+<dd><p>Target builtin that implements vector scatter operation.  <var>vectype</var>
+is the vector type of the store and <var>index_type</var> is scalar type of
+the index, scaled by <var>scale</var>.
+The default is <code>NULL_TREE</code> which means to not vectorize scatter
+stores.
 </p></dd></dl>
 
 <dl>
@@ -536,6 +545,52 @@ to SIMD clone <var>node</var> if needed.
 in vectorized loops in current function, or non-negative number if it is
 usable.  In that case, the smaller the number is, the more desirable it is
 to use it.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fSIMT_005fVF"></a>Target Hook: <em>int</em> <strong>TARGET_SIMT_VF</strong> <em>(void)</em></dt>
+<dd><p>Return number of threads in SIMT thread group on the target.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fGOACC_005fVALIDATE_005fDIMS"></a>Target Hook: <em>bool</em> <strong>TARGET_GOACC_VALIDATE_DIMS</strong> <em>(tree <var>decl</var>, int *<var>dims</var>, int <var>fn_level</var>)</em></dt>
+<dd><p>This hook should check the launch dimensions provided for an OpenACC
+compute region, or routine.  Defaulted values are represented as -1
+and non-constant values as 0.  The <var>fn_level</var> is negative for the
+function corresponding to the compute region.  For a routine is is the
+outermost level at which partitioned execution may be spawned.  The hook
+should verify non-default values.  If DECL is NULL, global defaults
+are being validated and unspecified defaults should be filled in.
+Diagnostics should be issued as appropriate.  Return
+true, if changes have been made.  You must override this hook to
+provide dimensions larger than 1.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fGOACC_005fDIM_005fLIMIT"></a>Target Hook: <em>int</em> <strong>TARGET_GOACC_DIM_LIMIT</strong> <em>(int <var>axis</var>)</em></dt>
+<dd><p>This hook should return the maximum size of a particular dimension,
+or zero if unbounded.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fGOACC_005fFORK_005fJOIN"></a>Target Hook: <em>bool</em> <strong>TARGET_GOACC_FORK_JOIN</strong> <em>(gcall *<var>call</var>, const int *<var>dims</var>, bool <var>is_fork</var>)</em></dt>
+<dd><p>This hook can be used to convert IFN_GOACC_FORK and IFN_GOACC_JOIN
+function calls to target-specific gimple, or indicate whether they
+should be retained.  It is executed during the oacc_device_lower pass.
+It should return true, if the call should be retained.  It should
+return false, if it is to be deleted (either because target-specific
+gimple has been inserted before it, or there is no need for it).
+The default hook returns false, if there are no RTL expanders for them.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-TARGET_005fGOACC_005fREDUCTION"></a>Target Hook: <em>void</em> <strong>TARGET_GOACC_REDUCTION</strong> <em>(gcall *<var>call</var>)</em></dt>
+<dd><p>This hook is used by the oacc_transform pass to expand calls to the
+<var>GOACC_REDUCTION</var> internal function, into a sequence of gimple
+instructions.  <var>call</var> is gimple statement containing the call to
+the function.  This hook removes statement <var>call</var> after the
+expanded sequence has been inserted.  This hook is also responsible
+for allocating any storage for reductions when necessary.
 </p></dd></dl>
 
 <hr>

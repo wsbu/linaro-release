@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -34,7 +34,7 @@ You have freedom to copy and modify this GNU Manual, like GNU
 <link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
 <link href="C-Extensions.html#C-Extensions" rel="up" title="C Extensions">
 <link href="Function-Prototypes.html#Function-Prototypes" rel="next" title="Function Prototypes">
-<link href="Function-Attributes.html#Function-Attributes" rel="prev" title="Function Attributes">
+<link href="Statement-Attributes.html#Statement-Attributes" rel="prev" title="Statement Attributes">
 <style type="text/css">
 <!--
 a.summary-letter {text-decoration: none}
@@ -71,11 +71,11 @@ ul.no-bullet {list-style: none}
 <a name="Attribute-Syntax"></a>
 <div class="header">
 <p>
-Next: <a href="Function-Prototypes.html#Function-Prototypes" accesskey="n" rel="next">Function Prototypes</a>, Previous: <a href="Function-Attributes.html#Function-Attributes" accesskey="p" rel="prev">Function Attributes</a>, Up: <a href="C-Extensions.html#C-Extensions" accesskey="u" rel="up">C Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="Function-Prototypes.html#Function-Prototypes" accesskey="n" rel="next">Function Prototypes</a>, Previous: <a href="Statement-Attributes.html#Statement-Attributes" accesskey="p" rel="prev">Statement Attributes</a>, Up: <a href="C-Extensions.html#C-Extensions" accesskey="u" rel="up">C Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
 <a name="Attribute-Syntax-1"></a>
-<h3 class="section">6.31 Attribute Syntax</h3>
+<h3 class="section">6.37 Attribute Syntax</h3>
 <a name="index-attribute-syntax"></a>
 
 <p>This section describes the syntax with which <code>__attribute__</code> may be
@@ -97,6 +97,12 @@ applying to functions.  See <a href="Variable-Attributes.html#Variable-Attribute
 semantics of attributes applying to variables.  See <a href="Type-Attributes.html#Type-Attributes">Type Attributes</a>,
 for details of the semantics of attributes applying to structure, union
 and enumerated types.
+See <a href="Label-Attributes.html#Label-Attributes">Label Attributes</a>, for details of the semantics of attributes 
+applying to labels.
+See <a href="Enumerator-Attributes.html#Enumerator-Attributes">Enumerator Attributes</a>, for details of the semantics of attributes
+applying to enumerators.
+See <a href="Statement-Attributes.html#Statement-Attributes">Statement Attributes</a>, for details of the semantics of attributes
+applying to statements.
 </p>
 <p>An <em>attribute specifier</em> is of the form
 <code>__attribute__ ((<var>attribute-list</var>))</code>.  An <em>attribute list</em>
@@ -106,10 +112,12 @@ each attribute is one of the following:
 <ul>
 <li> Empty.  Empty attributes are ignored.
 
-</li><li> A word (which may be an identifier such as <code>unused</code>, or a reserved
+</li><li> An attribute name
+(which may be an identifier such as <code>unused</code>, or a reserved
 word such as <code>const</code>).
 
-</li><li> A word, followed by, in parentheses, parameters for the attribute.
+</li><li> An attribute name followed by a parenthesized list of
+parameters for the attribute.
 These parameters take one of the following forms:
 
 <ul>
@@ -128,14 +136,18 @@ with the list being a single string constant.
 <p>An <em>attribute specifier list</em> is a sequence of one or more attribute
 specifiers, not separated by any other tokens.
 </p>
+<p>You may optionally specify attribute names with &lsquo;<samp>__</samp>&rsquo;
+preceding and following the name.
+This allows you to use them in header files without
+being concerned about a possible macro of the same name.  For example,
+you may use the attribute name <code>__noreturn__</code> instead of <code>noreturn</code>.
+</p>
+
+<a name="Label-Attributes-2"></a>
+<h4 class="subsubheading">Label Attributes</h4>
+
 <p>In GNU C, an attribute specifier list may appear after the colon following a
-label, other than a <code>case</code> or <code>default</code> label.  The only
-attribute it makes sense to use after a label is <code>unused</code>.  This
-feature is intended for program-generated code that may contain unused labels,
-but which is compiled with <samp>-Wall</samp>.  It is
-not normally appropriate to use in it human-written code, though it
-could be useful in cases where the code that jumps to the label is
-contained within an <code>#ifdef</code> conditional.  GNU C++ only permits
+label, other than a <code>case</code> or <code>default</code> label.  GNU C++ only permits
 attributes on labels if the attribute specifier is immediately
 followed by a semicolon (i.e., the label applies to an empty
 statement).  If the semicolon is missing, C++ label attributes are
@@ -143,6 +155,23 @@ ambiguous, as it is permissible for a declaration, which could begin
 with an attribute list, to be labelled in C++.  Declarations cannot be
 labelled in C90 or C99, so the ambiguity does not arise there.
 </p>
+<a name="Enumerator-Attributes-2"></a>
+<h4 class="subsubheading">Enumerator Attributes</h4>
+
+<p>In GNU C, an attribute specifier list may appear as part of an enumerator.
+The attribute goes after the enumeration constant, before <code>=</code>, if
+present.  The optional attribute in the enumerator appertains to the
+enumeration constant.  It is not possible to place the attribute after
+the constant expression, if present.
+</p>
+<a name="Statement-Attributes-2"></a>
+<h4 class="subsubheading">Statement Attributes</h4>
+<p>In GNU C, an attribute specifier list may appear as part of a null
+statement.  The attribute goes before the semicolon.
+</p>
+<a name="Type-Attributes-1"></a>
+<h4 class="subsubheading">Type Attributes</h4>
+
 <p>An attribute specifier list may appear as part of a <code>struct</code>,
 <code>union</code> or <code>enum</code> specifier.  It may go either immediately
 after the <code>struct</code>, <code>union</code> or <code>enum</code> keyword, or after
@@ -152,6 +181,10 @@ to relate to the structure, union or enumerated type defined, not to any
 enclosing declaration the type specifier appears in, and the type
 defined is not complete until after the attribute specifiers.
 </p>
+
+<a name="All-other-attributes"></a>
+<h4 class="subsubheading">All other attributes</h4>
+
 <p>Otherwise, an attribute specifier appears as part of a declaration,
 counting declarations of unnamed parameters and type names, and relates
 to that declaration (which may be nested in another declaration, for
@@ -198,7 +231,7 @@ example, in
 <div class="smallexample">
 <pre class="smallexample">__attribute__((noreturn)) void d0 (void),
     __attribute__((format(printf, 1, 2))) d1 (const char *, ...),
-     d2 (void)
+     d2 (void);
 </pre></div>
 
 <p>the <code>noreturn</code> attribute applies to all the functions
@@ -291,7 +324,7 @@ to the function type.
 <hr>
 <div class="header">
 <p>
-Next: <a href="Function-Prototypes.html#Function-Prototypes" accesskey="n" rel="next">Function Prototypes</a>, Previous: <a href="Function-Attributes.html#Function-Attributes" accesskey="p" rel="prev">Function Attributes</a>, Up: <a href="C-Extensions.html#C-Extensions" accesskey="u" rel="up">C Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="Function-Prototypes.html#Function-Prototypes" accesskey="n" rel="next">Function Prototypes</a>, Previous: <a href="Statement-Attributes.html#Statement-Attributes" accesskey="p" rel="prev">Statement Attributes</a>, Up: <a href="C-Extensions.html#C-Extensions" accesskey="u" rel="up">C Extensions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 
 

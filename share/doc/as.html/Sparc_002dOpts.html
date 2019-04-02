@@ -2,7 +2,7 @@
 <html>
 <!-- This file documents the GNU Assembler "as".
 
-Copyright (C) 1991-2013 Free Software Foundation, Inc.
+Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -66,8 +66,8 @@ ul.no-bullet {list-style: none}
 Next: <a href="Sparc_002dAligned_002dData.html#Sparc_002dAligned_002dData" accesskey="n" rel="next">Sparc-Aligned-Data</a>, Up: <a href="Sparc_002dDependent.html#Sparc_002dDependent" accesskey="u" rel="up">Sparc-Dependent</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="AS-Index.html#AS-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
-<a name="Options-23"></a>
-<h4 class="subsection">9.41.1 Options</h4>
+<a name="Options-24"></a>
+<h4 class="subsection">9.43.1 Options</h4>
 
 <a name="index-options-for-SPARC"></a>
 <a name="index-SPARC-options"></a>
@@ -104,7 +104,9 @@ is explicitly requested.  SPARC v9 is always incompatible with sparclite.
 <a name="index-_002dAv9b"></a>
 <a name="index-_002dAv9c"></a>
 <a name="index-_002dAv9d"></a>
+<a name="index-_002dAv9e"></a>
 <a name="index-_002dAv9v"></a>
+<a name="index-_002dAv9m"></a>
 <a name="index-_002dAsparc"></a>
 <a name="index-_002dAsparcvis"></a>
 <a name="index-_002dAsparcvis2"></a>
@@ -114,10 +116,10 @@ is explicitly requested.  SPARC v9 is always incompatible with sparclite.
 <a name="index-_002dAsparcvis3r"></a>
 </dd>
 <dt><code>-Av6 | -Av7 | -Av8 | -Aleon | -Asparclet | -Asparclite</code></dt>
-<dt><code>-Av8plus | -Av8plusa | -Av8plusb | -Av8plusc | -Av8plusd | -Av8plusv</code></dt>
-<dt><code>-Av9 | -Av9a | -Av9b | -Av9c | -Av9d | -Av9v</code></dt>
+<dt><code>-Av8plus | -Av8plusa | -Av8plusb | -Av8plusc | -Av8plusd | -Av8plusv | -Av8plusm</code></dt>
+<dt><code>-Av9 | -Av9a | -Av9b | -Av9c | -Av9d | -Av9e | -Av9v | -Av9m</code></dt>
 <dt><code>-Asparc | -Asparcvis | -Asparcvis2 | -Asparcfmaf | -Asparcima</code></dt>
-<dt><code>-Asparcvis3 | -Asparcvis3r</code></dt>
+<dt><code>-Asparcvis3 | -Asparcvis3r | -Asparc5</code></dt>
 <dd><p>Use one of the &lsquo;<samp>-A</samp>&rsquo; options to select one of the SPARC
 architectures explicitly.  If you select an architecture explicitly,
 <code>as</code> reports a fatal error if it encounters an instruction
@@ -126,9 +128,10 @@ or feature requiring an incompatible or higher level.
 <p>&lsquo;<samp>-Av8plus</samp>&rsquo;, &lsquo;<samp>-Av8plusa</samp>&rsquo;, &lsquo;<samp>-Av8plusb</samp>&rsquo;, &lsquo;<samp>-Av8plusc</samp>&rsquo;,
 &lsquo;<samp>-Av8plusd</samp>&rsquo;, and &lsquo;<samp>-Av8plusv</samp>&rsquo; select a 32 bit environment.
 </p>
-<p>&lsquo;<samp>-Av9</samp>&rsquo;, &lsquo;<samp>-Av9a</samp>&rsquo;, &lsquo;<samp>-Av9b</samp>&rsquo;, &lsquo;<samp>-Av9c</samp>&rsquo;, &lsquo;<samp>-Av9d</samp>&rsquo;, and
-&lsquo;<samp>-Av9v</samp>&rsquo; select a 64 bit environment and are not available unless GAS
-is explicitly configured with 64 bit environment support.
+<p>&lsquo;<samp>-Av9</samp>&rsquo;, &lsquo;<samp>-Av9a</samp>&rsquo;, &lsquo;<samp>-Av9b</samp>&rsquo;, &lsquo;<samp>-Av9c</samp>&rsquo;, &lsquo;<samp>-Av9d</samp>&rsquo;,
+&lsquo;<samp>-Av9e</samp>&rsquo;, &lsquo;<samp>-Av9v</samp>&rsquo; and &lsquo;<samp>-Av9m</samp>&rsquo; select a 64 bit
+environment and are not available unless GAS is explicitly configured
+with 64 bit environment support.
 </p>
 <p>&lsquo;<samp>-Av8plusa</samp>&rsquo; and &lsquo;<samp>-Av9a</samp>&rsquo; enable the SPARC V9 instruction set with
 UltraSPARC VIS 1.0 extensions.
@@ -143,10 +146,17 @@ as well as the instructions enabled by &lsquo;<samp>-Av8plusb</samp>&rsquo; and 
 multiply-add, VIS 3.0, and HPC extension instructions, as well as the
 instructions enabled by &lsquo;<samp>-Av8plusc</samp>&rsquo; and &lsquo;<samp>-Av9c</samp>&rsquo;.
 </p>
-<p>&lsquo;<samp>-Av8plusv</samp>&rsquo; and &lsquo;<samp>-Av9v</samp>&rsquo; enable the &rsquo;random&rsquo;, transactional
-memory, floating point unfused multiply-add, integer multiply-add, and
-cache sparing store instructions, as well as the instructions enabled
-by &lsquo;<samp>-Av8plusd</samp>&rsquo; and &lsquo;<samp>-Av9d</samp>&rsquo;.
+<p>&lsquo;<samp>-Av8pluse</samp>&rsquo; and &lsquo;<samp>-Av9e</samp>&rsquo; enable the cryptographic
+instructions, as well as the instructions enabled by &lsquo;<samp>-Av8plusd</samp>&rsquo;
+and &lsquo;<samp>-Av9d</samp>&rsquo;.
+</p>
+<p>&lsquo;<samp>-Av8plusv</samp>&rsquo; and &lsquo;<samp>-Av9v</samp>&rsquo; enable floating point unfused
+multiply-add, and integer multiply-add, as well as the instructions
+enabled by &lsquo;<samp>-Av8pluse</samp>&rsquo; and &lsquo;<samp>-Av9e</samp>&rsquo;.
+</p>
+<p>&lsquo;<samp>-Av8plusm</samp>&rsquo; and &lsquo;<samp>-Av9m</samp>&rsquo; enable the VIS 4.0, subtract extended,
+xmpmul, xmontmul and xmontsqr instructions, as well as the instructions
+enabled by &lsquo;<samp>-Av8plusv</samp>&rsquo; and &lsquo;<samp>-Av9v</samp>&rsquo;.
 </p>
 <p>&lsquo;<samp>-Asparc</samp>&rsquo; specifies a v9 environment.  It is equivalent to
 &lsquo;<samp>-Av9</samp>&rsquo; if the word size is 64-bit, and &lsquo;<samp>-Av8plus</samp>&rsquo; otherwise.
@@ -166,22 +176,23 @@ multiply-add instructions enabled.
 <p>&lsquo;<samp>-Asparcvis3</samp>&rsquo; specifies a v9b environment with the VIS 3.0,
 HPC , and floating point fused multiply-add instructions enabled.
 </p>
-<p>&lsquo;<samp>-Asparcvis3r</samp>&rsquo; specifies a v9b environment with the VIS 3.0,
-HPC, transactional memory, random, and floating point unfused multiply-add
-instructions enabled.
+<p>&lsquo;<samp>-Asparcvis3r</samp>&rsquo; specifies a v9b environment with the VIS 3.0, HPC,
+and floating point unfused multiply-add instructions enabled.
+</p>
+<p>&lsquo;<samp>-Asparc5</samp>&rsquo; is equivalent to &lsquo;<samp>-Av9m</samp>&rsquo;.
 </p>
 </dd>
 <dt><code>-xarch=v8plus | -xarch=v8plusa | -xarch=v8plusb | -xarch=v8plusc</code></dt>
-<dt><code>-xarch=v8plusd | -xarch=v8plusv | -xarch=v9 | -xarch=v9a</code></dt>
-<dt><code>-xarch=v9b | -xarch=v9c | -xarch=v9d | -xarch=v9v</code></dt>
+<dt><code>-xarch=v8plusd | -xarch=v8plusv | -xarch=v8plusm | -xarch=v9 | -xarch=v9a</code></dt>
+<dt><code>-xarch=v9b | -xarch=v9c | -xarch=v9d | -xarch=v9e | -xarch=v9v | -xarch=v9m</code></dt>
 <dt><code>-xarch=sparc | -xarch=sparcvis | -xarch=sparcvis2</code></dt>
 <dt><code>-xarch=sparcfmaf | -xarch=sparcima | -xarch=sparcvis3</code></dt>
-<dt><code>-xarch=sparcvis3r</code></dt>
+<dt><code>-xarch=sparcvis3r | -xarch=sparc5</code></dt>
 <dd><p>For compatibility with the SunOS v9 assembler.  These options are
 equivalent to -Av8plus, -Av8plusa, -Av8plusb, -Av8plusc, -Av8plusd,
--Av8plusv, -Av9, -Av9a, -Av9b, -Av9c, -Av9d, -Av9v, -Asparc, -Asparcvis,
--Asparcvis2, -Asparcfmaf, -Asparcima, -Asparcvis3, and -Asparcvis3r,
-respectively.
+-Av8plusv, -Av8plusm, -Av9, -Av9a, -Av9b, -Av9c, -Av9d, -Av9e, -Av9v, -Av9m,
+-Asparc, -Asparcvis, -Asparcvis2, -Asparcfmaf, -Asparcima,
+-Asparcvis3, and -Asparcvis3r, respectively.
 </p>
 </dd>
 <dt><code>-bump</code></dt>
@@ -195,6 +206,13 @@ as required (except between incompatible levels).
 <dd><p>Select the word size, either 32 bits or 64 bits.
 These options are only available with the ELF object file format,
 and require that the necessary BFD support has been included.
+</p>
+</dd>
+<dt><code>--dcti-couples-detect</code></dt>
+<dd><p>Warn if a DCTI (delayed control transfer instruction) couple is found
+when generating code for a variant of the SPARC architecture in which
+the execution of the couple is unpredictable, or very slow.  This is
+disabled by default.
 </p></dd>
 </dl>
 

@@ -2,7 +2,7 @@
 <html>
 <!-- This file documents the BFD library.
 
-Copyright (C) 1991 - 2013 Free Software Foundation, Inc.
+Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -121,8 +121,7 @@ typedef struct bfd_symbol
 #define BSF_EXPORT     BSF_GLOBAL /* No real difference.  */
 
   /* A normal C symbol would be one of:
-     <code>BSF_LOCAL</code>, <code>BSF_COMMON</code>,  <code>BSF_UNDEFINED</code> or
-     <code>BSF_GLOBAL</code>.  */
+     <code>BSF_LOCAL</code>, <code>BSF_UNDEFINED</code> or <code>BSF_GLOBAL</code>.  */
 
   /* The symbol is a debugging record. The value has an arbitrary
      meaning, unless BSF_DEBUGGING_RELOC is also set.  */
@@ -134,7 +133,9 @@ typedef struct bfd_symbol
 
   /* Used by the linker.  */
 #define BSF_KEEP               (1 &lt;&lt; 5)
-#define BSF_KEEP_G             (1 &lt;&lt; 6)
+
+  /* An ELF common symbol.  */
+#define BSF_ELF_COMMON         (1 &lt;&lt; 6)
 
   /* A weak global symbol, overridable without warnings by
      a regular global symbol of the same name.  */

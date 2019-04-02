@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -193,7 +193,10 @@ traditional preprocessor).
 <dt><code><var>file</var>.go</code></dt>
 <dd><p>Go source code.
 </p>
-
+</dd>
+<dt><code><var>file</var>.brig</code></dt>
+<dd><p>BRIG files (binary representation of HSAIL).
+</p>
 </dd>
 <dt><code><var>file</var>.ads</code></dt>
 <dd><p>Ada source code file that contains a library unit declaration (a
@@ -242,7 +245,7 @@ assembler  assembler-with-cpp
 ada
 f77  f77-cpp-input f95  f95-cpp-input
 go
-java
+brig
 </pre></div>
 
 </dd>
@@ -250,16 +253,6 @@ java
 <dd><p>Turn off any specification of a language, so that subsequent files are
 handled according to their file name suffixes (as they are if <samp>-x</samp>
 has not been used at all).
-</p>
-</dd>
-<dt><code>-pass-exit-codes</code></dt>
-<dd><a name="index-pass_002dexit_002dcodes"></a>
-<p>Normally the <code>gcc</code> program exits with the code of 1 if any
-phase of the compiler returns a non-success return code.  If you specify
-<samp>-pass-exit-codes</samp>, the <code>gcc</code> program instead returns with
-the numerically highest error produced by any phase returning an error
-indication.  The C, C++, and Fortran front ends return 4 if an internal
-compiler error is encountered.
 </p></dd>
 </dl>
 
@@ -331,14 +324,6 @@ program and of the preprocessor and the compiler proper.
 <p>Like <samp>-v</samp> except the commands are not executed and arguments
 are quoted unless they contain only alphanumeric characters or <code>./-_</code>.
 This is useful for shell scripts to capture the driver-generated command lines.
-</p>
-</dd>
-<dt><code>-pipe</code></dt>
-<dd><a name="index-pipe"></a>
-<p>Use pipes rather than temporary files for communication between the
-various stages of compilation.  This fails to work on some systems where
-the assembler is unable to read from a pipe; but the GNU assembler has
-no trouble.
 </p>
 </dd>
 <dt><code>--help</code></dt>
@@ -485,16 +470,38 @@ diff /tmp/O2-opts /tmp/O3-opts | grep enabled
 </pre></div>
 
 </dd>
-<dt><code>-no-canonical-prefixes</code></dt>
-<dd><a name="index-no_002dcanonical_002dprefixes"></a>
-<p>Do not expand any symbolic links, resolve references to &lsquo;<samp>/../</samp>&rsquo;
-or &lsquo;<samp>/./</samp>&rsquo;, or make the path absolute when generating a relative
-prefix.
-</p>
-</dd>
 <dt><code>--version</code></dt>
 <dd><a name="index-version"></a>
 <p>Display the version number and copyrights of the invoked GCC.
+</p>
+</dd>
+<dt><code>-pass-exit-codes</code></dt>
+<dd><a name="index-pass_002dexit_002dcodes"></a>
+<p>Normally the <code>gcc</code> program exits with the code of 1 if any
+phase of the compiler returns a non-success return code.  If you specify
+<samp>-pass-exit-codes</samp>, the <code>gcc</code> program instead returns with
+the numerically highest error produced by any phase returning an error
+indication.  The C, C++, and Fortran front ends return 4 if an internal
+compiler error is encountered.
+</p>
+</dd>
+<dt><code>-pipe</code></dt>
+<dd><a name="index-pipe"></a>
+<p>Use pipes rather than temporary files for communication between the
+various stages of compilation.  This fails to work on some systems where
+the assembler is unable to read from a pipe; but the GNU assembler has
+no trouble.
+</p>
+</dd>
+<dt><code>-specs=<var>file</var></code></dt>
+<dd><a name="index-specs"></a>
+<p>Process <var>file</var> after the compiler reads in the standard <samp>specs</samp>
+file, in order to override the defaults which the <code>gcc</code> driver
+program uses when determining what switches to pass to <code>cc1</code>,
+<code>cc1plus</code>, <code>as</code>, <code>ld</code>, etc.  More than one
+<samp>-specs=<var>file</var></samp> can be specified on the command line, and they
+are processed in order, from left to right.  See <a href="Spec-Files.html#Spec-Files">Spec Files</a>, for
+information about the format of the <var>file</var>.
 </p>
 </dd>
 <dt><code>-wrapper</code></dt>

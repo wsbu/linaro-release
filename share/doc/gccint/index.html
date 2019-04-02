@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -32,7 +32,6 @@ You have freedom to copy and modify this GNU Manual, like GNU
 <link href="#Top" rel="start" title="Top">
 <link href="Option-Index.html#Option-Index" rel="index" title="Option Index">
 <link href="#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="../DIR/index.html" rel="up" title="(DIR)">
 <link href="Contributing.html#Contributing" rel="next" title="Contributing">
 <style type="text/css">
 <!--
@@ -83,7 +82,7 @@ ul.no-bullet {list-style: none}
 
 <p>This file documents the internals of the GNU compilers.
 </p><br>
-<p>Copyright &copy; 1988-2015 Free Software Foundation, Inc.
+<p>Copyright &copy; 1988-2017 Free Software Foundation, Inc.
 </p>
 <p>Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -134,6 +133,7 @@ Texts being (a) (see below), and with the Back-Cover Texts being (b)
 <li><a name="stoc-Memory-Management-and-Type-Information" href="#toc-Memory-Management-and-Type-Information">22 Memory Management and Type Information</a></li>
 <li><a name="stoc-Plugins-1" href="#toc-Plugins-1">23 Plugins</a></li>
 <li><a name="stoc-Link-Time-Optimization" href="#toc-Link-Time-Optimization">24 Link Time Optimization</a></li>
+<li><a name="stoc-Match-and-Simplify-1" href="#toc-Match-and-Simplify-1">25 Match and Simplify</a></li>
 <li><a name="stoc-Funding-Free-Software" href="#toc-Funding-Free-Software">Funding Free Software</a></li>
 <li><a name="stoc-The-GNU-Project-and-GNU_002fLinux" href="#toc-The-GNU-Project-and-GNU_002fLinux">The GNU Project and GNU/Linux</a></li>
 <li><a name="stoc-GNU-General-Public-License" href="#toc-GNU-General-Public-License">GNU General Public License</a></li>
@@ -248,14 +248,15 @@ Texts being (a) (see below), and with the Back-Cover Texts being (b)
         <li><a name="toc-Thread-Local-Storage-attributes" href="Effective_002dTarget-Keywords.html#Thread-Local-Storage-attributes">7.2.3.4 Thread Local Storage attributes</a></li>
         <li><a name="toc-Decimal-floating-point-attributes" href="Effective_002dTarget-Keywords.html#Decimal-floating-point-attributes">7.2.3.5 Decimal floating point attributes</a></li>
         <li><a name="toc-ARM_002dspecific-attributes" href="Effective_002dTarget-Keywords.html#ARM_002dspecific-attributes">7.2.3.6 ARM-specific attributes</a></li>
-        <li><a name="toc-MIPS_002dspecific-attributes" href="Effective_002dTarget-Keywords.html#MIPS_002dspecific-attributes">7.2.3.7 MIPS-specific attributes</a></li>
-        <li><a name="toc-PowerPC_002dspecific-attributes" href="Effective_002dTarget-Keywords.html#PowerPC_002dspecific-attributes">7.2.3.8 PowerPC-specific attributes</a></li>
-        <li><a name="toc-Other-hardware-attributes" href="Effective_002dTarget-Keywords.html#Other-hardware-attributes">7.2.3.9 Other hardware attributes</a></li>
-        <li><a name="toc-Environment-attributes" href="Effective_002dTarget-Keywords.html#Environment-attributes">7.2.3.10 Environment attributes</a></li>
-        <li><a name="toc-Other-attributes" href="Effective_002dTarget-Keywords.html#Other-attributes">7.2.3.11 Other attributes</a></li>
-        <li><a name="toc-Local-to-tests-in-gcc_002etarget_002fi386" href="Effective_002dTarget-Keywords.html#Local-to-tests-in-gcc_002etarget_002fi386">7.2.3.12 Local to tests in <code>gcc.target/i386</code></a></li>
-        <li><a name="toc-Local-to-tests-in-gcc_002etarget_002fspu_002fea" href="Effective_002dTarget-Keywords.html#Local-to-tests-in-gcc_002etarget_002fspu_002fea">7.2.3.13 Local to tests in <code>gcc.target/spu/ea</code></a></li>
-        <li><a name="toc-Local-to-tests-in-gcc_002etest_002dframework" href="Effective_002dTarget-Keywords.html#Local-to-tests-in-gcc_002etest_002dframework">7.2.3.14 Local to tests in <code>gcc.test-framework</code></a></li>
+        <li><a name="toc-AArch64_002dspecific-attributes" href="Effective_002dTarget-Keywords.html#AArch64_002dspecific-attributes">7.2.3.7 AArch64-specific attributes</a></li>
+        <li><a name="toc-MIPS_002dspecific-attributes" href="Effective_002dTarget-Keywords.html#MIPS_002dspecific-attributes">7.2.3.8 MIPS-specific attributes</a></li>
+        <li><a name="toc-PowerPC_002dspecific-attributes" href="Effective_002dTarget-Keywords.html#PowerPC_002dspecific-attributes">7.2.3.9 PowerPC-specific attributes</a></li>
+        <li><a name="toc-Other-hardware-attributes" href="Effective_002dTarget-Keywords.html#Other-hardware-attributes">7.2.3.10 Other hardware attributes</a></li>
+        <li><a name="toc-Environment-attributes" href="Effective_002dTarget-Keywords.html#Environment-attributes">7.2.3.11 Environment attributes</a></li>
+        <li><a name="toc-Other-attributes" href="Effective_002dTarget-Keywords.html#Other-attributes">7.2.3.12 Other attributes</a></li>
+        <li><a name="toc-Local-to-tests-in-gcc_002etarget_002fi386" href="Effective_002dTarget-Keywords.html#Local-to-tests-in-gcc_002etarget_002fi386">7.2.3.13 Local to tests in <code>gcc.target/i386</code></a></li>
+        <li><a name="toc-Local-to-tests-in-gcc_002etarget_002fspu_002fea" href="Effective_002dTarget-Keywords.html#Local-to-tests-in-gcc_002etarget_002fspu_002fea">7.2.3.14 Local to tests in <code>gcc.target/spu/ea</code></a></li>
+        <li><a name="toc-Local-to-tests-in-gcc_002etest_002dframework" href="Effective_002dTarget-Keywords.html#Local-to-tests-in-gcc_002etest_002dframework">7.2.3.15 Local to tests in <code>gcc.test-framework</code></a></li>
       </ul></li>
       <li><a name="toc-Features-for-dg_002dadd_002doptions" href="Add-Options.html#Add-Options">7.2.4 Features for <code>dg-add-options</code></a></li>
       <li><a name="toc-Variants-of-dg_002drequire_002dsupport" href="Require-Support.html#Require-Support">7.2.5 Variants of <code>dg-require-<var>support</var></code></a></li>
@@ -272,12 +273,13 @@ Texts being (a) (see below), and with the Back-Cover Texts being (b)
     </ul></li>
     <li><a name="toc-Ada-Language-Testsuites" href="Ada-Tests.html#Ada-Tests">7.3 Ada Language Testsuites</a></li>
     <li><a name="toc-C-Language-Testsuites" href="C-Tests.html#C-Tests">7.4 C Language Testsuites</a></li>
-    <li><a name="toc-The-Java-library-testsuites_002e" href="libgcj-Tests.html#libgcj-Tests">7.5 The Java library testsuites.</a></li>
-    <li><a name="toc-Support-for-testing-link_002dtime-optimizations" href="LTO-Testing.html#LTO-Testing">7.6 Support for testing link-time optimizations</a></li>
-    <li><a name="toc-Support-for-testing-gcov" href="gcov-Testing.html#gcov-Testing">7.7 Support for testing <code>gcov</code></a></li>
-    <li><a name="toc-Support-for-testing-profile_002ddirected-optimizations" href="profopt-Testing.html#profopt-Testing">7.8 Support for testing profile-directed optimizations</a></li>
-    <li><a name="toc-Support-for-testing-binary-compatibility" href="compat-Testing.html#compat-Testing">7.9 Support for testing binary compatibility</a></li>
-    <li><a name="toc-Support-for-torture-testing-using-multiple-options" href="Torture-Tests.html#Torture-Tests">7.10 Support for torture testing using multiple options</a></li>
+    <li><a name="toc-Support-for-testing-link_002dtime-optimizations" href="LTO-Testing.html#LTO-Testing">7.5 Support for testing link-time optimizations</a></li>
+    <li><a name="toc-Support-for-testing-gcov" href="gcov-Testing.html#gcov-Testing">7.6 Support for testing <code>gcov</code></a></li>
+    <li><a name="toc-Support-for-testing-profile_002ddirected-optimizations" href="profopt-Testing.html#profopt-Testing">7.7 Support for testing profile-directed optimizations</a></li>
+    <li><a name="toc-Support-for-testing-binary-compatibility" href="compat-Testing.html#compat-Testing">7.8 Support for testing binary compatibility</a></li>
+    <li><a name="toc-Support-for-torture-testing-using-multiple-options" href="Torture-Tests.html#Torture-Tests">7.9 Support for torture testing using multiple options</a></li>
+    <li><a name="toc-Support-for-testing-GIMPLE-passes" href="GIMPLE-Tests.html#GIMPLE-Tests">7.10 Support for testing GIMPLE passes</a></li>
+    <li><a name="toc-Support-for-testing-RTL-passes" href="RTL-Tests.html#RTL-Tests">7.11 Support for testing RTL passes</a></li>
   </ul></li>
   <li><a name="toc-Option-specification-files" href="Options.html#Options">8 Option specification files</a>
   <ul class="no-bullet">
@@ -338,6 +340,7 @@ Texts being (a) (see below), and with the Back-Cover Texts being (b)
       <li><a name="toc-Jumps-1" href="Jumps.html#Jumps">10.7.5 Jumps</a></li>
       <li><a name="toc-Cleanups-1" href="Cleanups.html#Cleanups">10.7.6 Cleanups</a></li>
       <li><a name="toc-OpenMP-1" href="OpenMP.html#OpenMP">10.7.7 OpenMP</a></li>
+      <li><a name="toc-OpenACC-1" href="OpenACC.html#OpenACC">10.7.8 OpenACC</a></li>
     </ul></li>
     <li><a name="toc-Functions-1" href="Functions.html#Functions">10.8 Functions</a>
     <ul class="no-bullet">
@@ -363,63 +366,65 @@ Texts being (a) (see below), and with the Back-Cover Texts being (b)
   <ul class="no-bullet">
     <li><a name="toc-Tuple-representation-1" href="Tuple-representation.html#Tuple-representation">11.1 Tuple representation</a>
     <ul class="no-bullet">
-      <li><a name="toc-gimple_005fstatement_005fbase-_0028gsbase_0029" href="Tuple-representation.html#gimple_005fstatement_005fbase-_0028gsbase_0029">11.1.1 <code>gimple_statement_base</code> (gsbase)</a></li>
+      <li><a name="toc-gimple-_0028gsbase_0029" href="Tuple-representation.html#gimple-_0028gsbase_0029">11.1.1 <code>gimple</code> (gsbase)</a></li>
       <li><a name="toc-gimple_005fstatement_005fwith_005fops" href="Tuple-representation.html#gimple_005fstatement_005fwith_005fops">11.1.2 <code>gimple_statement_with_ops</code></a></li>
       <li><a name="toc-gimple_005fstatement_005fwith_005fmemory_005fops" href="Tuple-representation.html#gimple_005fstatement_005fwith_005fmemory_005fops">11.1.3 <code>gimple_statement_with_memory_ops</code></a></li>
     </ul></li>
-    <li><a name="toc-GIMPLE-instruction-set-1" href="GIMPLE-instruction-set.html#GIMPLE-instruction-set">11.2 GIMPLE instruction set</a></li>
-    <li><a name="toc-Exception-Handling-1" href="GIMPLE-Exception-Handling.html#GIMPLE-Exception-Handling">11.3 Exception Handling</a></li>
-    <li><a name="toc-Temporaries-1" href="Temporaries.html#Temporaries">11.4 Temporaries</a></li>
-    <li><a name="toc-Operands-1" href="Operands.html#Operands">11.5 Operands</a>
+    <li><a name="toc-Class-hierarchy-of-GIMPLE-statements-1" href="Class-hierarchy-of-GIMPLE-statements.html#Class-hierarchy-of-GIMPLE-statements">11.2 Class hierarchy of GIMPLE statements</a></li>
+    <li><a name="toc-GIMPLE-instruction-set-1" href="GIMPLE-instruction-set.html#GIMPLE-instruction-set">11.3 GIMPLE instruction set</a></li>
+    <li><a name="toc-Exception-Handling-1" href="GIMPLE-Exception-Handling.html#GIMPLE-Exception-Handling">11.4 Exception Handling</a></li>
+    <li><a name="toc-Temporaries-1" href="Temporaries.html#Temporaries">11.5 Temporaries</a></li>
+    <li><a name="toc-Operands-1" href="Operands.html#Operands">11.6 Operands</a>
     <ul class="no-bullet">
-      <li><a name="toc-Compound-Expressions-1" href="Compound-Expressions.html#Compound-Expressions">11.5.1 Compound Expressions</a></li>
-      <li><a name="toc-Compound-Lvalues-1" href="Compound-Lvalues.html#Compound-Lvalues">11.5.2 Compound Lvalues</a></li>
-      <li><a name="toc-Conditional-Expressions-1" href="Conditional-Expressions.html#Conditional-Expressions">11.5.3 Conditional Expressions</a></li>
-      <li><a name="toc-Logical-Operators-1" href="Logical-Operators.html#Logical-Operators">11.5.4 Logical Operators</a></li>
-      <li><a name="toc-Manipulating-operands" href="Logical-Operators.html#Manipulating-operands">11.5.5 Manipulating operands</a></li>
-      <li><a name="toc-Operand-vector-allocation" href="Logical-Operators.html#Operand-vector-allocation">11.5.6 Operand vector allocation</a></li>
-      <li><a name="toc-Operand-validation" href="Logical-Operators.html#Operand-validation">11.5.7 Operand validation</a></li>
-      <li><a name="toc-Statement-validation" href="Logical-Operators.html#Statement-validation">11.5.8 Statement validation</a></li>
+      <li><a name="toc-Compound-Expressions-1" href="Compound-Expressions.html#Compound-Expressions">11.6.1 Compound Expressions</a></li>
+      <li><a name="toc-Compound-Lvalues-1" href="Compound-Lvalues.html#Compound-Lvalues">11.6.2 Compound Lvalues</a></li>
+      <li><a name="toc-Conditional-Expressions-1" href="Conditional-Expressions.html#Conditional-Expressions">11.6.3 Conditional Expressions</a></li>
+      <li><a name="toc-Logical-Operators-1" href="Logical-Operators.html#Logical-Operators">11.6.4 Logical Operators</a></li>
+      <li><a name="toc-Manipulating-operands" href="Logical-Operators.html#Manipulating-operands">11.6.5 Manipulating operands</a></li>
+      <li><a name="toc-Operand-vector-allocation" href="Logical-Operators.html#Operand-vector-allocation">11.6.6 Operand vector allocation</a></li>
+      <li><a name="toc-Operand-validation" href="Logical-Operators.html#Operand-validation">11.6.7 Operand validation</a></li>
+      <li><a name="toc-Statement-validation" href="Logical-Operators.html#Statement-validation">11.6.8 Statement validation</a></li>
     </ul></li>
-    <li><a name="toc-Manipulating-GIMPLE-statements-1" href="Manipulating-GIMPLE-statements.html#Manipulating-GIMPLE-statements">11.6 Manipulating GIMPLE statements</a>
+    <li><a name="toc-Manipulating-GIMPLE-statements-1" href="Manipulating-GIMPLE-statements.html#Manipulating-GIMPLE-statements">11.7 Manipulating GIMPLE statements</a>
     <ul class="no-bullet">
-      <li><a name="toc-Common-accessors" href="Manipulating-GIMPLE-statements.html#Common-accessors">11.6.1 Common accessors</a></li>
+      <li><a name="toc-Common-accessors" href="Manipulating-GIMPLE-statements.html#Common-accessors">11.7.1 Common accessors</a></li>
     </ul></li>
-    <li><a name="toc-Tuple-specific-accessors-1" href="Tuple-specific-accessors.html#Tuple-specific-accessors">11.7 Tuple specific accessors</a>
+    <li><a name="toc-Tuple-specific-accessors-1" href="Tuple-specific-accessors.html#Tuple-specific-accessors">11.8 Tuple specific accessors</a>
     <ul class="no-bullet">
-      <li><a name="toc-GIMPLE_005fASM-1" href="GIMPLE_005fASM.html#GIMPLE_005fASM">11.7.1 <code>GIMPLE_ASM</code></a></li>
-      <li><a name="toc-GIMPLE_005fASSIGN-1" href="GIMPLE_005fASSIGN.html#GIMPLE_005fASSIGN">11.7.2 <code>GIMPLE_ASSIGN</code></a></li>
-      <li><a name="toc-GIMPLE_005fBIND-1" href="GIMPLE_005fBIND.html#GIMPLE_005fBIND">11.7.3 <code>GIMPLE_BIND</code></a></li>
-      <li><a name="toc-GIMPLE_005fCALL-1" href="GIMPLE_005fCALL.html#GIMPLE_005fCALL">11.7.4 <code>GIMPLE_CALL</code></a></li>
-      <li><a name="toc-GIMPLE_005fCATCH-1" href="GIMPLE_005fCATCH.html#GIMPLE_005fCATCH">11.7.5 <code>GIMPLE_CATCH</code></a></li>
-      <li><a name="toc-GIMPLE_005fCOND-1" href="GIMPLE_005fCOND.html#GIMPLE_005fCOND">11.7.6 <code>GIMPLE_COND</code></a></li>
-      <li><a name="toc-GIMPLE_005fDEBUG-1" href="GIMPLE_005fDEBUG.html#GIMPLE_005fDEBUG">11.7.7 <code>GIMPLE_DEBUG</code></a></li>
-      <li><a name="toc-GIMPLE_005fEH_005fFILTER-1" href="GIMPLE_005fEH_005fFILTER.html#GIMPLE_005fEH_005fFILTER">11.7.8 <code>GIMPLE_EH_FILTER</code></a></li>
-      <li><a name="toc-GIMPLE_005fLABEL-1" href="GIMPLE_005fLABEL.html#GIMPLE_005fLABEL">11.7.9 <code>GIMPLE_LABEL</code></a></li>
-      <li><a name="toc-GIMPLE_005fNOP-1" href="GIMPLE_005fNOP.html#GIMPLE_005fNOP">11.7.10 <code>GIMPLE_NOP</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fATOMIC_005fLOAD-1" href="GIMPLE_005fOMP_005fATOMIC_005fLOAD.html#GIMPLE_005fOMP_005fATOMIC_005fLOAD">11.7.11 <code>GIMPLE_OMP_ATOMIC_LOAD</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fATOMIC_005fSTORE-1" href="GIMPLE_005fOMP_005fATOMIC_005fSTORE.html#GIMPLE_005fOMP_005fATOMIC_005fSTORE">11.7.12 <code>GIMPLE_OMP_ATOMIC_STORE</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fCONTINUE-1" href="GIMPLE_005fOMP_005fCONTINUE.html#GIMPLE_005fOMP_005fCONTINUE">11.7.13 <code>GIMPLE_OMP_CONTINUE</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fCRITICAL-1" href="GIMPLE_005fOMP_005fCRITICAL.html#GIMPLE_005fOMP_005fCRITICAL">11.7.14 <code>GIMPLE_OMP_CRITICAL</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fFOR-1" href="GIMPLE_005fOMP_005fFOR.html#GIMPLE_005fOMP_005fFOR">11.7.15 <code>GIMPLE_OMP_FOR</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fMASTER-1" href="GIMPLE_005fOMP_005fMASTER.html#GIMPLE_005fOMP_005fMASTER">11.7.16 <code>GIMPLE_OMP_MASTER</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fORDERED-1" href="GIMPLE_005fOMP_005fORDERED.html#GIMPLE_005fOMP_005fORDERED">11.7.17 <code>GIMPLE_OMP_ORDERED</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fPARALLEL-1" href="GIMPLE_005fOMP_005fPARALLEL.html#GIMPLE_005fOMP_005fPARALLEL">11.7.18 <code>GIMPLE_OMP_PARALLEL</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fRETURN-1" href="GIMPLE_005fOMP_005fRETURN.html#GIMPLE_005fOMP_005fRETURN">11.7.19 <code>GIMPLE_OMP_RETURN</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fSECTION-1" href="GIMPLE_005fOMP_005fSECTION.html#GIMPLE_005fOMP_005fSECTION">11.7.20 <code>GIMPLE_OMP_SECTION</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fSECTIONS-1" href="GIMPLE_005fOMP_005fSECTIONS.html#GIMPLE_005fOMP_005fSECTIONS">11.7.21 <code>GIMPLE_OMP_SECTIONS</code></a></li>
-      <li><a name="toc-GIMPLE_005fOMP_005fSINGLE-1" href="GIMPLE_005fOMP_005fSINGLE.html#GIMPLE_005fOMP_005fSINGLE">11.7.22 <code>GIMPLE_OMP_SINGLE</code></a></li>
-      <li><a name="toc-GIMPLE_005fPHI-1" href="GIMPLE_005fPHI.html#GIMPLE_005fPHI">11.7.23 <code>GIMPLE_PHI</code></a></li>
-      <li><a name="toc-GIMPLE_005fRESX-1" href="GIMPLE_005fRESX.html#GIMPLE_005fRESX">11.7.24 <code>GIMPLE_RESX</code></a></li>
-      <li><a name="toc-GIMPLE_005fRETURN-1" href="GIMPLE_005fRETURN.html#GIMPLE_005fRETURN">11.7.25 <code>GIMPLE_RETURN</code></a></li>
-      <li><a name="toc-GIMPLE_005fSWITCH-1" href="GIMPLE_005fSWITCH.html#GIMPLE_005fSWITCH">11.7.26 <code>GIMPLE_SWITCH</code></a></li>
-      <li><a name="toc-GIMPLE_005fTRY-1" href="GIMPLE_005fTRY.html#GIMPLE_005fTRY">11.7.27 <code>GIMPLE_TRY</code></a></li>
-      <li><a name="toc-GIMPLE_005fWITH_005fCLEANUP_005fEXPR-1" href="GIMPLE_005fWITH_005fCLEANUP_005fEXPR.html#GIMPLE_005fWITH_005fCLEANUP_005fEXPR">11.7.28 <code>GIMPLE_WITH_CLEANUP_EXPR</code></a></li>
+      <li><a name="toc-GIMPLE_005fASM-1" href="GIMPLE_005fASM.html#GIMPLE_005fASM">11.8.1 <code>GIMPLE_ASM</code></a></li>
+      <li><a name="toc-GIMPLE_005fASSIGN-1" href="GIMPLE_005fASSIGN.html#GIMPLE_005fASSIGN">11.8.2 <code>GIMPLE_ASSIGN</code></a></li>
+      <li><a name="toc-GIMPLE_005fBIND-1" href="GIMPLE_005fBIND.html#GIMPLE_005fBIND">11.8.3 <code>GIMPLE_BIND</code></a></li>
+      <li><a name="toc-GIMPLE_005fCALL-1" href="GIMPLE_005fCALL.html#GIMPLE_005fCALL">11.8.4 <code>GIMPLE_CALL</code></a></li>
+      <li><a name="toc-GIMPLE_005fCATCH-1" href="GIMPLE_005fCATCH.html#GIMPLE_005fCATCH">11.8.5 <code>GIMPLE_CATCH</code></a></li>
+      <li><a name="toc-GIMPLE_005fCOND-1" href="GIMPLE_005fCOND.html#GIMPLE_005fCOND">11.8.6 <code>GIMPLE_COND</code></a></li>
+      <li><a name="toc-GIMPLE_005fDEBUG-1" href="GIMPLE_005fDEBUG.html#GIMPLE_005fDEBUG">11.8.7 <code>GIMPLE_DEBUG</code></a></li>
+      <li><a name="toc-GIMPLE_005fEH_005fFILTER-1" href="GIMPLE_005fEH_005fFILTER.html#GIMPLE_005fEH_005fFILTER">11.8.8 <code>GIMPLE_EH_FILTER</code></a></li>
+      <li><a name="toc-GIMPLE_005fLABEL-1" href="GIMPLE_005fLABEL.html#GIMPLE_005fLABEL">11.8.9 <code>GIMPLE_LABEL</code></a></li>
+      <li><a name="toc-GIMPLE_005fGOTO-1" href="GIMPLE_005fGOTO.html#GIMPLE_005fGOTO">11.8.10 <code>GIMPLE_GOTO</code></a></li>
+      <li><a name="toc-GIMPLE_005fNOP-1" href="GIMPLE_005fNOP.html#GIMPLE_005fNOP">11.8.11 <code>GIMPLE_NOP</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fATOMIC_005fLOAD-1" href="GIMPLE_005fOMP_005fATOMIC_005fLOAD.html#GIMPLE_005fOMP_005fATOMIC_005fLOAD">11.8.12 <code>GIMPLE_OMP_ATOMIC_LOAD</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fATOMIC_005fSTORE-1" href="GIMPLE_005fOMP_005fATOMIC_005fSTORE.html#GIMPLE_005fOMP_005fATOMIC_005fSTORE">11.8.13 <code>GIMPLE_OMP_ATOMIC_STORE</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fCONTINUE-1" href="GIMPLE_005fOMP_005fCONTINUE.html#GIMPLE_005fOMP_005fCONTINUE">11.8.14 <code>GIMPLE_OMP_CONTINUE</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fCRITICAL-1" href="GIMPLE_005fOMP_005fCRITICAL.html#GIMPLE_005fOMP_005fCRITICAL">11.8.15 <code>GIMPLE_OMP_CRITICAL</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fFOR-1" href="GIMPLE_005fOMP_005fFOR.html#GIMPLE_005fOMP_005fFOR">11.8.16 <code>GIMPLE_OMP_FOR</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fMASTER-1" href="GIMPLE_005fOMP_005fMASTER.html#GIMPLE_005fOMP_005fMASTER">11.8.17 <code>GIMPLE_OMP_MASTER</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fORDERED-1" href="GIMPLE_005fOMP_005fORDERED.html#GIMPLE_005fOMP_005fORDERED">11.8.18 <code>GIMPLE_OMP_ORDERED</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fPARALLEL-1" href="GIMPLE_005fOMP_005fPARALLEL.html#GIMPLE_005fOMP_005fPARALLEL">11.8.19 <code>GIMPLE_OMP_PARALLEL</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fRETURN-1" href="GIMPLE_005fOMP_005fRETURN.html#GIMPLE_005fOMP_005fRETURN">11.8.20 <code>GIMPLE_OMP_RETURN</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fSECTION-1" href="GIMPLE_005fOMP_005fSECTION.html#GIMPLE_005fOMP_005fSECTION">11.8.21 <code>GIMPLE_OMP_SECTION</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fSECTIONS-1" href="GIMPLE_005fOMP_005fSECTIONS.html#GIMPLE_005fOMP_005fSECTIONS">11.8.22 <code>GIMPLE_OMP_SECTIONS</code></a></li>
+      <li><a name="toc-GIMPLE_005fOMP_005fSINGLE-1" href="GIMPLE_005fOMP_005fSINGLE.html#GIMPLE_005fOMP_005fSINGLE">11.8.23 <code>GIMPLE_OMP_SINGLE</code></a></li>
+      <li><a name="toc-GIMPLE_005fPHI-1" href="GIMPLE_005fPHI.html#GIMPLE_005fPHI">11.8.24 <code>GIMPLE_PHI</code></a></li>
+      <li><a name="toc-GIMPLE_005fRESX-1" href="GIMPLE_005fRESX.html#GIMPLE_005fRESX">11.8.25 <code>GIMPLE_RESX</code></a></li>
+      <li><a name="toc-GIMPLE_005fRETURN-1" href="GIMPLE_005fRETURN.html#GIMPLE_005fRETURN">11.8.26 <code>GIMPLE_RETURN</code></a></li>
+      <li><a name="toc-GIMPLE_005fSWITCH-1" href="GIMPLE_005fSWITCH.html#GIMPLE_005fSWITCH">11.8.27 <code>GIMPLE_SWITCH</code></a></li>
+      <li><a name="toc-GIMPLE_005fTRY-1" href="GIMPLE_005fTRY.html#GIMPLE_005fTRY">11.8.28 <code>GIMPLE_TRY</code></a></li>
+      <li><a name="toc-GIMPLE_005fWITH_005fCLEANUP_005fEXPR-1" href="GIMPLE_005fWITH_005fCLEANUP_005fEXPR.html#GIMPLE_005fWITH_005fCLEANUP_005fEXPR">11.8.29 <code>GIMPLE_WITH_CLEANUP_EXPR</code></a></li>
     </ul></li>
-    <li><a name="toc-GIMPLE-sequences-1" href="GIMPLE-sequences.html#GIMPLE-sequences">11.8 GIMPLE sequences</a></li>
-    <li><a name="toc-Sequence-iterators-1" href="Sequence-iterators.html#Sequence-iterators">11.9 Sequence iterators</a></li>
-    <li><a name="toc-Adding-a-new-GIMPLE-statement-code-1" href="Adding-a-new-GIMPLE-statement-code.html#Adding-a-new-GIMPLE-statement-code">11.10 Adding a new GIMPLE statement code</a></li>
-    <li><a name="toc-Statement-and-operand-traversals-1" href="Statement-and-operand-traversals.html#Statement-and-operand-traversals">11.11 Statement and operand traversals</a></li>
+    <li><a name="toc-GIMPLE-sequences-1" href="GIMPLE-sequences.html#GIMPLE-sequences">11.9 GIMPLE sequences</a></li>
+    <li><a name="toc-Sequence-iterators-1" href="Sequence-iterators.html#Sequence-iterators">11.10 Sequence iterators</a></li>
+    <li><a name="toc-Adding-a-new-GIMPLE-statement-code-1" href="Adding-a-new-GIMPLE-statement-code.html#Adding-a-new-GIMPLE-statement-code">11.11 Adding a new GIMPLE statement code</a></li>
+    <li><a name="toc-Statement-and-operand-traversals-1" href="Statement-and-operand-traversals.html#Statement-and-operand-traversals">11.12 Statement and operand traversals</a></li>
   </ul></li>
   <li><a name="toc-Analysis-and-Optimization-of-GIMPLE-tuples" href="Tree-SSA.html#Tree-SSA">12 Analysis and Optimization of GIMPLE tuples</a>
   <ul class="no-bullet">
@@ -432,9 +437,8 @@ Texts being (a) (see below), and with the Back-Cover Texts being (b)
     <li><a name="toc-Static-Single-Assignment" href="SSA.html#SSA">12.3 Static Single Assignment</a>
     <ul class="no-bullet">
       <li><a name="toc-Preserving-the-SSA-form" href="SSA.html#Preserving-the-SSA-form">12.3.1 Preserving the SSA form</a></li>
-      <li><a name="toc-Preserving-the-virtual-SSA-form" href="SSA.html#Preserving-the-virtual-SSA-form">12.3.2 Preserving the virtual SSA form</a></li>
-      <li><a name="toc-Examining-SSA_005fNAME-nodes" href="SSA.html#Examining-SSA_005fNAME-nodes">12.3.3 Examining <code>SSA_NAME</code> nodes</a></li>
-      <li><a name="toc-Walking-the-dominator-tree" href="SSA.html#Walking-the-dominator-tree">12.3.4 Walking the dominator tree</a></li>
+      <li><a name="toc-Examining-SSA_005fNAME-nodes" href="SSA.html#Examining-SSA_005fNAME-nodes">12.3.2 Examining <code>SSA_NAME</code> nodes</a></li>
+      <li><a name="toc-Walking-the-dominator-tree" href="SSA.html#Walking-the-dominator-tree">12.3.3 Walking the dominator tree</a></li>
     </ul></li>
     <li><a name="toc-Alias-analysis-1" href="Alias-analysis.html#Alias-analysis">12.4 Alias analysis</a></li>
     <li><a name="toc-Memory-model-1" href="Memory-model.html#Memory-model">12.5 Memory model</a></li>
@@ -482,7 +486,6 @@ Texts being (a) (see below), and with the Back-Cover Texts being (b)
     <li><a name="toc-IV-analysis-on-RTL" href="loop_002div.html#loop_002div">15.6 IV analysis on RTL</a></li>
     <li><a name="toc-Number-of-iterations-analysis" href="Number-of-iterations.html#Number-of-iterations">15.7 Number of iterations analysis</a></li>
     <li><a name="toc-Data-Dependency-Analysis" href="Dependency-analysis.html#Dependency-analysis">15.8 Data Dependency Analysis</a></li>
-    <li><a name="toc-Omega-a-solver-for-linear-programming-problems" href="Omega.html#Omega">15.9 Omega a solver for linear programming problems</a></li>
   </ul></li>
   <li><a name="toc-Machine-Descriptions" href="Machine-Desc.html#Machine-Desc">16 Machine Descriptions</a>
   <ul class="no-bullet">
@@ -575,69 +578,70 @@ Texts being (a) (see below), and with the Back-Cover Texts being (b)
       <li><a name="toc-Registers-That-Form-a-Stack" href="Stack-Registers.html#Stack-Registers">17.7.5 Registers That Form a Stack</a></li>
     </ul></li>
     <li><a name="toc-Register-Classes-1" href="Register-Classes.html#Register-Classes">17.8 Register Classes</a></li>
-    <li><a name="toc-Obsolete-Macros-for-Defining-Constraints" href="Old-Constraints.html#Old-Constraints">17.9 Obsolete Macros for Defining Constraints</a></li>
-    <li><a name="toc-Stack-Layout-and-Calling-Conventions" href="Stack-and-Calling.html#Stack-and-Calling">17.10 Stack Layout and Calling Conventions</a>
+    <li><a name="toc-Stack-Layout-and-Calling-Conventions" href="Stack-and-Calling.html#Stack-and-Calling">17.9 Stack Layout and Calling Conventions</a>
     <ul class="no-bullet">
-      <li><a name="toc-Basic-Stack-Layout" href="Frame-Layout.html#Frame-Layout">17.10.1 Basic Stack Layout</a></li>
-      <li><a name="toc-Exception-Handling-Support" href="Exception-Handling.html#Exception-Handling">17.10.2 Exception Handling Support</a></li>
-      <li><a name="toc-Specifying-How-Stack-Checking-is-Done" href="Stack-Checking.html#Stack-Checking">17.10.3 Specifying How Stack Checking is Done</a></li>
-      <li><a name="toc-Registers-That-Address-the-Stack-Frame" href="Frame-Registers.html#Frame-Registers">17.10.4 Registers That Address the Stack Frame</a></li>
-      <li><a name="toc-Eliminating-Frame-Pointer-and-Arg-Pointer" href="Elimination.html#Elimination">17.10.5 Eliminating Frame Pointer and Arg Pointer</a></li>
-      <li><a name="toc-Passing-Function-Arguments-on-the-Stack" href="Stack-Arguments.html#Stack-Arguments">17.10.6 Passing Function Arguments on the Stack</a></li>
-      <li><a name="toc-Passing-Arguments-in-Registers" href="Register-Arguments.html#Register-Arguments">17.10.7 Passing Arguments in Registers</a></li>
-      <li><a name="toc-How-Scalar-Function-Values-Are-Returned" href="Scalar-Return.html#Scalar-Return">17.10.8 How Scalar Function Values Are Returned</a></li>
-      <li><a name="toc-How-Large-Values-Are-Returned" href="Aggregate-Return.html#Aggregate-Return">17.10.9 How Large Values Are Returned</a></li>
-      <li><a name="toc-Caller_002dSaves-Register-Allocation" href="Caller-Saves.html#Caller-Saves">17.10.10 Caller-Saves Register Allocation</a></li>
-      <li><a name="toc-Function-Entry-and-Exit" href="Function-Entry.html#Function-Entry">17.10.11 Function Entry and Exit</a></li>
-      <li><a name="toc-Generating-Code-for-Profiling" href="Profiling.html#Profiling">17.10.12 Generating Code for Profiling</a></li>
-      <li><a name="toc-Permitting-tail-calls" href="Tail-Calls.html#Tail-Calls">17.10.13 Permitting tail calls</a></li>
-      <li><a name="toc-Stack-smashing-protection" href="Stack-Smashing-Protection.html#Stack-Smashing-Protection">17.10.14 Stack smashing protection</a></li>
+      <li><a name="toc-Basic-Stack-Layout" href="Frame-Layout.html#Frame-Layout">17.9.1 Basic Stack Layout</a></li>
+      <li><a name="toc-Exception-Handling-Support" href="Exception-Handling.html#Exception-Handling">17.9.2 Exception Handling Support</a></li>
+      <li><a name="toc-Specifying-How-Stack-Checking-is-Done" href="Stack-Checking.html#Stack-Checking">17.9.3 Specifying How Stack Checking is Done</a></li>
+      <li><a name="toc-Registers-That-Address-the-Stack-Frame" href="Frame-Registers.html#Frame-Registers">17.9.4 Registers That Address the Stack Frame</a></li>
+      <li><a name="toc-Eliminating-Frame-Pointer-and-Arg-Pointer" href="Elimination.html#Elimination">17.9.5 Eliminating Frame Pointer and Arg Pointer</a></li>
+      <li><a name="toc-Passing-Function-Arguments-on-the-Stack" href="Stack-Arguments.html#Stack-Arguments">17.9.6 Passing Function Arguments on the Stack</a></li>
+      <li><a name="toc-Passing-Arguments-in-Registers" href="Register-Arguments.html#Register-Arguments">17.9.7 Passing Arguments in Registers</a></li>
+      <li><a name="toc-How-Scalar-Function-Values-Are-Returned" href="Scalar-Return.html#Scalar-Return">17.9.8 How Scalar Function Values Are Returned</a></li>
+      <li><a name="toc-How-Large-Values-Are-Returned" href="Aggregate-Return.html#Aggregate-Return">17.9.9 How Large Values Are Returned</a></li>
+      <li><a name="toc-Caller_002dSaves-Register-Allocation" href="Caller-Saves.html#Caller-Saves">17.9.10 Caller-Saves Register Allocation</a></li>
+      <li><a name="toc-Function-Entry-and-Exit" href="Function-Entry.html#Function-Entry">17.9.11 Function Entry and Exit</a></li>
+      <li><a name="toc-Generating-Code-for-Profiling" href="Profiling.html#Profiling">17.9.12 Generating Code for Profiling</a></li>
+      <li><a name="toc-Permitting-tail-calls" href="Tail-Calls.html#Tail-Calls">17.9.13 Permitting tail calls</a></li>
+      <li><a name="toc-Shrink_002dwrapping-separate-components-1" href="Shrink_002dwrapping-separate-components.html#Shrink_002dwrapping-separate-components">17.9.14 Shrink-wrapping separate components</a></li>
+      <li><a name="toc-Stack-smashing-protection" href="Stack-Smashing-Protection.html#Stack-Smashing-Protection">17.9.15 Stack smashing protection</a></li>
+      <li><a name="toc-Miscellaneous-register-hooks" href="Miscellaneous-Register-Hooks.html#Miscellaneous-Register-Hooks">17.9.16 Miscellaneous register hooks</a></li>
     </ul></li>
-    <li><a name="toc-Implementing-the-Varargs-Macros" href="Varargs.html#Varargs">17.11 Implementing the Varargs Macros</a></li>
-    <li><a name="toc-Trampolines-for-Nested-Functions" href="Trampolines.html#Trampolines">17.12 Trampolines for Nested Functions</a></li>
-    <li><a name="toc-Implicit-Calls-to-Library-Routines" href="Library-Calls.html#Library-Calls">17.13 Implicit Calls to Library Routines</a></li>
-    <li><a name="toc-Addressing-Modes-1" href="Addressing-Modes.html#Addressing-Modes">17.14 Addressing Modes</a></li>
-    <li><a name="toc-Anchored-Addresses-1" href="Anchored-Addresses.html#Anchored-Addresses">17.15 Anchored Addresses</a></li>
-    <li><a name="toc-Condition-Code-Status" href="Condition-Code.html#Condition-Code">17.16 Condition Code Status</a>
+    <li><a name="toc-Implementing-the-Varargs-Macros" href="Varargs.html#Varargs">17.10 Implementing the Varargs Macros</a></li>
+    <li><a name="toc-Trampolines-for-Nested-Functions" href="Trampolines.html#Trampolines">17.11 Trampolines for Nested Functions</a></li>
+    <li><a name="toc-Implicit-Calls-to-Library-Routines" href="Library-Calls.html#Library-Calls">17.12 Implicit Calls to Library Routines</a></li>
+    <li><a name="toc-Addressing-Modes-1" href="Addressing-Modes.html#Addressing-Modes">17.13 Addressing Modes</a></li>
+    <li><a name="toc-Anchored-Addresses-1" href="Anchored-Addresses.html#Anchored-Addresses">17.14 Anchored Addresses</a></li>
+    <li><a name="toc-Condition-Code-Status" href="Condition-Code.html#Condition-Code">17.15 Condition Code Status</a>
     <ul class="no-bullet">
-      <li><a name="toc-Representation-of-condition-codes-using-_0028cc0_0029" href="CC0-Condition-Codes.html#CC0-Condition-Codes">17.16.1 Representation of condition codes using <code>(cc0)</code></a></li>
-      <li><a name="toc-Representation-of-condition-codes-using-registers" href="MODE_005fCC-Condition-Codes.html#MODE_005fCC-Condition-Codes">17.16.2 Representation of condition codes using registers</a></li>
+      <li><a name="toc-Representation-of-condition-codes-using-_0028cc0_0029" href="CC0-Condition-Codes.html#CC0-Condition-Codes">17.15.1 Representation of condition codes using <code>(cc0)</code></a></li>
+      <li><a name="toc-Representation-of-condition-codes-using-registers" href="MODE_005fCC-Condition-Codes.html#MODE_005fCC-Condition-Codes">17.15.2 Representation of condition codes using registers</a></li>
     </ul></li>
-    <li><a name="toc-Describing-Relative-Costs-of-Operations" href="Costs.html#Costs">17.17 Describing Relative Costs of Operations</a></li>
-    <li><a name="toc-Adjusting-the-Instruction-Scheduler" href="Scheduling.html#Scheduling">17.18 Adjusting the Instruction Scheduler</a></li>
-    <li><a name="toc-Dividing-the-Output-into-Sections-_0028Texts_002c-Data_002c-_2026_0029" href="Sections.html#Sections">17.19 Dividing the Output into Sections (Texts, Data, &hellip;)</a></li>
-    <li><a name="toc-Position-Independent-Code" href="PIC.html#PIC">17.20 Position Independent Code</a></li>
-    <li><a name="toc-Defining-the-Output-Assembler-Language" href="Assembler-Format.html#Assembler-Format">17.21 Defining the Output Assembler Language</a>
+    <li><a name="toc-Describing-Relative-Costs-of-Operations" href="Costs.html#Costs">17.16 Describing Relative Costs of Operations</a></li>
+    <li><a name="toc-Adjusting-the-Instruction-Scheduler" href="Scheduling.html#Scheduling">17.17 Adjusting the Instruction Scheduler</a></li>
+    <li><a name="toc-Dividing-the-Output-into-Sections-_0028Texts_002c-Data_002c-_2026_0029" href="Sections.html#Sections">17.18 Dividing the Output into Sections (Texts, Data, &hellip;)</a></li>
+    <li><a name="toc-Position-Independent-Code" href="PIC.html#PIC">17.19 Position Independent Code</a></li>
+    <li><a name="toc-Defining-the-Output-Assembler-Language" href="Assembler-Format.html#Assembler-Format">17.20 Defining the Output Assembler Language</a>
     <ul class="no-bullet">
-      <li><a name="toc-The-Overall-Framework-of-an-Assembler-File" href="File-Framework.html#File-Framework">17.21.1 The Overall Framework of an Assembler File</a></li>
-      <li><a name="toc-Output-of-Data" href="Data-Output.html#Data-Output">17.21.2 Output of Data</a></li>
-      <li><a name="toc-Output-of-Uninitialized-Variables" href="Uninitialized-Data.html#Uninitialized-Data">17.21.3 Output of Uninitialized Variables</a></li>
-      <li><a name="toc-Output-and-Generation-of-Labels" href="Label-Output.html#Label-Output">17.21.4 Output and Generation of Labels</a></li>
-      <li><a name="toc-How-Initialization-Functions-Are-Handled" href="Initialization.html#Initialization">17.21.5 How Initialization Functions Are Handled</a></li>
-      <li><a name="toc-Macros-Controlling-Initialization-Routines" href="Macros-for-Initialization.html#Macros-for-Initialization">17.21.6 Macros Controlling Initialization Routines</a></li>
-      <li><a name="toc-Output-of-Assembler-Instructions" href="Instruction-Output.html#Instruction-Output">17.21.7 Output of Assembler Instructions</a></li>
-      <li><a name="toc-Output-of-Dispatch-Tables" href="Dispatch-Tables.html#Dispatch-Tables">17.21.8 Output of Dispatch Tables</a></li>
-      <li><a name="toc-Assembler-Commands-for-Exception-Regions" href="Exception-Region-Output.html#Exception-Region-Output">17.21.9 Assembler Commands for Exception Regions</a></li>
-      <li><a name="toc-Assembler-Commands-for-Alignment" href="Alignment-Output.html#Alignment-Output">17.21.10 Assembler Commands for Alignment</a></li>
+      <li><a name="toc-The-Overall-Framework-of-an-Assembler-File" href="File-Framework.html#File-Framework">17.20.1 The Overall Framework of an Assembler File</a></li>
+      <li><a name="toc-Output-of-Data" href="Data-Output.html#Data-Output">17.20.2 Output of Data</a></li>
+      <li><a name="toc-Output-of-Uninitialized-Variables" href="Uninitialized-Data.html#Uninitialized-Data">17.20.3 Output of Uninitialized Variables</a></li>
+      <li><a name="toc-Output-and-Generation-of-Labels" href="Label-Output.html#Label-Output">17.20.4 Output and Generation of Labels</a></li>
+      <li><a name="toc-How-Initialization-Functions-Are-Handled" href="Initialization.html#Initialization">17.20.5 How Initialization Functions Are Handled</a></li>
+      <li><a name="toc-Macros-Controlling-Initialization-Routines" href="Macros-for-Initialization.html#Macros-for-Initialization">17.20.6 Macros Controlling Initialization Routines</a></li>
+      <li><a name="toc-Output-of-Assembler-Instructions" href="Instruction-Output.html#Instruction-Output">17.20.7 Output of Assembler Instructions</a></li>
+      <li><a name="toc-Output-of-Dispatch-Tables" href="Dispatch-Tables.html#Dispatch-Tables">17.20.8 Output of Dispatch Tables</a></li>
+      <li><a name="toc-Assembler-Commands-for-Exception-Regions" href="Exception-Region-Output.html#Exception-Region-Output">17.20.9 Assembler Commands for Exception Regions</a></li>
+      <li><a name="toc-Assembler-Commands-for-Alignment" href="Alignment-Output.html#Alignment-Output">17.20.10 Assembler Commands for Alignment</a></li>
     </ul></li>
-    <li><a name="toc-Controlling-Debugging-Information-Format" href="Debugging-Info.html#Debugging-Info">17.22 Controlling Debugging Information Format</a>
+    <li><a name="toc-Controlling-Debugging-Information-Format" href="Debugging-Info.html#Debugging-Info">17.21 Controlling Debugging Information Format</a>
     <ul class="no-bullet">
-      <li><a name="toc-Macros-Affecting-All-Debugging-Formats" href="All-Debuggers.html#All-Debuggers">17.22.1 Macros Affecting All Debugging Formats</a></li>
-      <li><a name="toc-Specific-Options-for-DBX-Output" href="DBX-Options.html#DBX-Options">17.22.2 Specific Options for DBX Output</a></li>
-      <li><a name="toc-Open_002dEnded-Hooks-for-DBX-Format" href="DBX-Hooks.html#DBX-Hooks">17.22.3 Open-Ended Hooks for DBX Format</a></li>
-      <li><a name="toc-File-Names-in-DBX-Format" href="File-Names-and-DBX.html#File-Names-and-DBX">17.22.4 File Names in DBX Format</a></li>
-      <li><a name="toc-Macros-for-SDB-and-DWARF-Output" href="SDB-and-DWARF.html#SDB-and-DWARF">17.22.5 Macros for SDB and DWARF Output</a></li>
-      <li><a name="toc-Macros-for-VMS-Debug-Format" href="VMS-Debug.html#VMS-Debug">17.22.6 Macros for VMS Debug Format</a></li>
+      <li><a name="toc-Macros-Affecting-All-Debugging-Formats" href="All-Debuggers.html#All-Debuggers">17.21.1 Macros Affecting All Debugging Formats</a></li>
+      <li><a name="toc-Specific-Options-for-DBX-Output" href="DBX-Options.html#DBX-Options">17.21.2 Specific Options for DBX Output</a></li>
+      <li><a name="toc-Open_002dEnded-Hooks-for-DBX-Format" href="DBX-Hooks.html#DBX-Hooks">17.21.3 Open-Ended Hooks for DBX Format</a></li>
+      <li><a name="toc-File-Names-in-DBX-Format" href="File-Names-and-DBX.html#File-Names-and-DBX">17.21.4 File Names in DBX Format</a></li>
+      <li><a name="toc-Macros-for-SDB-and-DWARF-Output" href="SDB-and-DWARF.html#SDB-and-DWARF">17.21.5 Macros for SDB and DWARF Output</a></li>
+      <li><a name="toc-Macros-for-VMS-Debug-Format" href="VMS-Debug.html#VMS-Debug">17.21.6 Macros for VMS Debug Format</a></li>
     </ul></li>
-    <li><a name="toc-Cross-Compilation-and-Floating-Point" href="Floating-Point.html#Floating-Point">17.23 Cross Compilation and Floating Point</a></li>
-    <li><a name="toc-Mode-Switching-Instructions" href="Mode-Switching.html#Mode-Switching">17.24 Mode Switching Instructions</a></li>
-    <li><a name="toc-Defining-target_002dspecific-uses-of-_005f_005fattribute_005f_005f" href="Target-Attributes.html#Target-Attributes">17.25 Defining target-specific uses of <code>__attribute__</code></a></li>
-    <li><a name="toc-Emulating-TLS" href="Emulated-TLS.html#Emulated-TLS">17.26 Emulating TLS</a></li>
-    <li><a name="toc-Defining-coprocessor-specifics-for-MIPS-targets_002e" href="MIPS-Coprocessors.html#MIPS-Coprocessors">17.27 Defining coprocessor specifics for MIPS targets.</a></li>
-    <li><a name="toc-Parameters-for-Precompiled-Header-Validity-Checking" href="PCH-Target.html#PCH-Target">17.28 Parameters for Precompiled Header Validity Checking</a></li>
-    <li><a name="toc-C_002b_002b-ABI-parameters" href="C_002b_002b-ABI.html#C_002b_002b-ABI">17.29 C++ ABI parameters</a></li>
-    <li><a name="toc-Adding-support-for-named-address-spaces" href="Named-Address-Spaces.html#Named-Address-Spaces">17.30 Adding support for named address spaces</a></li>
-    <li><a name="toc-Miscellaneous-Parameters" href="Misc.html#Misc">17.31 Miscellaneous Parameters</a></li>
+    <li><a name="toc-Cross-Compilation-and-Floating-Point" href="Floating-Point.html#Floating-Point">17.22 Cross Compilation and Floating Point</a></li>
+    <li><a name="toc-Mode-Switching-Instructions" href="Mode-Switching.html#Mode-Switching">17.23 Mode Switching Instructions</a></li>
+    <li><a name="toc-Defining-target_002dspecific-uses-of-_005f_005fattribute_005f_005f" href="Target-Attributes.html#Target-Attributes">17.24 Defining target-specific uses of <code>__attribute__</code></a></li>
+    <li><a name="toc-Emulating-TLS" href="Emulated-TLS.html#Emulated-TLS">17.25 Emulating TLS</a></li>
+    <li><a name="toc-Defining-coprocessor-specifics-for-MIPS-targets_002e" href="MIPS-Coprocessors.html#MIPS-Coprocessors">17.26 Defining coprocessor specifics for MIPS targets.</a></li>
+    <li><a name="toc-Parameters-for-Precompiled-Header-Validity-Checking" href="PCH-Target.html#PCH-Target">17.27 Parameters for Precompiled Header Validity Checking</a></li>
+    <li><a name="toc-C_002b_002b-ABI-parameters" href="C_002b_002b-ABI.html#C_002b_002b-ABI">17.28 C++ ABI parameters</a></li>
+    <li><a name="toc-Adding-support-for-named-address-spaces" href="Named-Address-Spaces.html#Named-Address-Spaces">17.29 Adding support for named address spaces</a></li>
+    <li><a name="toc-Miscellaneous-Parameters" href="Misc.html#Misc">17.30 Miscellaneous Parameters</a></li>
   </ul></li>
   <li><a name="toc-Host-Configuration" href="Host-Config.html#Host-Config">18 Host Configuration</a>
   <ul class="no-bullet">
@@ -699,6 +703,11 @@ Texts being (a) (see below), and with the Back-Cover Texts being (b)
     <li><a name="toc-Whole-program-assumptions_002c-linker-plugin-and-symbol-visibilities" href="WHOPR.html#WHOPR">24.4 Whole program assumptions, linker plugin and symbol visibilities</a></li>
     <li><a name="toc-Internal-flags-controlling-lto1" href="Internal-flags.html#Internal-flags">24.5 Internal flags controlling <code>lto1</code></a></li>
   </ul></li>
+  <li><a name="toc-Match-and-Simplify-1" href="Match-and-Simplify.html#Match-and-Simplify">25 Match and Simplify</a>
+  <ul class="no-bullet">
+    <li><a name="toc-GIMPLE-API-1" href="GIMPLE-API.html#GIMPLE-API">25.1 GIMPLE API</a></li>
+    <li><a name="toc-The-Language-1" href="The-Language.html#The-Language">25.2 The Language</a></li>
+  </ul></li>
   <li><a name="toc-Funding-Free-Software" href="Funding.html#Funding">Funding Free Software</a></li>
   <li><a name="toc-The-GNU-Project-and-GNU_002fLinux" href="GNU-Project.html#GNU-Project">The GNU Project and GNU/Linux</a></li>
   <li><a name="toc-GNU-General-Public-License" href="Copying.html#Copying">GNU General Public License</a></li>
@@ -716,7 +725,7 @@ Texts being (a) (see below), and with the Back-Cover Texts being (b)
 <a name="Top"></a>
 <div class="header">
 <p>
-Next: <a href="Contributing.html#Contributing" accesskey="n" rel="next">Contributing</a>, Up: <a href="../DIR/index.html" accesskey="u" rel="up">(DIR)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="Contributing.html#Contributing" accesskey="n" rel="next">Contributing</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
 <a name="Introduction"></a>
@@ -726,8 +735,8 @@ Next: <a href="Contributing.html#Contributing" accesskey="n" rel="next">Contribu
 <p>This manual documents the internals of the GNU compilers, including
 how to port them to new targets and some information about how to
 write front ends for new languages.  It corresponds to the compilers
-(Linaro GCC 4.9-2017.01)
-version 4.9.4.  The use of the GNU compilers is documented in a
+(Linaro GCC 7.4-2019.02)
+version 7.4.1.  The use of the GNU compilers is documented in a
 separate manual.  See <a href="http://gcc.gnu.org/onlinedocs/gcc/index.html#Top">Introduction</a> in <cite>Using the GNU
 Compiler Collection (GCC)</cite>.
 </p>
@@ -794,7 +803,9 @@ implemented in GCC.
 <tr><td align="left" valign="top">&bull; <a href="LTO.html#LTO">LTO</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using Link-Time Optimization.
 </td></tr>
 <tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
-</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Funding.html#Funding">Funding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to help assure funding for free software.
+</pre></th></tr><tr><td align="left" valign="top">&bull; <a href="Match-and-Simplify.html#Match-and-Simplify">Match and Simplify</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to write expression simplification patterns for GIMPLE and GENERIC
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Funding.html#Funding">Funding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to help assure funding for free software.
 </td></tr>
 <tr><td align="left" valign="top">&bull; <a href="GNU-Project.html#GNU-Project">GNU Project</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The GNU Project and GNU/Linux.
 </td></tr>
@@ -817,7 +828,7 @@ implemented in GCC.
 <hr>
 <div class="header">
 <p>
-Next: <a href="Contributing.html#Contributing" accesskey="n" rel="next">Contributing</a>, Up: <a href="../DIR/index.html" accesskey="u" rel="up">(DIR)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="Contributing.html#Contributing" accesskey="n" rel="next">Contributing</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 
 

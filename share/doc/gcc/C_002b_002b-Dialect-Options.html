@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -83,30 +83,35 @@ Next: <a href="Objective_002dC-and-Objective_002dC_002b_002b-Dialect-Options.htm
 <p>This section describes the command-line options that are only meaningful
 for C++ programs.  You can also use most of the GNU compiler options
 regardless of what language your program is in.  For example, you
-might compile a file <code>firstClass.C</code> like this:
+might compile a file <samp>firstClass.C</samp> like this:
 </p>
 <div class="smallexample">
-<pre class="smallexample">g++ -g -frepo -O -c firstClass.C
+<pre class="smallexample">g++ -g -fstrict-enums -O -c firstClass.C
 </pre></div>
 
-<p>In this example, only <samp>-frepo</samp> is an option meant
+<p>In this example, only <samp>-fstrict-enums</samp> is an option meant
 only for C++ programs; you can use the other options with any
 language supported by GCC.
+</p>
+<p>Some options for compiling C programs, such as <samp>-std</samp>, are also
+relevant for C++ programs.
+See <a href="C-Dialect-Options.html#C-Dialect-Options">Options Controlling C Dialect</a>.
 </p>
 <p>Here is a list of options that are <em>only</em> for compiling C++ programs:
 </p>
 <dl compact="compact">
 <dt><code>-fabi-version=<var>n</var></code></dt>
 <dd><a name="index-fabi_002dversion"></a>
-<p>Use version <var>n</var> of the C++ ABI.  The default is version 2.
+<p>Use version <var>n</var> of the C++ ABI.  The default is version 0.
 </p>
 <p>Version 0 refers to the version conforming most closely to
 the C++ ABI specification.  Therefore, the ABI obtained using version 0
 will change in different versions of G++ as ABI bugs are fixed.
 </p>
-<p>Version 1 is the version of the C++ ABI that first appeared in G++ 3.2.  
+<p>Version 1 is the version of the C++ ABI that first appeared in G++ 3.2.
 </p>
-<p>Version 2 is the version of the C++ ABI that first appeared in G++ 3.4.  
+<p>Version 2 is the version of the C++ ABI that first appeared in G++
+3.4, and was the default through G++ 4.9.
 </p>
 <p>Version 3 corrects an error in mangling a constant address as a
 template argument.
@@ -124,7 +129,45 @@ behavior of C++11 scoped enums and the mangling of template argument
 packs, const/static_cast, prefix ++ and &ndash;, and a class scope function
 used as a template argument.
 </p>
+<p>Version 7, which first appeared in G++ 4.8, that treats nullptr_t as a
+builtin type and corrects the mangling of lambdas in default argument
+scope.
+</p>
+<p>Version 8, which first appeared in G++ 4.9, corrects the substitution
+behavior of function types with function-cv-qualifiers.
+</p>
+<p>Version 9, which first appeared in G++ 5.2, corrects the alignment of
+<code>nullptr_t</code>.
+</p>
+<p>Version 10, which first appeared in G++ 6.1, adds mangling of
+attributes that affect type identity, such as ia32 calling convention
+attributes (e.g. &lsquo;<samp>stdcall</samp>&rsquo;).
+</p>
+<p>Version 11, which first appeared in G++ 7, corrects the mangling of
+sizeof... expressions and operator names.  For multiple entities with
+the same name within a function, that are declared in different scopes,
+the mangling now changes starting with the twelfth occurrence.  It also
+implies <samp>-fnew-inheriting-ctors</samp>.
+</p>
 <p>See also <samp>-Wabi</samp>.
+</p>
+</dd>
+<dt><code>-fabi-compat-version=<var>n</var></code></dt>
+<dd><a name="index-fabi_002dcompat_002dversion"></a>
+<p>On targets that support strong aliases, G++
+works around mangling changes by creating an alias with the correct
+mangled name when defining a symbol with an incorrect mangled name.
+This switch specifies which ABI version to use for the alias.
+</p>
+<p>With <samp>-fabi-version=0</samp> (the default), this defaults to 8 (GCC 5
+compatibility).  If another ABI version is explicitly selected, this
+defaults to 0.  For compatibility with GCC versions 3.2 through 4.9,
+use <samp>-fabi-compat-version=2</samp>.
+</p>
+<p>If this option is not provided but <samp>-Wabi=<var>n</var></samp> is, that
+version is used for compatibility aliases.  If this option is provided
+along with <samp>-Wabi</samp> (without the version), the version from this
+option is used for the warning.
 </p>
 </dd>
 <dt><code>-fno-access-control</code></dt>
@@ -133,18 +176,39 @@ used as a template argument.
 around bugs in the access control code.
 </p>
 </dd>
+<dt><code>-faligned-new</code></dt>
+<dd><a name="index-faligned_002dnew"></a>
+<p>Enable support for C++17 <code>new</code> of types that require more
+alignment than <code>void* ::operator new(std::size_t)</code> provides.  A
+numeric argument such as <code>-faligned-new=32</code> can be used to
+specify how much alignment (in bytes) is provided by that function,
+but few users will need to override the default of
+<code>alignof(std::max_align_t)</code>.
+</p>
+</dd>
 <dt><code>-fcheck-new</code></dt>
 <dd><a name="index-fcheck_002dnew"></a>
 <p>Check that the pointer returned by <code>operator new</code> is non-null
 before attempting to modify the storage allocated.  This check is
 normally unnecessary because the C++ standard specifies that
 <code>operator new</code> only returns <code>0</code> if it is declared
-&lsquo;<samp>throw()</samp>&rsquo;, in which case the compiler always checks the
+<code>throw()</code>, in which case the compiler always checks the
 return value even without this option.  In all other cases, when
 <code>operator new</code> has a non-empty exception specification, memory
 exhaustion is signalled by throwing <code>std::bad_alloc</code>.  See also
 &lsquo;<samp>new (nothrow)</samp>&rsquo;.
 </p>
+</dd>
+<dt><code>-fconcepts</code></dt>
+<dd><a name="index-fconcepts"></a>
+<p>Enable support for the C++ Extensions for Concepts Technical
+Specification, ISO 19217 (2015), which allows code like
+</p>
+<div class="smallexample">
+<pre class="smallexample">template &lt;class T&gt; concept bool Addable = requires (T t) { t + t; };
+template &lt;Addable T&gt; T add (T a, T b) { return a + b; }
+</pre></div>
+
 </dd>
 <dt><code>-fconstexpr-depth=<var>n</var></code></dt>
 <dd><a name="index-fconstexpr_002ddepth"></a>
@@ -152,6 +216,13 @@ exhaustion is signalled by throwing <code>std::bad_alloc</code>.  See also
 to <var>n</var>.  A limit is needed to detect endless recursion during
 constant expression evaluation.  The minimum specified by the standard
 is 512.
+</p>
+</dd>
+<dt><code>-fconstexpr-loop-limit=<var>n</var></code></dt>
+<dd><a name="index-fconstexpr_002dloop_002dlimit"></a>
+<p>Set the maximum number of iterations for a loop in C++14 constexpr functions
+to <var>n</var>.  A limit is needed to detect infinite loops during
+constant expression evaluation.  The default is 262144 (1&lt;&lt;18).
 </p>
 </dd>
 <dt><code>-fdeduce-init-list</code></dt>
@@ -182,11 +253,10 @@ deprecated, and may be removed in a future version of G++.
 <p>Inject friend functions into the enclosing namespace, so that they are
 visible outside the scope of the class in which they are declared.
 Friend functions were documented to work this way in the old Annotated
-C++ Reference Manual, and versions of G++ before 4.1 always worked
-that way.  However, in ISO C++ a friend function that is not declared
+C++ Reference Manual.  
+However, in ISO C++ a friend function that is not declared
 in an enclosing scope can only be found using argument dependent
-lookup.  This option causes friends to be injected as they were in
-earlier releases.
+lookup.  GCC defaults to the standard behavior.
 </p>
 <p>This option is for compatibility, and may be removed in a future
 release of G++.
@@ -197,7 +267,11 @@ release of G++.
 <p>The C++ standard allows an implementation to omit creating a temporary
 that is only used to initialize another object of the same type.
 Specifying this option disables that optimization, and forces G++ to
-call the copy constructor in all cases.
+call the copy constructor in all cases.  This option also causes G++
+to call trivial member functions which otherwise would be expanded inline.
+</p>
+<p>In C++17, the compiler is required to omit these temporaries, but this
+option still affects trivial member functions.
 </p>
 </dd>
 <dt><code>-fno-enforce-eh-specs</code></dt>
@@ -205,7 +279,7 @@ call the copy constructor in all cases.
 <p>Don&rsquo;t generate code to check for violation of exception specifications
 at run time.  This option violates the C++ standard, but may be useful
 for reducing code size in production builds, much like defining
-&lsquo;<samp>NDEBUG</samp>&rsquo;.  This does not give user code permission to throw
+<code>NDEBUG</code>.  This does not give user code permission to throw
 exceptions in violation of the exception specifications; the compiler
 still optimizes based on the specifications, so throwing an
 unexpected exception results in undefined behavior at run time.
@@ -215,8 +289,8 @@ unexpected exception results in undefined behavior at run time.
 <dt><code>-fno-extern-tls-init</code></dt>
 <dd><a name="index-fextern_002dtls_002dinit"></a>
 <a name="index-fno_002dextern_002dtls_002dinit"></a>
-<p>The C++11 and OpenMP standards allow &lsquo;<samp>thread_local</samp>&rsquo; and
-&lsquo;<samp>threadprivate</samp>&rsquo; variables to have dynamic (runtime)
+<p>The C++11 and OpenMP standards allow <code>thread_local</code> and
+<code>threadprivate</code> variables to have dynamic (runtime)
 initialization.  To support this, any use of such a variable goes
 through a wrapper function that performs any necessary initialization.
 When the use and definition of the variable are in the same
@@ -240,7 +314,7 @@ aliases, the default is <samp>-fno-extern-tls-init</samp>.
 <dd><a name="index-ffor_002dscope"></a>
 <a name="index-fno_002dfor_002dscope"></a>
 <p>If <samp>-ffor-scope</samp> is specified, the scope of variables declared in
-a <i>for-init-statement</i> is limited to the &lsquo;<samp>for</samp>&rsquo; loop itself,
+a <i>for-init-statement</i> is limited to the <code>for</code> loop itself,
 as specified by the C++ standard.
 If <samp>-fno-for-scope</samp> is specified, the scope of variables declared in
 a <i>for-init-statement</i> extends to the end of the enclosing scope,
@@ -256,7 +330,8 @@ otherwise be invalid, or have different behavior.
 <dd><a name="index-fno_002dgnu_002dkeywords"></a>
 <p>Do not recognize <code>typeof</code> as a keyword, so that code can use this
 word as an identifier.  You can use the keyword <code>__typeof__</code> instead.
-<samp>-ansi</samp> implies <samp>-fno-gnu-keywords</samp>.
+This option is implied by the strict ISO C++ dialects: <samp>-ansi</samp>,
+<samp>-std=c++98</samp>, <samp>-std=c++11</samp>, etc.
 </p>
 </dd>
 <dt><code>-fno-implicit-templates</code></dt>
@@ -276,7 +351,7 @@ without optimization need the same set of explicit instantiations.
 <dt><code>-fno-implement-inlines</code></dt>
 <dd><a name="index-fno_002dimplement_002dinlines"></a>
 <p>To save space, do not emit out-of-line copies of inline functions
-controlled by &lsquo;<samp>#pragma implementation</samp>&rsquo;.  This causes linker
+controlled by <code>#pragma implementation</code>.  This causes linker
 errors if these functions are not inlined everywhere they are called.
 </p>
 </dd>
@@ -284,6 +359,23 @@ errors if these functions are not inlined everywhere they are called.
 <dd><a name="index-fms_002dextensions-1"></a>
 <p>Disable Wpedantic warnings about constructs used in MFC, such as implicit
 int and getting a pointer to member function via non-standard syntax.
+</p>
+</dd>
+<dt><code>-fnew-inheriting-ctors</code></dt>
+<dd><a name="index-fnew_002dinheriting_002dctors"></a>
+<p>Enable the P0136 adjustment to the semantics of C++11 constructor
+inheritance.  This is part of C++17 but also considered to be a Defect
+Report against C++11 and C++14.  This flag is enabled by default
+unless <samp>-fabi-version=10</samp> or lower is specified.
+</p>
+</dd>
+<dt><code>-fnew-ttp-matching</code></dt>
+<dd><a name="index-fnew_002dttp_002dmatching"></a>
+<p>Enable the P0522 resolution to Core issue 150, template template
+parameters and default arguments: this allows a template with default
+template arguments as an argument for a template template parameter
+with fewer template parameters.  This flag is enabled by default for
+<samp>-std=c++1z</samp>.
 </p>
 </dd>
 <dt><code>-fno-nonansi-builtins</code></dt>
@@ -351,18 +443,26 @@ implies <samp>-fno-implicit-templates</samp>.  See <a href="Template-Instantiati
 <dd><a name="index-fno_002drtti"></a>
 <p>Disable generation of information about every class with virtual
 functions for use by the C++ run-time type identification features
-(&lsquo;<samp>dynamic_cast</samp>&rsquo; and &lsquo;<samp>typeid</samp>&rsquo;).  If you don&rsquo;t use those parts
+(<code>dynamic_cast</code> and <code>typeid</code>).  If you don&rsquo;t use those parts
 of the language, you can save some space by using this flag.  Note that
 exception handling uses the same information, but G++ generates it as
-needed. The &lsquo;<samp>dynamic_cast</samp>&rsquo; operator can still be used for casts that
+needed. The <code>dynamic_cast</code> operator can still be used for casts that
 do not require run-time type information, i.e. casts to <code>void *</code> or to
 unambiguous base classes.
 </p>
 </dd>
-<dt><code>-fstats</code></dt>
-<dd><a name="index-fstats"></a>
-<p>Emit statistics about front-end processing at the end of the compilation.
-This information is generally only useful to the G++ development team.
+<dt><code>-fsized-deallocation</code></dt>
+<dd><a name="index-fsized_002ddeallocation"></a>
+<p>Enable the built-in global declarations
+</p><div class="smallexample">
+<pre class="smallexample">void operator delete (void *, std::size_t) noexcept;
+void operator delete[] (void *, std::size_t) noexcept;
+</pre></div>
+<p>as introduced in C++14.  This is useful for user-defined replacement
+deallocation functions that, for example, use the size of the object
+to make deallocation faster.  Enabled by default under
+<samp>-std=c++14</samp> and above.  The flag <samp>-Wsized-deallocation</samp>
+warns about places that might want to add a definition.
 </p>
 </dd>
 <dt><code>-fstrict-enums</code></dt>
@@ -373,6 +473,16 @@ defined in the C++ standard; basically, a value that can be
 represented in the minimum number of bits needed to represent all the
 enumerators).  This assumption may not be valid if the program uses a
 cast to convert an arbitrary integer value to the enumerated type.
+</p>
+</dd>
+<dt><code>-fstrong-eval-order</code></dt>
+<dd><a name="index-fstrong_002deval_002dorder"></a>
+<p>Evaluate member access, array subscripting, and shift expressions in
+left-to-right order, and evaluate assignment in right-to-left order,
+as adopted for C++17.  Enabled by default with <samp>-std=c++1z</samp>.
+<samp>-fstrong-eval-order=some</samp> enables just the ordering of member
+access and shift expressions, and is the default without
+<samp>-std=c++1z</samp>.
 </p>
 </dd>
 <dt><code>-ftemplate-backtrace-limit=<var>n</var></code></dt>
@@ -476,59 +586,6 @@ objects may not compare equal.  When this flag is given, it is a
 violation of the ODR to define types with the same name differently.
 </p>
 </dd>
-<dt><code>-fvtable-verify=<var>std|preinit|none</var></code></dt>
-<dd><a name="index-fvtable_002dverify"></a>
-<p>Turn on (or off, if using <samp>-fvtable-verify=none</samp>) the security
-feature that verifies at runtime, for every virtual call that is made, that
-the vtable pointer through which the call is made is valid for the type of
-the object, and has not been corrupted or overwritten.  If an invalid vtable
-pointer is detected (at runtime), an error is reported and execution of the
-program is immediately halted.
-</p>
-<p>This option causes runtime data structures to be built, at program start up,
-for verifying the vtable pointers.  The options <code>std</code> and <code>preinit</code>
-control the timing of when these data structures are built.  In both cases the
-data structures are built before execution reaches &rsquo;main&rsquo;.  The
-<samp>-fvtable-verify=std</samp> causes these data structure to be built after the
-shared libraries have been loaded and initialized.
-<samp>-fvtable-verify=preinit</samp> causes them to be built before the shared
-libraries have been loaded and initialized.
-</p>
-<p>If this option appears multiple times in the compiler line, with different
-values specified, &rsquo;none&rsquo; will take highest priority over both &rsquo;std&rsquo; and
-&rsquo;preinit&rsquo;; &rsquo;preinit&rsquo; will take priority over &rsquo;std&rsquo;.
-</p>
-</dd>
-<dt><code>-fvtv-debug</code></dt>
-<dd><a name="index-_0028fvtv_002ddebug_0029"></a>
-<p>Causes debug versions of the runtime functions for the vtable verification 
-feature to be called.  This assumes the <samp>-fvtable-verify=std</samp> or
-<samp>-fvtable-verify=preinit</samp> has been used.  This flag will also cause the
-compiler to keep track of which vtable pointers it found for each class, and
-record that information in the file &ldquo;vtv_set_ptr_data.log&rdquo;, in the dump
-file directory on the user&rsquo;s machine.
-</p>
-<p>Note:  This feature APPENDS data to the log file. If you want a fresh log
-file, be sure to delete any existing one.
-</p>
-</dd>
-<dt><code>-fvtv-counts</code></dt>
-<dd><a name="index-fvtv_002dcounts"></a>
-<p>This is a debugging flag.  When used in conjunction with
-<samp>-fvtable-verify=std</samp> or <samp>-fvtable-verify=preinit</samp>, this
-causes the compiler to keep track of the total number of virtual calls
-it encountered and the number of verifications it inserted.  It also
-counts the number of calls to certain runtime library functions
-that it inserts.  This information, for each compilation unit, is written
-to a file named &ldquo;vtv_count_data.log&rdquo;, in the dump_file directory on
-the user&rsquo;s machine.   It also counts the size of the vtable pointer sets
-for each class, and writes this information to &ldquo;vtv_class_set_sizes.log&rdquo;
-in the same directory.
-</p>
-<p>Note:  This feature APPENDS data to the log files.  To get a fresh log
-files, be sure to delete any existing ones.
-</p>
-</dd>
 <dt><code>-fno-weak</code></dt>
 <dd><a name="index-fno_002dweak"></a>
 <p>Do not use weak symbol support, even if it is provided by the linker.
@@ -553,8 +610,27 @@ have meanings only for C++ programs:
 <dt><code>-Wabi <span class="roman">(C, Objective-C, C++ and Objective-C++ only)</span></code></dt>
 <dd><a name="index-Wabi"></a>
 <a name="index-Wno_002dabi"></a>
-<p>Warn when G++ generates code that is probably not compatible with the
-vendor-neutral C++ ABI.  Although an effort has been made to warn about
+<p>Warn when G++ it generates code that is probably not compatible with
+the vendor-neutral C++ ABI.  Since G++ now defaults to updating the
+ABI with each major release, normally <samp>-Wabi</samp> will warn only if
+there is a check added later in a release series for an ABI issue
+discovered since the initial release.  <samp>-Wabi</samp> will warn about
+more things if an older ABI version is selected (with
+<samp>-fabi-version=<var>n</var></samp>).
+</p>
+<p><samp>-Wabi</samp> can also be used with an explicit version number to
+warn about compatibility with a particular <samp>-fabi-version</samp>
+level, e.g. <samp>-Wabi=2</samp> to warn about changes relative to
+<samp>-fabi-version=2</samp>.
+</p>
+<p>If an explicit version number is provided and
+<samp>-fabi-compat-version</samp> is not specified, the version number
+from this option is used for compatibility aliases.  If no explicit
+version number is provided with this option, but
+<samp>-fabi-compat-version</samp> is specified, that version number is
+used for ABI warnings.
+</p>
+<p>Although an effort has been made to warn about
 all such cases, there are probably some cases that are not warned about,
 even though G++ is generating incompatible code.  There may also be
 cases where warnings are emitted even though the code that is generated
@@ -564,10 +640,11 @@ is compatible.
 concerned about the fact that code generated by G++ may not be binary
 compatible with code generated by other compilers.
 </p>
-<p>The known incompatibilities in <samp>-fabi-version=2</samp> (the default) include:
+<p>Known incompatibilities in <samp>-fabi-version=2</samp> (which was the
+default from GCC 3.4 to 4.9) include:
 </p>
 <ul>
-<li> A template with a non-type template parameter of reference type is
+<li> A template with a non-type template parameter of reference type was
 mangled incorrectly:
 <div class="smallexample">
 <pre class="smallexample">extern int N;
@@ -575,87 +652,54 @@ template &lt;int &amp;&gt; struct S {};
 void n (S&lt;N&gt;) {2}
 </pre></div>
 
-<p>This is fixed in <samp>-fabi-version=3</samp>.
+<p>This was fixed in <samp>-fabi-version=3</samp>.
 </p>
-</li><li> SIMD vector types declared using <code>__attribute ((vector_size))</code> are
+</li><li> SIMD vector types declared using <code>__attribute ((vector_size))</code> were
 mangled in a non-standard way that does not allow for overloading of
 functions taking vectors of different sizes.
 
-<p>The mangling is changed in <samp>-fabi-version=4</samp>.
-</p></li></ul>
-
-<p>The known incompatibilities in <samp>-fabi-version=1</samp> include:
+<p>The mangling was changed in <samp>-fabi-version=4</samp>.
 </p>
-<ul>
-<li> Incorrect handling of tail-padding for bit-fields.  G++ may attempt to
-pack data into the same byte as a base class.  For example:
+</li><li> <code>__attribute ((const))</code> and <code>noreturn</code> were mangled as type
+qualifiers, and <code>decltype</code> of a plain declaration was folded away.
 
-<div class="smallexample">
-<pre class="smallexample">struct A { virtual void f(); int f1 : 1; };
-struct B : public A { int f2 : 1; };
-</pre></div>
-
-<p>In this case, G++ places <code>B::f2</code> into the same byte
-as <code>A::f1</code>; other compilers do not.  You can avoid this problem
-by explicitly padding <code>A</code> so that its size is a multiple of the
-byte size on your platform; that causes G++ and other compilers to
-lay out <code>B</code> identically.
+<p>These mangling issues were fixed in <samp>-fabi-version=5</samp>.
 </p>
-</li><li> Incorrect handling of tail-padding for virtual bases.  G++ does not use
-tail padding when laying out virtual bases.  For example:
+</li><li> Scoped enumerators passed as arguments to a variadic function are
+promoted like unscoped enumerators, causing <code>va_arg</code> to complain.
+On most targets this does not actually affect the parameter passing
+ABI, as there is no way to pass an argument smaller than <code>int</code>.
 
-<div class="smallexample">
-<pre class="smallexample">struct A { virtual void f(); char c1; };
-struct B { B(); char c2; };
-struct C : public A, public virtual B {};
-</pre></div>
-
-<p>In this case, G++ does not place <code>B</code> into the tail-padding for
-<code>A</code>; other compilers do.  You can avoid this problem by
-explicitly padding <code>A</code> so that its size is a multiple of its
-alignment (ignoring virtual base classes); that causes G++ and other
-compilers to lay out <code>C</code> identically.
+<p>Also, the ABI changed the mangling of template argument packs,
+<code>const_cast</code>, <code>static_cast</code>, prefix increment/decrement, and
+a class scope function used as a template argument.
 </p>
-</li><li> Incorrect handling of bit-fields with declared widths greater than that
-of their underlying types, when the bit-fields appear in a union.  For
-example:
-
-<div class="smallexample">
-<pre class="smallexample">union U { int i : 4096; };
-</pre></div>
-
-<p>Assuming that an <code>int</code> does not have 4096 bits, G++ makes the
-union too small by the number of bits in an <code>int</code>.
+<p>These issues were corrected in <samp>-fabi-version=6</samp>.
 </p>
-</li><li> Empty classes can be placed at incorrect offsets.  For example:
+</li><li> Lambdas in default argument scope were mangled incorrectly, and the
+ABI changed the mangling of <code>nullptr_t</code>.
 
-<div class="smallexample">
-<pre class="smallexample">struct A {};
-
-struct B {
-  A a;
-  virtual void f ();
-};
-
-struct C : public B, public A {};
-</pre></div>
-
-<p>G++ places the <code>A</code> base class of <code>C</code> at a nonzero offset;
-it should be placed at offset zero.  G++ mistakenly believes that the
-<code>A</code> data member of <code>B</code> is already at offset zero.
+<p>These issues were corrected in <samp>-fabi-version=7</samp>.
 </p>
-</li><li> Names of template functions whose types involve <code>typename</code> or
-template template parameters can be mangled incorrectly.
+</li><li> When mangling a function type with function-cv-qualifiers, the
+un-qualified function type was incorrectly treated as a substitution
+candidate.
 
-<div class="smallexample">
-<pre class="smallexample">template &lt;typename Q&gt;
-void f(typename Q::X) {}
+<p>This was fixed in <samp>-fabi-version=8</samp>, the default for GCC 5.1.
+</p>
+</li><li> <code>decltype(nullptr)</code> incorrectly had an alignment of 1, leading to
+unaligned accesses.  Note that this did not affect the ABI of a
+function with a <code>nullptr_t</code> parameter, as parameters have a
+minimum alignment.
 
-template &lt;template &lt;typename&gt; class Q&gt;
-void f(typename Q&lt;int&gt;::X) {}
-</pre></div>
+<p>This was fixed in <samp>-fabi-version=9</samp>, the default for GCC 5.2.
+</p>
+</li><li> Target-specific attributes that affect the identity of a type, such as
+ia32 calling conventions on a function type (stdcall, regparm, etc.),
+did not affect the mangled name, leading to name collisions when
+function pointers were used as template arguments.
 
-<p>Instantiations of these templates may be mangled incorrectly.
+<p>This was fixed in <samp>-fabi-version=10</samp>, the default for GCC 6.1.
 </p>
 </li></ul>
 
@@ -678,6 +722,14 @@ passed in memory as specified in psABI.  For example:
 </li></ul>
 
 </dd>
+<dt><code>-Wabi-tag <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
+<dd><a name="index-Wabi_002dtag"></a>
+<a name="index-_002dWabi_002dtag"></a>
+<p>Warn when a type with an ABI tag is used in a context that does not
+have that ABI tag.  See <a href="C_002b_002b-Attributes.html#C_002b_002b-Attributes">C++ Attributes</a> for more information
+about ABI tags.
+</p>
+</dd>
 <dt><code>-Wctor-dtor-privacy <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
 <dd><a name="index-Wctor_002ddtor_002dprivacy"></a>
 <a name="index-Wno_002dctor_002ddtor_002dprivacy"></a>
@@ -691,7 +743,7 @@ a constructor or destructor.
 <dt><code>-Wdelete-non-virtual-dtor <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
 <dd><a name="index-Wdelete_002dnon_002dvirtual_002ddtor"></a>
 <a name="index-Wno_002ddelete_002dnon_002dvirtual_002ddtor"></a>
-<p>Warn when &lsquo;<samp>delete</samp>&rsquo; is used to destroy an instance of a class that
+<p>Warn when <code>delete</code> is used to destroy an instance of a class that
 has virtual functions and non-virtual destructor. It is unsafe to delete
 an instance of a derived class through a pointer to a base class if the
 base class does not have a virtual destructor.  This warning is enabled
@@ -714,19 +766,41 @@ For example:
 
 int main() {
   int64_t i64 = 123;
-  printf(&quot;My int64: %&quot;PRId64&quot;\n&quot;, i64);
+  printf(&quot;My int64: %&quot; PRId64&quot;\n&quot;, i64);
 }
 </pre></div>
 
 <p>In this case, <code>PRId64</code> is treated as a separate preprocessing token.
 </p>
+<p>Additionally, warn when a user-defined literal operator is declared with
+a literal suffix identifier that doesn&rsquo;t begin with an underscore. Literal
+suffix identifiers that don&rsquo;t begin with an underscore are reserved for
+future standardization.
+</p>
 <p>This warning is enabled by default.
 </p>
 </dd>
-<dt><code>-Wnarrowing <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
+<dt><code>-Wlto-type-mismatch</code></dt>
+<dd><a name="index-Wlto_002dtype_002dmismatch"></a>
+<a name="index-Wno_002dlto_002dtype_002dmismatch"></a>
+
+<p>During the link-time optimization warn about type mismatches in
+global declarations from different compilation units.
+Requires <samp>-flto</samp> to be enabled.  Enabled by default.
+</p>
+</dd>
+<dt><code>-Wno-narrowing <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
 <dd><a name="index-Wnarrowing"></a>
 <a name="index-Wno_002dnarrowing"></a>
-<p>Warn when a narrowing conversion prohibited by C++11 occurs within
+<p>For C++11 and later standards, narrowing conversions are diagnosed by default,
+as required by the standard.  A narrowing conversion from a constant produces
+an error, and a narrowing conversion from a non-constant produces a warning,
+but <samp>-Wno-narrowing</samp> suppresses the diagnostic.
+Note that this does not affect the meaning of well-formed code;
+narrowing conversions are still considered ill-formed in SFINAE contexts.
+</p>
+<p>With <samp>-Wnarrowing</samp> in C++98, warn when a narrowing
+conversion prohibited by C++11 occurs within
 &lsquo;<samp>{ }</samp>&rsquo;, e.g.
 </p>
 <div class="smallexample">
@@ -735,20 +809,30 @@ int main() {
 
 <p>This flag is included in <samp>-Wall</samp> and <samp>-Wc++11-compat</samp>.
 </p>
-<p>With <samp>-std=c++11</samp>, <samp>-Wno-narrowing</samp> suppresses the diagnostic
-required by the standard.  Note that this does not affect the meaning
-of well-formed code; narrowing conversions are still considered
-ill-formed in SFINAE context.
-</p>
 </dd>
 <dt><code>-Wnoexcept <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
 <dd><a name="index-Wnoexcept"></a>
 <a name="index-Wno_002dnoexcept"></a>
 <p>Warn when a noexcept-expression evaluates to false because of a call
 to a function that does not have a non-throwing exception
-specification (i.e. &lsquo;<samp>throw()</samp>&rsquo; or &lsquo;<samp>noexcept</samp>&rsquo;) but is known by
+specification (i.e. <code>throw()</code> or <code>noexcept</code>) but is known by
 the compiler to never throw an exception.
 </p>
+</dd>
+<dt><code>-Wnoexcept-type <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
+<dd><a name="index-Wnoexcept_002dtype"></a>
+<a name="index-Wno_002dnoexcept_002dtype"></a>
+<p>Warn if the C++1z feature making <code>noexcept</code> part of a function
+type changes the mangled name of a symbol relative to C++14.  Enabled
+by <samp>-Wabi</samp> and <samp>-Wc++1z-compat</samp>.
+</p>
+<div class="smallexample">
+<pre class="smallexample">template &lt;class T&gt; void f(T t) { t(); };
+void g() noexcept;
+void h() { f(g); } // in C++14 calls f&lt;void(*)()&gt;, in C++1z calls f&lt;void(*)()noexcept&gt;
+</pre></div>
+
+
 </dd>
 <dt><code>-Wnon-virtual-dtor <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
 <dd><a name="index-Wnon_002dvirtual_002ddtor"></a>
@@ -758,6 +842,16 @@ destructor itself or in an accessible polymorphic base class, in which
 case it is possible but unsafe to delete an instance of a derived
 class through a pointer to the class itself or base class.  This
 warning is automatically enabled if <samp>-Weffc++</samp> is specified.
+</p>
+</dd>
+<dt><code>-Wregister <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
+<dd><a name="index-Wregister"></a>
+<a name="index-Wno_002dregister"></a>
+<p>Warn on uses of the <code>register</code> storage class specifier, except
+when it is part of the GNU <a href="Explicit-Register-Variables.html#Explicit-Register-Variables">Explicit Register Variables</a> extension.
+The use of the <code>register</code> keyword as storage class specifier has
+been deprecated in C++11 and removed in C++17.
+Enabled by default with <samp>-std=c++1z</samp>.
 </p>
 </dd>
 <dt><code>-Wreorder <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
@@ -776,8 +870,8 @@ match the order in which they must be executed.  For instance:
 };
 </pre></div>
 
-<p>The compiler rearranges the member initializers for &lsquo;<samp>i</samp>&rsquo;
-and &lsquo;<samp>j</samp>&rsquo; to match the declaration order of the members, emitting
+<p>The compiler rearranges the member initializers for <code>i</code>
+and <code>j</code> to match the declaration order of the members, emitting
 a warning to that effect.  This warning is enabled by <samp>-Wall</samp>.
 </p>
 </dd>
@@ -790,7 +884,7 @@ When this option is turned off these suffixes are treated
 as C++11 user-defined literal numeric suffixes.
 This is on by default for all pre-C++11 dialects and all GNU dialects:
 <samp>-std=c++98</samp>, <samp>-std=gnu++98</samp>, <samp>-std=gnu++11</samp>,
-<samp>-std=gnu++1y</samp>.
+<samp>-std=gnu++14</samp>.
 This option is off by default
 for ISO C++11 onwards (<samp>-std=c++11</samp>, ...).
 </p></dd>
@@ -845,27 +939,21 @@ But this use is not portable across different compilers.
 <dt><code>-Wno-non-template-friend <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
 <dd><a name="index-Wno_002dnon_002dtemplate_002dfriend"></a>
 <a name="index-Wnon_002dtemplate_002dfriend"></a>
-<p>Disable warnings when non-templatized friend functions are declared
-within a template.  Since the advent of explicit template specification
-support in G++, if the name of the friend is an unqualified-id (i.e.,
-&lsquo;<samp>friend foo(int)</samp>&rsquo;), the C++ language specification demands that the
-friend declare or define an ordinary, nontemplate function.  (Section
-14.5.3).  Before G++ implemented explicit specification, unqualified-ids
-could be interpreted as a particular specialization of a templatized
-function.  Because this non-conforming behavior is no longer the default
-behavior for G++, <samp>-Wnon-template-friend</samp> allows the compiler to
-check existing code for potential trouble spots and is on by default.
-This new compiler behavior can be turned off with
-<samp>-Wno-non-template-friend</samp>, which keeps the conformant compiler code
-but disables the helpful warning.
+<p>Disable warnings when non-template friend functions are declared
+within a template.  In very old versions of GCC that predate implementation
+of the ISO standard, declarations such as 
+&lsquo;<samp>friend int foo(int)</samp>&rsquo;, where the name of the friend is an unqualified-id,
+could be interpreted as a particular specialization of a template
+function; the warning exists to diagnose compatibility problems, 
+and is enabled by default.
 </p>
 </dd>
 <dt><code>-Wold-style-cast <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
 <dd><a name="index-Wold_002dstyle_002dcast"></a>
 <a name="index-Wno_002dold_002dstyle_002dcast"></a>
 <p>Warn if an old-style (C-style) cast to a non-void type is used within
-a C++ program.  The new-style casts (&lsquo;<samp>dynamic_cast</samp>&rsquo;,
-&lsquo;<samp>static_cast</samp>&rsquo;, &lsquo;<samp>reinterpret_cast</samp>&rsquo;, and &lsquo;<samp>const_cast</samp>&rsquo;) are
+a C++ program.  The new-style casts (<code>dynamic_cast</code>,
+<code>static_cast</code>, <code>reinterpret_cast</code>, and <code>const_cast</code>) are
 less vulnerable to unintended effects and much easier to search for.
 </p>
 </dd>
@@ -912,6 +1000,48 @@ to a plain pointer.
 enumerated type to a signed type, over a conversion to an unsigned type of
 the same size.  Previous versions of G++ tried to preserve
 unsignedness, but the standard mandates the current behavior.
+</p>
+</dd>
+<dt><code>-Wtemplates <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
+<dd><a name="index-Wtemplates"></a>
+<p>Warn when a primary template declaration is encountered.  Some coding
+rules disallow templates, and this may be used to enforce that rule.
+The warning is inactive inside a system header file, such as the STL, so
+one can still use the STL.  One may also instantiate or specialize
+templates.
+</p>
+</dd>
+<dt><code>-Wmultiple-inheritance <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
+<dd><a name="index-Wmultiple_002dinheritance"></a>
+<p>Warn when a class is defined with multiple direct base classes.  Some
+coding rules disallow multiple inheritance, and this may be used to
+enforce that rule.  The warning is inactive inside a system header file,
+such as the STL, so one can still use the STL.  One may also define
+classes that indirectly use multiple inheritance.
+</p>
+</dd>
+<dt><code>-Wvirtual-inheritance</code></dt>
+<dd><a name="index-Wvirtual_002dinheritance"></a>
+<p>Warn when a class is defined with a virtual direct base class.  Some
+coding rules disallow multiple inheritance, and this may be used to
+enforce that rule.  The warning is inactive inside a system header file,
+such as the STL, so one can still use the STL.  One may also define
+classes that indirectly use virtual inheritance.
+</p>
+</dd>
+<dt><code>-Wnamespaces</code></dt>
+<dd><a name="index-Wnamespaces"></a>
+<p>Warn when a namespace definition is opened.  Some coding rules disallow
+namespaces, and this may be used to enforce that rule.  The warning is
+inactive inside a system header file, such as the STL, so one can still
+use the STL.  One may also use using directives and qualified names.
+</p>
+</dd>
+<dt><code>-Wno-terminate <span class="roman">(C++ and Objective-C++ only)</span></code></dt>
+<dd><a name="index-Wterminate"></a>
+<a name="index-Wno_002dterminate"></a>
+<p>Disable the warning about a throw-expression that will immediately
+result in a call to <code>terminate</code>.
 </p></dd>
 </dl>
 

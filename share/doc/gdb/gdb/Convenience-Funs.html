@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -237,6 +237,20 @@ checks all stack frames from the immediate caller to the frame specified
 by <var>number_of_frames</var>, whereas <code>$_caller_matches</code> only checks the
 frame specified by <var>number_of_frames</var>.
 </p>
+</dd>
+<dt><code>$_as_string(<var>value</var>)</code></dt>
+<dd><a name="index-_0024_005fas_005fstring_002c-convenience-function"></a>
+<p>Return the string representation of <var>value</var>.
+</p>
+<p>This function is useful to obtain the textual label (enumerator) of an
+enumeration value.  For example, assuming the variable <var>node</var> is of
+an enumerated type:
+</p>
+<div class="smallexample">
+<pre class="smallexample">(gdb) printf &quot;Visiting node of type %s\n&quot;, $_as_string(node)
+Visiting node of type NODE_INTEGER
+</pre></div>
+
 </dd>
 </dl>
 

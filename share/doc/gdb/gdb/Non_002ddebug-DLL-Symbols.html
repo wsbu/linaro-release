@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -68,7 +68,7 @@ Up: <a href="Cygwin-Native.html#Cygwin-Native" accesskey="u" rel="up">Cygwin Nat
 </div>
 <hr>
 <a name="Support-for-DLLs-without-Debugging-Symbols"></a>
-<h4 class="subsubsection">21.1.5.1 Support for DLLs without Debugging Symbols</h4>
+<h4 class="subsubsection">21.1.4.1 Support for DLLs without Debugging Symbols</h4>
 <a name="index-DLLs-with-no-debugging-symbols"></a>
 <a name="index-Minimal-symbols-and-DLLs"></a>
 
@@ -86,7 +86,7 @@ start the program &mdash; either by setting a breakpoint or letting the
 program run once to completion.
 </p>
 <a name="DLL-Name-Prefixes"></a>
-<h4 class="subsubsection">21.1.5.2 DLL Name Prefixes</h4>
+<h4 class="subsubsection">21.1.4.2 DLL Name Prefixes</h4>
 
 <p>In keeping with the naming conventions used by the Microsoft debugging
 tools, DLL export symbols are made available with a prefix based on the
@@ -126,7 +126,7 @@ Non-debugging symbols:
 </pre></div>
 
 <a name="Working-with-Minimal-Symbols"></a>
-<h4 class="subsubsection">21.1.5.3 Working with Minimal Symbols</h4>
+<h4 class="subsubsection">21.1.4.3 Working with Minimal Symbols</h4>
 
 <p>Symbols extracted from a DLL&rsquo;s export table do not contain very much
 type information. All that <small>GDB</small> can do is guess whether a symbol
@@ -144,12 +144,12 @@ problem:
 </p>
 <div class="smallexample">
 <pre class="smallexample">(gdb) print 'cygwin1!__argv'
-$1 = 268572168
+'cygwin1!__argv' has unknown type; cast it to its declared type
 </pre></div>
 
 <div class="smallexample">
 <pre class="smallexample">(gdb) x 'cygwin1!__argv'
-0x10021610:      &quot;\230y\&quot;&quot;
+'cygwin1!__argv' has unknown type; cast it to its declared type
 </pre></div>
 
 <p>And two possible solutions:

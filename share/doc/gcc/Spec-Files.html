@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -33,8 +33,8 @@ You have freedom to copy and modify this GNU Manual, like GNU
 <link href="Option-Index.html#Option-Index" rel="index" title="Option Index">
 <link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
 <link href="Invoking-GCC.html#Invoking-GCC" rel="up" title="Invoking GCC">
-<link href="Target-Options.html#Target-Options" rel="next" title="Target Options">
-<link href="Directory-Options.html#Directory-Options" rel="prev" title="Directory Options">
+<link href="Environment-Variables.html#Environment-Variables" rel="next" title="Environment Variables">
+<link href="zSeries-Options.html#zSeries-Options" rel="prev" title="zSeries Options">
 <style type="text/css">
 <!--
 a.summary-letter {text-decoration: none}
@@ -71,11 +71,11 @@ ul.no-bullet {list-style: none}
 <a name="Spec-Files"></a>
 <div class="header">
 <p>
-Next: <a href="Target-Options.html#Target-Options" accesskey="n" rel="next">Target Options</a>, Previous: <a href="Directory-Options.html#Directory-Options" accesskey="p" rel="prev">Directory Options</a>, Up: <a href="Invoking-GCC.html#Invoking-GCC" accesskey="u" rel="up">Invoking GCC</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="Environment-Variables.html#Environment-Variables" accesskey="n" rel="next">Environment Variables</a>, Previous: <a href="Submodel-Options.html#Submodel-Options" accesskey="p" rel="prev">Submodel Options</a>, Up: <a href="Invoking-GCC.html#Invoking-GCC" accesskey="u" rel="up">Invoking GCC</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
-<a name="Specifying-subprocesses-and-the-switches-to-pass-to-them"></a>
-<h3 class="section">3.15 Specifying subprocesses and the switches to pass to them</h3>
+<a name="Specifying-Subprocesses-and-the-Switches-to-Pass-to-Them"></a>
+<h3 class="section">3.19 Specifying Subprocesses and the Switches to Pass to Them</h3>
 <a name="index-Spec-Files"></a>
 
 <p><code>gcc</code> is a driver program.  It performs its job by invoking a
@@ -89,7 +89,7 @@ strings to control their behavior.  The spec strings built into GCC can
 be overridden by using the <samp>-specs=</samp> command-line switch to specify
 a spec file.
 </p>
-<p><em>Spec files</em> are plaintext files that are used to construct spec
+<p><em>Spec files</em> are plain-text files that are used to construct spec
 strings.  They consist of a sequence of directives separated by blank
 lines.  The type of directive is determined by the first non-whitespace
 character on the line, which can be one of the following:
@@ -449,12 +449,12 @@ to be passed to the C preprocessor.
 </dd>
 <dt><code>%1</code></dt>
 <dd><p>Process the <code>cc1</code> spec.  This is used to construct the options to be
-passed to the actual C compiler (&lsquo;<samp>cc1</samp>&rsquo;).
+passed to the actual C compiler (<code>cc1</code>).
 </p>
 </dd>
 <dt><code>%2</code></dt>
 <dd><p>Process the <code>cc1plus</code> spec.  This is used to construct the options to be
-passed to the actual C++ compiler (&lsquo;<samp>cc1plus</samp>&rsquo;).
+passed to the actual C++ compiler (<code>cc1plus</code>).
 </p>
 </dd>
 <dt><code>%*</code></dt>
@@ -617,8 +617,8 @@ for each matching switch, with the <code>%*</code> replaced by the part of
 that switch matching the <code>*</code>.
 </p>
 <p>If <code>%*</code> appears as the last part of a spec sequence then a space
-will be added after the end of the last substitution.  If there is more
-text in the sequence however then a space will not be generated.  This
+is added after the end of the last substitution.  If there is more
+text in the sequence, however, then a space is not generated.  This
 allows the <code>%*</code> substitution to be used as part of a larger
 string.  For example, a spec string like this:
 </p>
@@ -626,7 +626,7 @@ string.  For example, a spec string like this:
 <pre class="smallexample">%{mcu=*:--script=%*/memory.ld}
 </pre></div>
 
-<p>when matching an option like <code>-mcu=newchip</code> will produce:
+<p>when matching an option like <samp>-mcu=newchip</samp> produces:
 </p>
 <div class="smallexample">
 <pre class="smallexample">--script=newchip/memory.ld
@@ -715,11 +715,10 @@ compilers to run).
 treated as compiler output files, and passed to the linker in their
 proper position among the other output files.
 </p>
-
 <hr>
 <div class="header">
 <p>
-Next: <a href="Target-Options.html#Target-Options" accesskey="n" rel="next">Target Options</a>, Previous: <a href="Directory-Options.html#Directory-Options" accesskey="p" rel="prev">Directory Options</a>, Up: <a href="Invoking-GCC.html#Invoking-GCC" accesskey="u" rel="up">Invoking GCC</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="Environment-Variables.html#Environment-Variables" accesskey="n" rel="next">Environment Variables</a>, Previous: <a href="Submodel-Options.html#Submodel-Options" accesskey="p" rel="prev">Submodel Options</a>, Up: <a href="Invoking-GCC.html#Invoking-GCC" accesskey="u" rel="up">Invoking GCC</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Option-Index.html#Option-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 
 

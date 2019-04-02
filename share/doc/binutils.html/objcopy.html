@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1991-2013 Free Software Foundation, Inc.
+<!-- Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -91,6 +91,7 @@ Next: <a href="objdump.html#objdump" accesskey="n" rel="next">objdump</a>, Previ
         [<samp>--interleave-width=</samp><var>width</var>]
         [<samp>-j</samp> <var>sectionpattern</var>|<samp>--only-section=</samp><var>sectionpattern</var>]
         [<samp>-R</samp> <var>sectionpattern</var>|<samp>--remove-section=</samp><var>sectionpattern</var>]
+        [<samp>--remove-relocations=</samp><var>sectionpattern</var>]
         [<samp>-p</samp>|<samp>--preserve-dates</samp>]
         [<samp>-D</samp>|<samp>--enable-deterministic-archives</samp>]
         [<samp>-U</samp>|<samp>--disable-deterministic-archives</samp>]
@@ -106,6 +107,8 @@ Next: <a href="objdump.html#objdump" accesskey="n" rel="next">objdump</a>, Previ
         [<samp>--change-warnings</samp>] [<samp>--no-change-warnings</samp>]
         [<samp>--set-section-flags</samp> <var>sectionpattern</var>=<var>flags</var>]
         [<samp>--add-section</samp> <var>sectionname</var>=<var>filename</var>]
+        [<samp>--dump-section</samp> <var>sectionname</var>=<var>filename</var>]
+        [<samp>--update-section</samp> <var>sectionname</var>=<var>filename</var>]
         [<samp>--rename-section</samp> <var>oldname</var>=<var>newname</var>[,<var>flags</var>]]
         [<samp>--long-section-names</samp> {enable,disable,keep}]
         [<samp>--change-leading-char</samp>] [<samp>--remove-leading-char</samp>]
@@ -121,6 +124,7 @@ Next: <a href="objdump.html#objdump" accesskey="n" rel="next">objdump</a>, Previ
         [<samp>--localize-symbols=</samp><var>filename</var>]
         [<samp>--globalize-symbols=</samp><var>filename</var>]
         [<samp>--weaken-symbols=</samp><var>filename</var>]
+        [<samp>--add-symbol</samp> <var>name</var>=[<var>section</var>:]<var>value</var>[,<var>flags</var>]
         [<samp>--alt-machine-code=</samp><var>index</var>]
         [<samp>--prefix-symbols=</samp><var>string</var>]
         [<samp>--prefix-sections=</samp><var>string</var>]
@@ -143,8 +147,7 @@ Next: <a href="objdump.html#objdump" accesskey="n" rel="next">objdump</a>, Previ
         [<samp>--subsystem=</samp><var>which</var>:<var>major</var>.<var>minor</var>]
         [<samp>--compress-debug-sections</samp>]
         [<samp>--decompress-debug-sections</samp>]
-        [<samp>--dwarf-depth=<var>n</var></samp>]
-        [<samp>--dwarf-start=<var>n</var></samp>]
+        [<samp>--elf-stt-common=<var>val</var></samp>]
         [<samp>-v</samp>|<samp>--verbose</samp>]
         [<samp>-V</samp>|<samp>--version</samp>]
         [<samp>--help</samp>] [<samp>--info</samp>]
@@ -236,6 +239,18 @@ This option may be given more than once.  Note that using this option
 inappropriately may make the output file unusable.  Wildcard
 characters are accepted in <var>sectionpattern</var>.
 </p>
+<p>If the first character of <var>sectionpattern</var> is the exclamation
+point (!) then matching sections will not be copied, even if earlier
+use of <samp>--only-section</samp> on the same command line would
+otherwise copy it.  For example:
+</p>
+<div class="smallexample">
+<pre class="smallexample">  --only-section=.text.* --only-section=!.text.foo
+</pre></div>
+
+<p>will copy all sectinos maching &rsquo;.text.*&rsquo; but not the section
+&rsquo;.text.foo&rsquo;.
+</p>
 </dd>
 <dt><code>-R <var>sectionpattern</var></code></dt>
 <dt><code>--remove-section=<var>sectionpattern</var></code></dt>
@@ -245,6 +260,47 @@ inappropriately may make the output file unusable.  Wildcard
 characters are accepted in <var>sectionpattern</var>.  Using both the
 <samp>-j</samp> and <samp>-R</samp> options together results in undefined
 behaviour.
+</p>
+<p>If the first character of <var>sectionpattern</var> is the exclamation
+point (!) then matching sections will not be removed even if an
+earlier use of <samp>--remove-section</samp> on the same command line
+would otherwise remove it.  For example:
+</p>
+<div class="smallexample">
+<pre class="smallexample">  --remove-section=.text.* --remove-section=!.text.foo
+</pre></div>
+
+<p>will remove all sections matching the pattern &rsquo;.text.*&rsquo;, but will not
+remove the section &rsquo;.text.foo&rsquo;.
+</p>
+</dd>
+<dt><code>--remove-relocations=<var>sectionpattern</var></code></dt>
+<dd><p>Remove relocations from the output file for any section matching
+<var>sectionpattern</var>.  This option may be given more than once.  Note
+that using this option inappropriately may make the output file
+unusable.  Wildcard characters are accepted in <var>sectionpattern</var>.
+For example:
+</p>
+<div class="smallexample">
+<pre class="smallexample">  --remove-relocations=.text.*
+</pre></div>
+
+<p>will remove the relocations for all sections matching the patter
+&rsquo;.text.*&rsquo;.
+</p>
+<p>If the first character of <var>sectionpattern</var> is the exclamation
+point (!) then matching sections will not have their relocation
+removed even if an earlier use of <samp>--remove-relocations</samp> on the
+same command line would otherwise cause the relocations to be removed.
+For example:
+</p>
+<div class="smallexample">
+<pre class="smallexample">  --remove-relocations=.text.* --remove-relocations=!.text.foo
+</pre></div>
+
+<p>will remove all relocations for sections matching the pattern
+&rsquo;.text.*&rsquo;, but will not remove relocations for the section
+&rsquo;.text.foo&rsquo;.
 </p>
 </dd>
 <dt><code>-S</code></dt>
@@ -293,8 +349,9 @@ such as <samp>-L</samp>.
 </dd>
 <dt><code>-L <var>symbolname</var></code></dt>
 <dt><code>--localize-symbol=<var>symbolname</var></code></dt>
-<dd><p>Make symbol <var>symbolname</var> local to the file, so that it is not
-visible externally.  This option may be given more than once.
+<dd><p>Convert a global or weak symbol called <var>symbolname</var> into a local
+symbol, so that it is not visible externally.  This option may be
+given more than once.  Note - unique symbols are not converted.
 </p>
 </dd>
 <dt><code>-W <var>symbolname</var></code></dt>
@@ -526,6 +583,47 @@ meaningful for all object file formats.
 contents of the new section are taken from the file <var>filename</var>.  The
 size of the section will be the size of the file.  This option only
 works on file formats which can support sections with arbitrary names.
+Note - it may be necessary to use the <samp>--set-section-flags</samp>
+option to set the attributes of the newly created section.
+</p>
+</dd>
+<dt><code>--dump-section <var>sectionname</var>=<var>filename</var></code></dt>
+<dd><p>Place the contents of section named <var>sectionname</var> into the file
+<var>filename</var>, overwriting any contents that may have been there
+previously.  This option is the inverse of <samp>--add-section</samp>.
+This option is similar to the <samp>--only-section</samp> option except
+that it does not create a formatted file, it just dumps the contents
+as raw binary data, without applying any relocations.  The option can
+be specified more than once.
+</p>
+</dd>
+<dt><code>--update-section <var>sectionname</var>=<var>filename</var></code></dt>
+<dd><p>Replace the existing contents of a section named <var>sectionname</var>
+with the contents of file <var>filename</var>.  The size of the section
+will be adjusted to the size of the file.  The section flags for
+<var>sectionname</var> will be unchanged.  For ELF format files the section
+to segment mapping will also remain unchanged, something which is not
+possible using <samp>--remove-section</samp> followed by
+<samp>--add-section</samp>.  The option can be specified more than once.
+</p>
+<p>Note - it is possible to use <samp>--rename-section</samp> and
+<samp>--update-section</samp> to both update and rename a section from one
+command line.  In this case, pass the original section name to
+<samp>--update-section</samp>, and the original and new section names to
+<samp>--rename-section</samp>.
+</p>
+</dd>
+<dt><code>--add-symbol <var>name</var>=[<var>section</var>:]<var>value</var>[,<var>flags</var>]</code></dt>
+<dd><p>Add a new symbol named <var>name</var> while copying the file.  This option may be
+specified multiple times.  If the <var>section</var> is given, the symbol will be
+associated with and relative to that section, otherwise it will be an ABS
+symbol.  Specifying an undefined section will result in a fatal error.  There
+is no check for the value, it will be taken as specified.  Symbol flags can
+be specified and not all flags will be meaningful for all object file
+formats.  By default, the symbol will be global.  The special flag
+&rsquo;before=<var>othersym</var>&rsquo; will insert the new symbol in front of the specified
+<var>othersym</var>, otherwise the symbol(s) will be added at the end of the
+symbol table in the order they appear.
 </p>
 </dd>
 <dt><code>--rename-section <var>oldname</var>=<var>newname</var>[,<var>flags</var>]</code></dt>
@@ -732,8 +830,41 @@ object file formats.
 </p>
 </dd>
 <dt><code>--add-gnu-debuglink=<var>path-to-file</var></code></dt>
-<dd><p>Creates a .gnu_debuglink section which contains a reference to <var>path-to-file</var>
-and adds it to the output file.
+<dd><p>Creates a .gnu_debuglink section which contains a reference to
+<var>path-to-file</var> and adds it to the output file.  Note: the file at
+<var>path-to-file</var> must exist.  Part of the process of adding the
+.gnu_debuglink section involves embedding a checksum of the contents
+of the debug info file into the section.
+</p>
+<p>If the debug info file is built in one location but it is going to be
+installed at a later time into a different location then do not use
+the path to the installed location.  The <samp>--add-gnu-debuglink</samp>
+option will fail because the installed file does not exist yet.
+Instead put the debug info file in the current directory and use the
+<samp>--add-gnu-debuglink</samp> option without any directory components,
+like this:
+</p>
+<div class="smallexample">
+<pre class="smallexample"> objcopy --add-gnu-debuglink=foo.debug
+</pre></div>
+ 
+<p>At debug time the debugger will attempt to look for the separate debug
+info file in a set of known locations.  The exact set of these
+locations varies depending upon the distribution being used, but it
+typically includes:
+</p>
+<dl compact="compact">
+<dt><code>* The same directory as the executable.</code></dt>
+<dt><code>* A sub-directory of the directory containing the executable</code></dt>
+<dd><p>called .debug
+</p>
+</dd>
+<dt><code>* A global debug directory such as /usr/lib/debug.</code></dt>
+</dl>
+
+<p>As long as the debug info file has been installed into one of these
+locations before the debugger is run everything should work
+correctly.
 </p>
 </dd>
 <dt><code>--keep-file-symbols</code></dt>
@@ -746,6 +877,12 @@ which would otherwise get stripped.
 <dd><p>Strip a file, removing contents of any sections that would not be
 stripped by <samp>--strip-debug</samp> and leaving the debugging sections
 intact.  In ELF files, this preserves all note sections in the output.
+</p>
+<p>Note - the section headers of the stripped sections are preserved,
+including their sizes, but the contents of the section are discarded.
+The section headers are preserved so that other tools can match up the
+debuginfo file with the real executable, even if that executable has
+been relocated to a different address space.
 </p>
 <p>The intention is that this option will be used in conjunction with
 <samp>--add-gnu-debuglink</samp> to create a two part executable.  One a
@@ -870,11 +1007,40 @@ linker input file.
 </p>
 </dd>
 <dt><code>--compress-debug-sections</code></dt>
-<dd><p>Compress DWARF debug sections using zlib.
+<dd><p>Compress DWARF debug sections using zlib with SHF_COMPRESSED from the
+ELF ABI.  Note - if compression would actually make a section
+<em>larger</em>, then it is not compressed.
+</p>
+</dd>
+<dt><code>--compress-debug-sections=none</code></dt>
+<dt><code>--compress-debug-sections=zlib</code></dt>
+<dt><code>--compress-debug-sections=zlib-gnu</code></dt>
+<dt><code>--compress-debug-sections=zlib-gabi</code></dt>
+<dd><p>For ELF files, these options control how DWARF debug sections are
+compressed.  <samp>--compress-debug-sections=none</samp> is equivalent
+to <samp>--decompress-debug-sections</samp>.
+<samp>--compress-debug-sections=zlib</samp> and
+<samp>--compress-debug-sections=zlib-gabi</samp> are equivalent to
+<samp>--compress-debug-sections</samp>.
+<samp>--compress-debug-sections=zlib-gnu</samp> compresses DWARF debug
+sections using zlib.  The debug sections are renamed to begin with
+&lsquo;<samp>.zdebug</samp>&rsquo; instead of &lsquo;<samp>.debug</samp>&rsquo;.  Note - if compression would
+actually make a section <em>larger</em>, then it is not compressed nor
+renamed.
 </p>
 </dd>
 <dt><code>--decompress-debug-sections</code></dt>
-<dd><p>Decompress DWARF debug sections using zlib.
+<dd><p>Decompress DWARF debug sections using zlib.  The original section
+names of the compressed sections are restored.
+</p>
+</dd>
+<dt><code>--elf-stt-common=yes</code></dt>
+<dt><code>--elf-stt-common=no</code></dt>
+<dd><p>For ELF files, these options control whether common symbols should be
+converted to the <code>STT_COMMON</code> or <code>STT_OBJECT</code> type.
+<samp>--elf-stt-common=yes</samp> converts common symbol type to
+<code>STT_COMMON</code>. <samp>--elf-stt-common=no</samp> converts common symbol
+type to <code>STT_OBJECT</code>.
 </p>
 </dd>
 <dt><code>-V</code></dt>

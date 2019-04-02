@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -296,6 +296,33 @@ $1 = (void *) 0x7ffff7ff7000
 
 <p>Depending on target support, <code>$_siginfo</code> may also be writable.
 </p>
+<a name="index-Intel-MPX-boundary-violations"></a>
+<a name="index-boundary-violations_002c-Intel-MPX"></a>
+<p>On some targets, a <code>SIGSEGV</code> can be caused by a boundary
+violation, i.e., accessing an address outside of the allowed range.
+In those cases <small>GDB</small> may displays additional information,
+depending on how <small>GDB</small> has been told to handle the signal.
+With <code>handle stop SIGSEGV</code>, <small>GDB</small> displays the violation
+kind: &quot;Upper&quot; or &quot;Lower&quot;, the memory address accessed and the
+bounds, while with <code>handle nostop SIGSEGV</code> no additional
+information is displayed.
+</p>
+<p>The usual output of a segfault is:
+</p><div class="smallexample">
+<pre class="smallexample">Program received signal SIGSEGV, Segmentation fault
+0x0000000000400d7c in upper () at i386-mpx-sigsegv.c:68
+68        value = *(p + len);
+</pre></div>
+
+<p>While a bound violation is presented as:
+</p><div class="smallexample">
+<pre class="smallexample">Program received signal SIGSEGV, Segmentation fault
+Upper bound violation while accessing address 0x7fffffffc3b3
+Bounds: [lower = 0x7fffffffc390, upper = 0x7fffffffc3a3]
+0x0000000000400d7c in upper () at i386-mpx-sigsegv.c:68
+68        value = *(p + len);
+</pre></div>
+
 <hr>
 <div class="header">
 <p>

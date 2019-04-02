@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- Copyright (C) 1988-2015 Free Software Foundation, Inc.
+<!-- Copyright (C) 1988-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -75,11 +75,11 @@ Next: <a href="GIMPLE_005fPHI.html#GIMPLE_005fPHI" accesskey="n" rel="next"><cod
 </div>
 <hr>
 <a name="GIMPLE_005fOMP_005fSINGLE-1"></a>
-<h4 class="subsection">11.7.22 <code>GIMPLE_OMP_SINGLE</code></h4>
+<h4 class="subsection">11.8.23 <code>GIMPLE_OMP_SINGLE</code></h4>
 <a name="index-GIMPLE_005fOMP_005fSINGLE"></a>
 
 <dl>
-<dt><a name="index-gimple_005fbuild_005fomp_005fsingle"></a>GIMPLE function: <em>gimple</em> <strong>gimple_build_omp_single</strong> <em>(gimple_seq body, tree clauses)</em></dt>
+<dt><a name="index-_002agimple_005fbuild_005fomp_005fsingle"></a>GIMPLE function: <em>gomp_single</em> <strong>*gimple_build_omp_single</strong> <em>( gimple_seq body, tree clauses)</em></dt>
 <dd><p>Build a <code>GIMPLE_OMP_SINGLE</code> statement. <code>BODY</code> is the sequence of
 statements that will be executed once.  <code>CLAUSES</code> are any of the
 <code>OMP</code> single construct&rsquo;s clauses: private, firstprivate,
@@ -97,7 +97,7 @@ copyprivate, nowait.
 </p></dd></dl>
 
 <dl>
-<dt><a name="index-gimple_005fomp_005fsingle_005fset_005fclauses"></a>GIMPLE function: <em>void</em> <strong>gimple_omp_single_set_clauses</strong> <em>(gimple g, tree clauses)</em></dt>
+<dt><a name="index-gimple_005fomp_005fsingle_005fset_005fclauses"></a>GIMPLE function: <em>void</em> <strong>gimple_omp_single_set_clauses</strong> <em>( gomp_single *g, tree clauses)</em></dt>
 <dd><p>Set <code>CLAUSES</code> to be the clauses associated with <code>OMP_SINGLE</code> <code>G</code>.
 </p></dd></dl>
 

@@ -2,7 +2,7 @@
 <html>
 <!-- This file documents the GNU Assembler "as".
 
-Copyright (C) 1991-2013 Free Software Foundation, Inc.
+Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -66,8 +66,8 @@ ul.no-bullet {list-style: none}
 Next: <a href="Sparc_002dConstants.html#Sparc_002dConstants" accesskey="n" rel="next">Sparc-Constants</a>, Previous: <a href="Sparc_002dChars.html#Sparc_002dChars" accesskey="p" rel="prev">Sparc-Chars</a>, Up: <a href="Sparc_002dSyntax.html#Sparc_002dSyntax" accesskey="u" rel="up">Sparc-Syntax</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="AS-Index.html#AS-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <hr>
-<a name="Register-Names-14"></a>
-<h4 class="subsubsection">9.41.3.2 Register Names</h4>
+<a name="Register-Names-15"></a>
+<h4 class="subsubsection">9.43.3.2 Register Names</h4>
 <a name="index-Sparc-registers"></a>
 <a name="index-register-names_002c-Sparc"></a>
 
@@ -97,6 +97,14 @@ restrictions when referencing the upper 32 registers.  They
 can only be accessed as double or quad, and thus only even
 or quad numbered accesses are allowed.  For example, &lsquo;<samp>%f34</samp>&rsquo;
 is a legal floating point register, but &lsquo;<samp>%f35</samp>&rsquo; is not.
+</p>
+<p>Floating point registers accessed as double can also be referred using
+the &lsquo;<samp>%d<var>n</var></samp>&rsquo; notation, where <var>n</var> is even.  Similarly,
+floating point registers accessed as quad can be referred using the
+&lsquo;<samp>%q<var>n</var></samp>&rsquo; notation, where <var>n</var> is a multiple of 4.  For
+example, &lsquo;<samp>%f4</samp>&rsquo; can be denoted as both &lsquo;<samp>%d4</samp>&rsquo; and &lsquo;<samp>%q4</samp>&rsquo;.
+On the other hand, &lsquo;<samp>%f2</samp>&rsquo; can be denoted as &lsquo;<samp>%d2</samp>&rsquo; but not as
+&lsquo;<samp>%q2</samp>&rsquo;.
 </p>
 <p>Certain V9 instructions allow access to ancillary state registers.
 Most simply they can be referred to as &lsquo;<samp>%asr<var>n</var></samp>&rsquo; where
@@ -137,6 +145,10 @@ as an alias.
 <p>Various V9 branch and conditional move instructions allow
 specification of which set of integer condition codes to
 test.  These are referred to as &lsquo;<samp>%xcc</samp>&rsquo; and &lsquo;<samp>%icc</samp>&rsquo;.
+</p>
+<p>Additionally, GAS supports the so-called &ldquo;natural&rdquo; condition codes;
+these are referred to as &lsquo;<samp>%ncc</samp>&rsquo; and reference to &lsquo;<samp>%icc</samp>&rsquo; if
+the word size is 32, &lsquo;<samp>%xcc</samp>&rsquo; if the word size is 64.
 </p>
 <p>In V9, there are 4 sets of floating point condition codes
 which are referred to as &lsquo;<samp>%fcc<var>n</var></samp>&rsquo;.
@@ -219,9 +231,15 @@ exist:
 </li><li> The hyperprivileged implementation version register is referred
 to as &lsquo;<samp>%hver</samp>&rsquo;.
 
+</li><li> The hyperprivileged system tick offset register is referred to as
+&lsquo;<samp>%hstick_offset</samp>&rsquo;.  Note that there is no &lsquo;<samp>%hstick</samp>&rsquo; register,
+the normal &lsquo;<samp>%stick</samp>&rsquo; is used.
+
+</li><li> The hyperprivileged system tick enable register is referred to as
+&lsquo;<samp>%hstick_enable</samp>&rsquo;.
+
 </li><li> The hyperprivileged system tick compare register is referred
-to as &lsquo;<samp>%hstick_cmpr</samp>&rsquo;.  Note that there is no &lsquo;<samp>%hstick</samp>&rsquo;
-register, the normal &lsquo;<samp>%stick</samp>&rsquo; is used.
+to as &lsquo;<samp>%hstick_cmpr</samp>&rsquo;.
 </li></ul>
 
 <hr>

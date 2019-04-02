@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!-- This file documents the GNU linker LD
-(Linaro_Binutils-2017.01)
-version 2.24.0.
+(GNU Binutils)
+version 2.28.
 
-Copyright (C) 1991-2013 Free Software Foundation, Inc.
+Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3
@@ -121,7 +121,7 @@ to the next <var>align</var> boundary.  The single operand <code>ALIGN</code>
 doesn&rsquo;t change the value of the location counter&mdash;it just does
 arithmetic on it.  The two operand <code>ALIGN</code> allows an arbitrary
 expression to be aligned upwards (<code>ALIGN(<var>align</var>)</code> is
-equivalent to <code>ALIGN(., <var>align</var>)</code>).
+equivalent to <code>ALIGN(ABSOLUTE(.), <var>align</var>)</code>).
 </p>
 <p>Here is an example which aligns the output <code>.data</code> section to the
 next <code>0x2000</code> byte boundary after the preceding section and sets a
@@ -176,7 +176,8 @@ section.
 </pre></div>
 <p>or
 </p><div class="smallexample">
-<pre class="smallexample">(ALIGN(<var>maxpagesize</var>) + (. &amp; (<var>maxpagesize</var> - <var>commonpagesize</var>)))
+<pre class="smallexample">(ALIGN(<var>maxpagesize</var>)
+ + ((. + <var>commonpagesize</var> - 1) &amp; (<var>maxpagesize</var> - <var>commonpagesize</var>)))
 </pre></div>
 <p>depending on whether the latter uses fewer <var>commonpagesize</var> sized pages
 for the data segment (area between the result of this expression and
@@ -210,13 +211,15 @@ evaluation purposes.
 <dt><code>DATA_SEGMENT_RELRO_END(<var>offset</var>, <var>exp</var>)</code></dt>
 <dd><a name="index-DATA_005fSEGMENT_005fRELRO_005fEND_0028offset_002c-exp_0029"></a>
 <p>This defines the end of the <code>PT_GNU_RELRO</code> segment when
-&lsquo;<samp>-z relro</samp>&rsquo; option is used.  Second argument is returned.
+&lsquo;<samp>-z relro</samp>&rsquo; option is used.
 When &lsquo;<samp>-z relro</samp>&rsquo; option is not present, <code>DATA_SEGMENT_RELRO_END</code>
 does nothing, otherwise <code>DATA_SEGMENT_ALIGN</code> is padded so that
 <var>exp</var> + <var>offset</var> is aligned to the most commonly used page
 boundary for particular target.  If present in the linker script,
 it must always come in between <code>DATA_SEGMENT_ALIGN</code> and
-<code>DATA_SEGMENT_END</code>.
+<code>DATA_SEGMENT_END</code>.  Evaluates to the second argument plus any
+padding needed at the end of the <code>PT_GNU_RELRO</code> segment due to
+section alignment.
 </p>
 <div class="smallexample">
 <pre class="smallexample">  . = DATA_SEGMENT_RELRO_END(24, .);

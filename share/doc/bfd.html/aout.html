@@ -2,7 +2,7 @@
 <html>
 <!-- This file documents the BFD library.
 
-Copyright (C) 1991 - 2013 Free Software Foundation, Inc.
+Copyright (C) 1991-2017 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -127,14 +127,14 @@ sun4, from <samp>aout32.c</samp>:
 </p>
 <div class="example">
 <pre class="example">       #define TARGET_NAME &quot;a.out-sunos-big&quot;
-       #define VECNAME    sunos_big_vec
+       #define VECNAME    sparc_aout_sunos_be_vec
        #include &quot;aoutf1.h&quot;
 </pre></div>
 
 <p>requires all the names from <samp>aout32.c</samp>, and produces the jump vector
 </p>
 <div class="example">
-<pre class="example">       sunos_big_vec
+<pre class="example">       sparc_aout_sunos_be_vec
 </pre></div>
 
 <p>The file <samp>host-aout.c</samp> is a special case.  It is for a large set
@@ -169,7 +169,7 @@ to use <samp>host-aout.c</samp>, specify:
        TDEPFILES= host-aout.o trad-core.o
 </pre></div>
 
-<p>in the <samp>config/<var>XXX</var>.mt</samp> file, and modify <samp>configure.in</samp>
+<p>in the <samp>config/<var>XXX</var>.mt</samp> file, and modify <samp>configure.ac</samp>
 to use the
 <samp><var>XXX</var>.mt</samp> file (by setting &quot;<code>bfd_target=XXX</code>&quot;) when your
 configuration is selected.
